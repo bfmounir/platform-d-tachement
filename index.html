@@ -1,903 +1,1417 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>منصة متابعة الانتداب والوضع تحت التصرف</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --primary: #6d4aff;
-            --primary-dark: #5434d6;
-            --primary-light: #f1edff;
-            --gold: #c89b3c;
-            --bg: #f7f7fb;
-            --card: #ffffff;
-            --text: #252238;
-            --muted: #77748a;
-            --border: #e9e7f0;
-            --success: #1d9b68;
-            --warning: #d89518;
-            --danger: #d94b5c;
-            --shadow: 0 10px 30px rgba(50, 35, 100, .07);
-        }
-
-        body {
-            font-family:
-                "Segoe UI",
-                Tahoma,
-                Arial,
-                sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        button,
-        input,
-        select,
-        textarea {
-            font-family: inherit;
-        }
-
-        button {
-            cursor: pointer;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* =========================
-           LOGIN
-        ========================= */
-
-        #loginScreen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 25px;
-            background:
-                radial-gradient(circle at top right, #eee9ff 0, transparent 35%),
-                radial-gradient(circle at bottom left, #fff4dc 0, transparent 30%),
-                #f7f7fb;
-        }
-
-        .login-card {
-            width: 100%;
-            max-width: 430px;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 38px;
-            box-shadow: var(--shadow);
-        }
-
-        .logo-box {
-            width: 78px;
-            height: 78px;
-            margin: 0 auto 18px;
-            border-radius: 22px;
-            background: linear-gradient(135deg, var(--primary), #9178ff);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: 800;
-            box-shadow: 0 12px 25px rgba(109, 74, 255, .22);
-        }
-
-        .login-title {
-            text-align: center;
-            font-size: 23px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .login-subtitle {
-            text-align: center;
-            color: var(--muted);
-            font-size: 14px;
-            line-height: 1.8;
-            margin-bottom: 28px;
-        }
-
-        .field {
-            margin-bottom: 17px;
-        }
-
-        .field label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .field input,
-        .field select,
-        .field textarea {
-            width: 100%;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 13px 14px;
-            outline: none;
-            background: #fff;
-            color: var(--text);
-            transition: .2s;
-        }
-
-        .field input:focus,
-        .field select:focus,
-        .field textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(109, 74, 255, .08);
-        }
-
-        .login-btn {
-            width: 100%;
-            border: 0;
-            border-radius: 13px;
-            padding: 14px;
-            color: white;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            font-size: 15px;
-            font-weight: 800;
-            margin-top: 7px;
-            transition: .2s;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(109, 74, 255, .2);
-        }
-
-        .login-error {
-            margin-top: 15px;
-            padding: 11px 13px;
-            border-radius: 10px;
-            background: #fff0f2;
-            color: var(--danger);
-            font-size: 13px;
-            line-height: 1.7;
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 22px;
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        /* =========================
-           APP
-        ========================= */
-
-        #app {
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 270px;
-            background: white;
-            border-left: 1px solid var(--border);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand {
-            padding: 23px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-icon {
-            width: 46px;
-            height: 46px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, var(--primary), #927bff);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-        }
-
-        .brand-text strong {
-            display: block;
-            font-size: 14px;
-        }
-
-        .brand-text span {
-            color: var(--muted);
-            font-size: 11px;
-        }
-
-        .nav {
-            padding: 18px 12px;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .nav-title {
-            color: #aaa6b9;
-            font-size: 11px;
-            font-weight: 800;
-            padding: 8px 12px;
-            margin-bottom: 5px;
-        }
-
-        .nav-btn {
-            width: 100%;
-            border: 0;
-            background: transparent;
-            text-align: right;
-            padding: 12px 13px;
-            border-radius: 11px;
-            margin-bottom: 5px;
-            color: #5c596b;
-            font-size: 14px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 11px;
-            transition: .2s;
-        }
-
-        .nav-btn:hover {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .nav-btn.active {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .nav-icon {
-            width: 23px;
-            text-align: center;
-            font-size: 17px;
-        }
-
-        .sidebar-footer {
-            border-top: 1px solid var(--border);
-            padding: 15px;
-        }
-
-        .user-mini {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .avatar {
-            width: 39px;
-            height: 39px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-        }
-
-        .user-mini strong {
-            font-size: 13px;
-            display: block;
-        }
-
-        .user-mini span {
-            font-size: 11px;
-            color: var(--muted);
-        }
-
-        .logout-btn {
-            width: 100%;
-            border: 1px solid #eee;
-            background: #fff;
-            color: var(--danger);
-            padding: 9px;
-            border-radius: 10px;
-            font-weight: 700;
-        }
-
-        .main {
-            margin-right: 270px;
-            min-height: 100vh;
-        }
-
-        .topbar {
-            height: 76px;
-            background: rgba(255,255,255,.95);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            position: sticky;
-            top: 0;
-            z-index: 900;
-        }
-
-        .mobile-menu {
-            display: none;
-            border: 0;
-            background: var(--primary-light);
-            color: var(--primary);
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            font-size: 20px;
-        }
-
-        .page-heading h1 {
-            font-size: 21px;
-            margin-bottom: 4px;
-        }
-
-        .page-heading p {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        .top-date {
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        .content {
-            padding: 28px 30px 50px;
-            max-width: 1500px;
-            margin: auto;
-        }
-
-        /* =========================
-           CARDS
-        ========================= */
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 17px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .stat-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .stat-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 13px;
-            background: var(--primary-light);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 19px;
-        }
-
-        .stat-card.warning .stat-icon {
-            background: #fff6df;
-            color: var(--warning);
-        }
-
-        .stat-card.danger .stat-icon {
-            background: #fff0f2;
-            color: var(--danger);
-        }
-
-        .stat-card.success .stat-icon {
-            background: #eaf9f2;
-            color: var(--success);
-        }
-
-        .stat-label {
-            color: var(--muted);
-            font-size: 12px;
-            margin-top: 17px;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: 900;
-            margin-top: 5px;
-        }
-
-        .section {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            box-shadow: var(--shadow);
-            margin-bottom: 22px;
-            overflow: hidden;
-        }
-
-        .section-head {
-            padding: 18px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .section-head h2 {
-            font-size: 16px;
-        }
-
-        .section-head p {
-            color: var(--muted);
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        .section-body {
-            padding: 20px;
-        }
-
-        /* =========================
-           ALERTS
-        ========================= */
-
-        .alert-list {
-            display: grid;
-            gap: 10px;
-        }
-
-        .alert-item {
-            border: 1px solid var(--border);
-            border-radius: 13px;
-            padding: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .alert-main {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .alert-dot {
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            background: var(--warning);
-        }
-
-        .alert-dot.danger {
-            background: var(--danger);
-        }
-
-        .alert-main strong {
-            display: block;
-            font-size: 14px;
-        }
-
-        .alert-main span {
-            display: block;
-            color: var(--muted);
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        .alert-badge {
-            white-space: nowrap;
-            padding: 7px 10px;
-            border-radius: 8px;
-            background: #fff6df;
-            color: var(--warning);
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .alert-badge.danger {
-            background: #fff0f2;
-            color: var(--danger);
-        }
-
-        .empty {
-            text-align: center;
-            padding: 35px 15px;
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        /* =========================
-           TABLE
-        ========================= */
-
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 230px;
-            position: relative;
-        }
-
-        .search-box input {
-            width: 100%;
-            border: 1px solid var(--border);
-            border-radius: 11px;
-            padding: 12px 15px;
-            outline: none;
-        }
-
-        .search-box input:focus {
-            border-color: var(--primary);
-        }
-
-        .primary-btn {
-            border: 0;
-            border-radius: 11px;
-            padding: 11px 17px;
-            background: var(--primary);
-            color: white;
-            font-weight: 800;
-        }
-
-        .secondary-btn {
-            border: 1px solid var(--border);
-            border-radius: 11px;
-            padding: 11px 17px;
-            background: white;
-            color: var(--text);
-            font-weight: 700;
-        }
-
-        .table-wrap {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 750px;
-        }
-
-        th {
-            background: #faf9fd;
-            color: var(--muted);
-            font-size: 12px;
-            text-align: right;
-            padding: 13px 14px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        td {
-            padding: 14px;
-            border-bottom: 1px solid #f0eef5;
-            font-size: 13px;
-        }
-
-        tr:last-child td {
-            border-bottom: 0;
-        }
-
-        .status {
-            display: inline-flex;
-            padding: 6px 9px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .status.active {
-            background: #eaf9f2;
-            color: var(--success);
-        }
-
-        .status.warning {
-            background: #fff6df;
-            color: var(--warning);
-        }
-
-        .status.danger {
-            background: #fff0f2;
-            color: var(--danger);
-        }
-
-        .action-btn {
-            border: 0;
-            background: var(--primary-light);
-            color: var(--primary);
-            border-radius: 8px;
-            padding: 7px 10px;
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        /* =========================
-           MODAL
-        ========================= */
-
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(20, 16, 35, .45);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal {
-            width: 100%;
-            max-width: 700px;
-            max-height: 90vh;
-            overflow-y: auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 25px 70px rgba(0,0,0,.2);
-        }
-
-        .modal-head {
-            padding: 18px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-head h2 {
-            font-size: 17px;
-        }
-
-        .close-btn {
-            width: 35px;
-            height: 35px;
-            border: 0;
-            border-radius: 9px;
-            background: #f5f4f8;
-            font-size: 18px;
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        .employee-profile {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .profile-box {
-            background: #faf9fd;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 13px;
-        }
-
-        .profile-box small {
-            color: var(--muted);
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .profile-box strong {
-            font-size: 13px;
-        }
-
-        .assignment-card {
-            border: 1px solid var(--border);
-            border-radius: 13px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-
-        .assignment-card-head {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .assignment-card strong {
-            font-size: 14px;
-        }
-
-        .assignment-details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.7;
-        }
-
-        /* =========================
-           LOADING
-        ========================= */
-
-        .loading {
-            position: fixed;
-            inset: 0;
-            background: rgba(255,255,255,.75);
-            z-index: 5000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 13px;
-        }
-
-        .spinner {
-            width: 42px;
-            height: 42px;
-            border: 4px solid #e9e5ff;
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin .8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 22px;
-            left: 22px;
-            z-index: 6000;
-            background: #252238;
-            color: white;
-            padding: 12px 17px;
-            border-radius: 11px;
-            font-size: 13px;
-            box-shadow: var(--shadow);
-        }
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 1100px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 800px) {
-            .sidebar {
-                transform: translateX(100%);
-                transition: transform .25s ease;
-                width: 275px;
-                box-shadow: -10px 0 30px rgba(0,0,0,.08);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main {
-                margin-right: 0;
-            }
-
-            .mobile-menu {
-                display: block;
-            }
-
-            .topbar {
-                padding: 0 15px;
-                gap: 12px;
-            }
-
-            .top-date {
-                display: none;
-            }
-
-            .content {
-                padding: 20px 15px 35px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-            }
-
-            .stat-card {
-                padding: 15px;
-            }
-
-            .stat-value {
-                font-size: 23px;
-            }
-
-            .section-head,
-            .section-body {
-                padding: 15px;
-            }
-        }
-
-        @media (max-width: 520px) {
-            .login-card {
-                padding: 28px 20px;
-                border-radius: 20px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-heading h1 {
-                font-size: 17px;
-            }
-
-            .page-heading p {
-                display: none;
-            }
-
-            .alert-item {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .employee-profile {
-                grid-template-columns: 1fr;
-            }
-
-            .assignment-details {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>منصة متابعة الانتداب والوضع تحت التصرف</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+/* =========================================================
+   الأساس
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --primary:#6d4aff;
+    --primary-dark:#5636d8;
+    --primary-light:#f1edff;
+
+    --gold:#c79a3b;
+    --gold-light:#fff7e6;
+
+    --bg:#f7f7fb;
+    --card:#ffffff;
+
+    --text:#252238;
+    --muted:#77748a;
+
+    --border:#e8e6ef;
+
+    --success:#1d9b68;
+    --success-light:#eaf9f2;
+
+    --warning:#d89418;
+    --warning-light:#fff6df;
+
+    --danger:#d94b5c;
+    --danger-light:#fff0f2;
+
+    --shadow:0 8px 25px rgba(45,32,90,.06);
+}
+
+body{
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+    background:var(--bg);
+    color:var(--text);
+
+    min-height:100vh;
+}
+
+button,
+input,
+select,
+textarea{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+
+/* =========================================================
+   تسجيل الدخول
+========================================================= */
+
+#loginScreen{
+    min-height:100vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:25px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            #eee9ff 0,
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at bottom left,
+            #fff3d8 0,
+            transparent 30%
+        ),
+        var(--bg);
+}
+
+.login-card{
+    width:100%;
+    max-width:430px;
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:25px;
+
+    padding:38px;
+
+    box-shadow:var(--shadow);
+}
+
+.logo-box{
+    width:76px;
+    height:76px;
+
+    margin:0 auto 18px;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #947cff
+        );
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:30px;
+    font-weight:900;
+
+    box-shadow:
+        0 12px 25px
+        rgba(109,74,255,.22);
+}
+
+.login-title{
+    text-align:center;
+
+    font-size:22px;
+    font-weight:900;
+
+    margin-bottom:7px;
+}
+
+.login-subtitle{
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:13px;
+
+    line-height:1.8;
+
+    margin-bottom:27px;
+}
+
+.field{
+    margin-bottom:16px;
+}
+
+.field label{
+    display:block;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    margin-bottom:7px;
+}
+
+.field input,
+.field select,
+.field textarea{
+
+    width:100%;
+
+    border:1px solid var(--border);
+
+    border-radius:11px;
+
+    padding:12px 13px;
+
+    outline:none;
+
+    background:white;
+
+    color:var(--text);
+
+    transition:.2s;
+}
+
+.field textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(109,74,255,.08);
+}
+
+.login-btn{
+
+    width:100%;
+
+    border:0;
+
+    border-radius:12px;
+
+    padding:14px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
+
+    font-weight:900;
+
+    margin-top:7px;
+}
+
+.login-error{
+
+    margin-top:14px;
+
+    padding:11px;
+
+    border-radius:10px;
+
+    background:var(--danger-light);
+
+    color:var(--danger);
+
+    font-size:12px;
+
+    line-height:1.7;
+}
+
+.login-footer{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    color:var(--muted);
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   التطبيق
+========================================================= */
+
+#app{
+    min-height:100vh;
+}
+
+.sidebar{
+
+    position:fixed;
+
+    top:0;
+    right:0;
+    bottom:0;
+
+    width:270px;
+
+    background:white;
+
+    border-left:1px solid var(--border);
+
+    z-index:1000;
+
+    display:flex;
+    flex-direction:column;
+}
+
+.brand{
+
+    padding:22px 19px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+}
+
+.brand-icon{
+
+    width:46px;
+    height:46px;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #947cff
+        );
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:900;
+}
+
+.brand-text strong{
+    display:block;
+    font-size:14px;
+}
+
+.brand-text span{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    margin-top:2px;
+}
+
+.nav{
+
+    flex:1;
+
+    padding:17px 12px;
+
+    overflow-y:auto;
+}
+
+.nav-title{
+
+    color:#aaa6b8;
+
+    font-size:10px;
+
+    font-weight:900;
+
+    padding:8px 12px;
+
+    margin-bottom:5px;
+}
+
+.nav-btn{
+
+    width:100%;
+
+    border:0;
+
+    background:transparent;
+
+    text-align:right;
+
+    padding:12px 13px;
+
+    border-radius:11px;
+
+    margin-bottom:5px;
+
+    color:#5c596b;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+}
+
+.nav-icon{
+    width:23px;
+    text-align:center;
+    font-size:16px;
+}
+
+.sidebar-footer{
+
+    border-top:1px solid var(--border);
+
+    padding:14px;
+}
+
+.user-mini{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    margin-bottom:11px;
+}
+
+.avatar{
+
+    width:39px;
+    height:39px;
+
+    border-radius:50%;
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-weight:900;
+}
+
+.user-mini strong{
+    display:block;
+    font-size:12px;
+}
+
+.user-mini span{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.logout-btn{
+
+    width:100%;
+
+    border:1px solid var(--border);
+
+    background:white;
+
+    color:var(--danger);
+
+    padding:9px;
+
+    border-radius:10px;
+
+    font-weight:800;
+
+    font-size:12px;
+}
+
+.main{
+    margin-right:270px;
+    min-height:100vh;
+}
+
+.topbar{
+
+    height:76px;
+
+    background:rgba(255,255,255,.96);
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 30px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:900;
+}
+
+.mobile-menu{
+
+    display:none;
+
+    border:0;
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+
+    width:42px;
+    height:42px;
+
+    border-radius:10px;
+
+    font-size:20px;
+}
+
+.page-heading h1{
+    font-size:20px;
+    margin-bottom:3px;
+}
+
+.page-heading p{
+    font-size:11px;
+    color:var(--muted);
+}
+
+.top-date{
+    color:var(--muted);
+    font-size:11px;
+}
+
+.content{
+
+    padding:27px 30px 50px;
+
+    max-width:1500px;
+
+    margin:auto;
+}
+
+
+/* =========================================================
+   الإحصائيات
+========================================================= */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin-bottom:22px;
+}
+
+.stat-card{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:17px;
+
+    padding:19px;
+
+    box-shadow:var(--shadow);
+}
+
+.stat-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.stat-icon{
+
+    width:44px;
+    height:44px;
+
+    border-radius:12px;
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:18px;
+}
+
+.stat-card.success .stat-icon{
+    background:var(--success-light);
+    color:var(--success);
+}
+
+.stat-card.warning .stat-icon{
+    background:var(--warning-light);
+    color:var(--warning);
+}
+
+.stat-card.danger .stat-icon{
+    background:var(--danger-light);
+    color:var(--danger);
+}
+
+.stat-label{
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-top:16px;
+}
+
+.stat-value{
+
+    font-size:27px;
+
+    font-weight:900;
+
+    margin-top:4px;
+}
+
+
+/* =========================================================
+   الأقسام
+========================================================= */
+
+.section{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:20px;
+
+    overflow:hidden;
+}
+
+.section-head{
+
+    padding:17px 19px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+}
+
+.section-head h2{
+    font-size:15px;
+}
+
+.section-head p{
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-top:4px;
+}
+
+.section-body{
+    padding:19px;
+}
+
+
+/* =========================================================
+   الأزرار
+========================================================= */
+
+.primary-btn{
+
+    border:0;
+
+    border-radius:10px;
+
+    padding:10px 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
+
+    color:white;
+
+    font-weight:900;
+
+    font-size:12px;
+}
+
+.secondary-btn{
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    padding:10px 15px;
+
+    background:white;
+
+    color:var(--text);
+
+    font-weight:800;
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   التنبيهات
+========================================================= */
+
+.alert-list{
+
+    display:grid;
+
+    gap:9px;
+}
+
+.alert-item{
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:13px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+}
+
+.alert-main{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.alert-dot{
+
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:var(--warning);
+}
+
+.alert-dot.danger{
+    background:var(--danger);
+}
+
+.alert-main strong{
+    display:block;
+    font-size:13px;
+}
+
+.alert-main span{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.alert-badge{
+
+    white-space:nowrap;
+
+    padding:6px 9px;
+
+    border-radius:8px;
+
+    background:var(--warning-light);
+
+    color:var(--warning);
+
+    font-size:10px;
+
+    font-weight:900;
+}
+
+.alert-badge.danger{
+
+    background:var(--danger-light);
+
+    color:var(--danger);
+}
+
+.empty{
+
+    text-align:center;
+
+    padding:32px 15px;
+
+    color:var(--muted);
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   الأدوات والجدول
+========================================================= */
+
+.toolbar{
+
+    display:flex;
+
+    gap:9px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:17px;
+}
+
+.search-box{
+
+    flex:1;
+
+    min-width:230px;
+}
+
+.search-box input{
+
+    width:100%;
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    padding:11px 13px;
+
+    outline:none;
+}
+
+.search-box input:focus{
+    border-color:var(--primary);
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:760px;
+}
+
+th{
+
+    background:#faf9fd;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    text-align:right;
+
+    padding:12px 13px;
+
+    border-bottom:1px solid var(--border);
+}
+
+td{
+
+    padding:13px;
+
+    border-bottom:1px solid #f0eef5;
+
+    font-size:12px;
+}
+
+tr:last-child td{
+    border-bottom:0;
+}
+
+.status{
+
+    display:inline-flex;
+
+    padding:5px 8px;
+
+    border-radius:7px;
+
+    font-size:10px;
+
+    font-weight:900;
+}
+
+.status.active{
+
+    background:var(--success-light);
+
+    color:var(--success);
+}
+
+.status.warning{
+
+    background:var(--warning-light);
+
+    color:var(--warning);
+}
+
+.status.danger{
+
+    background:var(--danger-light);
+
+    color:var(--danger);
+}
+
+.action-btn{
+
+    border:0;
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+
+    border-radius:8px;
+
+    padding:7px 10px;
+
+    font-size:10px;
+
+    font-weight:900;
+}
+
+
+/* =========================================================
+   النموذج
+========================================================= */
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:15px;
+}
+
+.form-grid .full{
+    grid-column:1/-1;
+}
+
+.form-section-title{
+
+    grid-column:1/-1;
+
+    font-size:13px;
+
+    font-weight:900;
+
+    color:var(--primary);
+
+    background:var(--primary-light);
+
+    border-radius:9px;
+
+    padding:9px 11px;
+
+    margin-top:3px;
+}
+
+.checkbox-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding-top:8px;
+}
+
+.checkbox-row input{
+
+    width:17px;
+    height:17px;
+
+    accent-color:var(--primary);
+}
+
+.checkbox-row label{
+
+    margin:0;
+
+    font-size:12px;
+
+    font-weight:800;
+}
+
+.form-note{
+
+    background:#faf9fd;
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    padding:10px;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    line-height:1.7;
+}
+
+.form-actions{
+
+    display:flex;
+
+    justify-content:flex-start;
+
+    gap:9px;
+
+    padding-top:8px;
+
+    grid-column:1/-1;
+}
+
+.required{
+    color:var(--danger);
+}
+
+
+/* =========================================================
+   Modal
+========================================================= */
+
+.modal-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(20,16,35,.45);
+
+    z-index:2000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:18px;
+}
+
+.modal{
+
+    width:100%;
+
+    max-width:760px;
+
+    max-height:92vh;
+
+    overflow-y:auto;
+
+    background:white;
+
+    border-radius:20px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.2);
+}
+
+.modal-head{
+
+    padding:17px 19px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.modal-head h2{
+    font-size:16px;
+}
+
+.close-btn{
+
+    width:34px;
+    height:34px;
+
+    border:0;
+
+    border-radius:9px;
+
+    background:#f5f4f8;
+
+    font-size:18px;
+}
+
+.modal-body{
+    padding:19px;
+}
+
+.employee-profile{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:10px;
+
+    margin-bottom:19px;
+}
+
+.profile-box{
+
+    background:#faf9fd;
+
+    border:1px solid var(--border);
+
+    border-radius:11px;
+
+    padding:12px;
+}
+
+.profile-box small{
+
+    color:var(--muted);
+
+    display:block;
+
+    margin-bottom:4px;
+
+    font-size:10px;
+}
+
+.profile-box strong{
+    font-size:12px;
+}
+
+.assignment-card{
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:14px;
+
+    margin-bottom:9px;
+}
+
+.assignment-card-head{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:9px;
+}
+
+.assignment-card strong{
+    font-size:13px;
+}
+
+.assignment-details{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:7px;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   تحميل
+========================================================= */
+
+.loading{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(255,255,255,.75);
+
+    z-index:5000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    gap:12px;
+}
+
+.spinner{
+
+    width:40px;
+    height:40px;
+
+    border:4px solid #e9e5ff;
+
+    border-top-color:var(--primary);
+
+    border-radius:50%;
+
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.toast{
+
+    position:fixed;
+
+    bottom:20px;
+    left:20px;
+
+    z-index:6000;
+
+    background:#252238;
+
+    color:white;
+
+    padding:11px 16px;
+
+    border-radius:10px;
+
+    font-size:12px;
+
+    box-shadow:var(--shadow);
+}
+
+
+/* =========================================================
+   استجابة الهاتف
+========================================================= */
+
+@media(max-width:1100px){
+
+    .stats-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+}
+
+@media(max-width:800px){
+
+    .sidebar{
+
+        transform:translateX(100%);
+
+        transition:.25s;
+
+        width:275px;
+
+        box-shadow:
+            -10px 0 30px
+            rgba(0,0,0,.08);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-right:0;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .topbar{
+        padding:0 15px;
+    }
+
+    .top-date{
+        display:none;
+    }
+
+    .content{
+        padding:19px 14px 35px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid .full{
+        grid-column:auto;
+    }
+
+    .form-section-title{
+        grid-column:auto;
+    }
+
+    .form-actions{
+        grid-column:auto;
+    }
+}
+
+@media(max-width:520px){
+
+    .login-card{
+        padding:28px 20px;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+    .employee-profile{
+        grid-template-columns:1fr;
+    }
+
+    .assignment-details{
+        grid-template-columns:1fr;
+    }
+
+    .section-head{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .alert-item{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+}
+
+</style>
 </head>
+
 
 <body>
 
-<!-- =========================
-     شاشة تسجيل الدخول
-========================= -->
+
+<!-- =====================================================
+     تسجيل الدخول
+===================================================== -->
 
 <div id="loginScreen">
 
     <div class="login-card">
 
-        <div class="logo-box">م</div>
+        <div class="logo-box">
+            م
+        </div>
 
         <div class="login-title">
             منصة متابعة الانتداب
@@ -905,37 +1419,47 @@
 
         <div class="login-subtitle">
             الانتداب والوضع تحت التصرف<br>
-            نظام داخلي لإدارة ومتابعة الوضعيات الإدارية
+            نظام داخلي لمتابعة الوضعيات الإدارية
         </div>
 
         <form id="loginForm">
 
             <div class="field">
-                <label for="email">البريد الإلكتروني</label>
+
+                <label>
+                    البريد الإلكتروني
+                </label>
+
                 <input
                     id="email"
                     type="email"
                     autocomplete="email"
-                    placeholder="أدخل البريد الإلكتروني"
                     required
+                    placeholder="أدخل البريد الإلكتروني"
                 >
+
             </div>
 
             <div class="field">
-                <label for="password">كلمة المرور</label>
+
+                <label>
+                    كلمة المرور
+                </label>
+
                 <input
                     id="password"
                     type="password"
                     autocomplete="current-password"
-                    placeholder="أدخل كلمة المرور"
                     required
+                    placeholder="أدخل كلمة المرور"
                 >
+
             </div>
 
             <button
-                type="submit"
                 class="login-btn"
                 id="loginButton"
+                type="submit"
             >
                 تسجيل الدخول
             </button>
@@ -956,486 +1480,606 @@
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      التطبيق
-========================= -->
+===================================================== -->
 
 <div id="app" class="hidden">
 
-    <!-- الشريط الجانبي -->
 
-    <aside class="sidebar" id="sidebar">
+<!-- =====================================================
+     القائمة
+===================================================== -->
 
-        <div class="brand">
+<aside
+    class="sidebar"
+    id="sidebar"
+>
 
-            <div class="brand-icon">
+    <div class="brand">
+
+        <div class="brand-icon">
+            م
+        </div>
+
+        <div class="brand-text">
+
+            <strong>
+                منصة المتابعة
+            </strong>
+
+            <span>
+                الانتداب والوضع تحت التصرف
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <nav class="nav">
+
+        <div class="nav-title">
+            القائمة الرئيسية
+        </div>
+
+        <button
+            class="nav-btn active"
+            data-page="dashboard"
+        >
+            <span class="nav-icon">⌂</span>
+            لوحة التحكم
+        </button>
+
+        <button
+            class="nav-btn"
+            data-page="employees"
+        >
+            <span class="nav-icon">👥</span>
+            الموظفون
+        </button>
+
+        <button
+            class="nav-btn"
+            data-page="assignments"
+        >
+            <span class="nav-icon">↔</span>
+            الوضعيات
+        </button>
+
+        <button
+            class="nav-btn"
+            data-page="alerts"
+        >
+            <span class="nav-icon">⚠</span>
+            التنبيهات
+        </button>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+
+        <div class="user-mini">
+
+            <div class="avatar">
                 م
             </div>
 
-            <div class="brand-text">
-                <strong>منصة المتابعة</strong>
-                <span>الانتداب والوضع تحت التصرف</span>
+            <div>
+
+                <strong id="userEmail">
+                    المسؤول
+                </strong>
+
+                <span>
+                    مسؤول النظام
+                </span>
+
             </div>
 
         </div>
 
-        <nav class="nav">
+        <button
+            class="logout-btn"
+            id="logoutButton"
+        >
+            تسجيل الخروج
+        </button>
 
-            <div class="nav-title">
-                القائمة الرئيسية
-            </div>
+    </div>
 
-            <button
-                class="nav-btn active"
-                data-page="dashboard"
-            >
-                <span class="nav-icon">⌂</span>
+</aside>
+
+
+<!-- =====================================================
+     المحتوى الرئيسي
+===================================================== -->
+
+<main class="main">
+
+    <header class="topbar">
+
+        <button
+            class="mobile-menu"
+            id="mobileMenu"
+        >
+            ☰
+        </button>
+
+        <div class="page-heading">
+
+            <h1 id="pageTitle">
                 لوحة التحكم
-            </button>
+            </h1>
 
-            <button
-                class="nav-btn"
-                data-page="employees"
-            >
-                <span class="nav-icon">👥</span>
-                الموظفون
-            </button>
+            <p id="pageSubtitle">
+                نظرة عامة على الوضعيات الإدارية
+            </p>
 
-            <button
-                class="nav-btn"
-                data-page="assignments"
-            >
-                <span class="nav-icon">↔</span>
-                الوضعيات
-            </button>
+        </div>
 
-            <button
-                class="nav-btn"
-                data-page="alerts"
-            >
-                <span class="nav-icon">⚠</span>
-                التنبيهات
-            </button>
+        <div
+            class="top-date"
+            id="todayDate"
+        ></div>
 
-        </nav>
+    </header>
 
-        <div class="sidebar-footer">
 
-            <div class="user-mini">
+    <div class="content">
 
-                <div class="avatar">
-                    م
-                </div>
+
+<!-- =====================================================
+     لوحة التحكم
+===================================================== -->
+
+<section id="page-dashboard">
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-top">
 
                 <div>
-                    <strong id="userEmail">
-                        المسؤول
-                    </strong>
 
-                    <span>
-                        مسؤول النظام
-                    </span>
+                    <div class="stat-label">
+                        إجمالي الموظفين
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="statEmployees"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+                <div class="stat-icon">
+                    👥
                 </div>
 
             </div>
 
-            <button
-                class="logout-btn"
-                id="logoutButton"
-            >
-                تسجيل الخروج
-            </button>
+        </div>
+
+
+        <div class="stat-card success">
+
+            <div class="stat-top">
+
+                <div>
+
+                    <div class="stat-label">
+                        الوضعيات السارية
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="statActive"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+                <div class="stat-icon">
+                    ✓
+                </div>
+
+            </div>
 
         </div>
 
-    </aside>
+
+        <div class="stat-card warning">
+
+            <div class="stat-top">
+
+                <div>
+
+                    <div class="stat-label">
+                        التنبيهات
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="statAlerts"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+                <div class="stat-icon">
+                    ⚠
+                </div>
+
+            </div>
+
+        </div>
 
 
-    <!-- المحتوى -->
+        <div class="stat-card danger">
 
-    <main class="main">
+            <div class="stat-top">
 
-        <header class="topbar">
+                <div>
 
-            <button
-                class="mobile-menu"
-                id="mobileMenu"
-            >
-                ☰
-            </button>
+                    <div class="stat-label">
+                        الوضعيات المنتهية
+                    </div>
 
-            <div class="page-heading">
+                    <div
+                        class="stat-value"
+                        id="statExpired"
+                    >
+                        —
+                    </div>
 
-                <h1 id="pageTitle">
-                    لوحة التحكم
-                </h1>
+                </div>
 
-                <p id="pageSubtitle">
-                    نظرة عامة على الوضعيات الإدارية
+                <div class="stat-icon">
+                    !
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="section">
+
+        <div class="section-head">
+
+            <div>
+
+                <h2>
+                    التنبيهات الداخلية
+                </h2>
+
+                <p>
+                    الوضعيات التي تحتاج إلى متابعة
                 </p>
 
             </div>
 
-            <div
-                class="top-date"
-                id="todayDate"
-            ></div>
-
-        </header>
-
-
-        <div class="content">
-
-            <!-- =====================
-                 DASHBOARD
-            ====================== -->
-
-            <section id="page-dashboard">
-
-                <div class="stats-grid">
-
-                    <div class="stat-card">
-
-                        <div class="stat-top">
-
-                            <div>
-                                <div class="stat-label">
-                                    إجمالي الموظفين
-                                </div>
-
-                                <div
-                                    class="stat-value"
-                                    id="statEmployees"
-                                >
-                                    —
-                                </div>
-                            </div>
-
-                            <div class="stat-icon">
-                                👥
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="stat-card success">
-
-                        <div class="stat-top">
-
-                            <div>
-                                <div class="stat-label">
-                                    الوضعيات السارية
-                                </div>
-
-                                <div
-                                    class="stat-value"
-                                    id="statActive"
-                                >
-                                    —
-                                </div>
-                            </div>
-
-                            <div class="stat-icon">
-                                ✓
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="stat-card warning">
-
-                        <div class="stat-top">
-
-                            <div>
-                                <div class="stat-label">
-                                    التنبيهات
-                                </div>
-
-                                <div
-                                    class="stat-value"
-                                    id="statAlerts"
-                                >
-                                    —
-                                </div>
-                            </div>
-
-                            <div class="stat-icon">
-                                ⚠
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="stat-card danger">
-
-                        <div class="stat-top">
-
-                            <div>
-                                <div class="stat-label">
-                                    الوضعيات المنتهية
-                                </div>
-
-                                <div
-                                    class="stat-value"
-                                    id="statExpired"
-                                >
-                                    —
-                                </div>
-                            </div>
-
-                            <div class="stat-icon">
-                                !
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="section">
-
-                    <div class="section-head">
-
-                        <div>
-                            <h2>التنبيهات الداخلية</h2>
-
-                            <p>
-                                الوضعيات التي تحتاج إلى متابعة
-                            </p>
-                        </div>
-
-                        <button
-                            class="secondary-btn"
-                            onclick="showPage('alerts')"
-                        >
-                            عرض الكل
-                        </button>
-
-                    </div>
-
-                    <div
-                        class="section-body"
-                        id="dashboardAlerts"
-                    >
-                        <div class="empty">
-                            جارٍ تحميل التنبيهات...
-                        </div>
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =====================
-                 EMPLOYEES
-            ====================== -->
-
-            <section
-                id="page-employees"
-                class="hidden"
+            <button
+                class="secondary-btn"
+                onclick="showPage('alerts')"
             >
-
-                <div class="section">
-
-                    <div class="section-head">
-
-                        <div>
-                            <h2>الموظفون</h2>
-
-                            <p>
-                                البحث والوصول إلى الملف الإداري للموظف
-                            </p>
-                        </div>
-
-                        <button
-                            class="primary-btn"
-                            id="addEmployeeButton"
-                        >
-                            + إضافة موظف
-                        </button>
-
-                    </div>
-
-                    <div class="section-body">
-
-                        <div class="toolbar">
-
-                            <div class="search-box">
-
-                                <input
-                                    type="text"
-                                    id="employeeSearch"
-                                    placeholder="ابحث بالاسم أو اللقب..."
-                                >
-
-                            </div>
-
-                        </div>
-
-                        <div class="table-wrap">
-
-                            <table>
-
-                                <thead>
-
-                                    <tr>
-                                        <th>الاسم واللقب</th>
-                                        <th>رقم الموظف</th>
-                                        <th>الرتبة</th>
-                                        <th>الحالة</th>
-                                        <th>الإجراء</th>
-                                    </tr>
-
-                                </thead>
-
-                                <tbody id="employeesTable">
-
-                                    <tr>
-                                        <td colspan="5">
-                                            <div class="empty">
-                                                جارٍ التحميل...
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =====================
-                 ASSIGNMENTS
-            ====================== -->
-
-            <section
-                id="page-assignments"
-                class="hidden"
-            >
-
-                <div class="section">
-
-                    <div class="section-head">
-
-                        <div>
-                            <h2>الوضعيات</h2>
-
-                            <p>
-                                الانتداب والوضع تحت التصرف
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="section-body">
-
-                        <div class="table-wrap">
-
-                            <table>
-
-                                <thead>
-
-                                    <tr>
-                                        <th>الموظف</th>
-                                        <th>النوع</th>
-                                        <th>الاتجاه</th>
-                                        <th>المؤسسة</th>
-                                        <th>البداية</th>
-                                        <th>النهاية</th>
-                                        <th>الحالة</th>
-                                    </tr>
-
-                                </thead>
-
-                                <tbody id="assignmentsTable">
-
-                                    <tr>
-                                        <td colspan="7">
-                                            <div class="empty">
-                                                جارٍ التحميل...
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =====================
-                 ALERTS
-            ====================== -->
-
-            <section
-                id="page-alerts"
-                class="hidden"
-            >
-
-                <div class="section">
-
-                    <div class="section-head">
-
-                        <div>
-                            <h2>التنبيهات الداخلية</h2>
-
-                            <p>
-                                متابعة الوضعيات التي اقتربت من نهايتها
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="section-body">
-
-                        <div
-                            class="alert-list"
-                            id="alertsList"
-                        >
-                            <div class="empty">
-                                جارٍ تحميل التنبيهات...
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
+                عرض الكل
+            </button>
 
         </div>
 
-    </main>
+        <div
+            class="section-body"
+            id="dashboardAlerts"
+        >
+
+            <div class="empty">
+                جارٍ تحميل التنبيهات...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     الموظفون
+===================================================== -->
+
+<section
+    id="page-employees"
+    class="hidden"
+>
+
+    <div class="section">
+
+        <div class="section-head">
+
+            <div>
+
+                <h2>
+                    الموظفون
+                </h2>
+
+                <p>
+                    البحث والوصول إلى الملف الإداري للموظف
+                </p>
+
+            </div>
+
+            <button
+                class="primary-btn"
+                id="addEmployeeButton"
+            >
+                + إضافة موظف
+            </button>
+
+        </div>
+
+
+        <div class="section-body">
+
+            <div class="toolbar">
+
+                <div class="search-box">
+
+                    <input
+                        id="employeeSearch"
+                        type="text"
+                        placeholder="ابحث بالاسم أو اللقب أو رقم الموظف..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                الاسم واللقب
+                            </th>
+
+                            <th>
+                                رقم الموظف
+                            </th>
+
+                            <th>
+                                الرتبة
+                            </th>
+
+                            <th>
+                                الحالة
+                            </th>
+
+                            <th>
+                                الإجراء
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="employeesTable">
+
+                        <tr>
+
+                            <td colspan="5">
+
+                                <div class="empty">
+                                    جارٍ التحميل...
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     الوضعيات
+===================================================== -->
+
+<section
+    id="page-assignments"
+    class="hidden"
+>
+
+    <div class="section">
+
+        <div class="section-head">
+
+            <div>
+
+                <h2>
+                    الوضعيات الإدارية
+                </h2>
+
+                <p>
+                    متابعة الانتداب والوضع تحت التصرف
+                </p>
+
+            </div>
+
+            <button
+                class="primary-btn"
+                id="addAssignmentButton"
+            >
+                + تسجيل وضعية
+            </button>
+
+        </div>
+
+
+        <div class="section-body">
+
+            <div class="form-note" style="margin-bottom:16px;">
+
+                يمكنك تسجيل وضعية جديدة للموظف،
+                سواء كانت <strong>انتدابًا</strong>
+                أو <strong>وضعًا تحت التصرف</strong>.
+                يتم حساب المدة والأيام المتبقية
+                والتنبيه تلقائيًا.
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                الموظف
+                            </th>
+
+                            <th>
+                                النوع
+                            </th>
+
+                            <th>
+                                الاتجاه
+                            </th>
+
+                            <th>
+                                المؤسسة
+                            </th>
+
+                            <th>
+                                البداية
+                            </th>
+
+                            <th>
+                                النهاية
+                            </th>
+
+                            <th>
+                                المدة
+                            </th>
+
+                            <th>
+                                الحالة
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="assignmentsTable">
+
+                        <tr>
+
+                            <td colspan="8">
+
+                                <div class="empty">
+                                    جارٍ تحميل الوضعيات...
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     التنبيهات
+===================================================== -->
+
+<section
+    id="page-alerts"
+    class="hidden"
+>
+
+    <div class="section">
+
+        <div class="section-head">
+
+            <div>
+
+                <h2>
+                    التنبيهات الداخلية
+                </h2>
+
+                <p>
+                    الوضعيات التي اقتربت من نهايتها
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="section-body">
+
+            <div
+                class="alert-list"
+                id="alertsList"
+            >
+
+                <div class="empty">
+                    جارٍ تحميل التنبيهات...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+    </div>
+
+</main>
 
 </div>
 
 
-<!-- =========================
-     MODAL ملف الموظف
-========================= -->
+<!-- =====================================================
+     نافذة ملف الموظف
+===================================================== -->
 
 <div
     id="employeeModal"
@@ -1462,20 +2106,16 @@
         <div
             class="modal-body"
             id="employeeModalBody"
-        >
-            <div class="empty">
-                جارٍ التحميل...
-            </div>
-        </div>
+        ></div>
 
     </div>
 
 </div>
 
 
-<!-- =========================
-     MODAL إضافة موظف
-========================= -->
+<!-- =====================================================
+     نافذة إضافة موظف
+===================================================== -->
 
 <div
     id="addEmployeeModal"
@@ -1503,71 +2143,91 @@
 
             <form id="addEmployeeForm">
 
-                <div class="field">
+                <div class="form-grid">
 
-                    <label>
-                        رقم الموظف
-                    </label>
+                    <div class="field">
 
-                    <input
-                        id="newEmployeeNumber"
-                        type="text"
-                        placeholder="رقم الموظف"
-                    >
+                        <label>
+                            رقم الموظف
+                        </label>
+
+                        <input
+                            id="newEmployeeNumber"
+                            type="text"
+                            placeholder="اختياري"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            الاسم
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="newFirstName"
+                            type="text"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            اللقب
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="newLastName"
+                            type="text"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            الرتبة
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="newGrade"
+                            type="text"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="button"
+                            class="secondary-btn"
+                            onclick="closeAddEmployeeModal()"
+                        >
+                            إلغاء
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="primary-btn"
+                        >
+                            حفظ الموظف
+                        </button>
+
+                    </div>
 
                 </div>
-
-                <div class="field">
-
-                    <label>
-                        الاسم
-                    </label>
-
-                    <input
-                        id="newFirstName"
-                        type="text"
-                        required
-                        placeholder="الاسم"
-                    >
-
-                </div>
-
-                <div class="field">
-
-                    <label>
-                        اللقب
-                    </label>
-
-                    <input
-                        id="newLastName"
-                        type="text"
-                        required
-                        placeholder="اللقب"
-                    >
-
-                </div>
-
-                <div class="field">
-
-                    <label>
-                        الرتبة
-                    </label>
-
-                    <input
-                        id="newGrade"
-                        type="text"
-                        required
-                        placeholder="الرتبة"
-                    >
-
-                </div>
-
-                <button
-                    type="submit"
-                    class="primary-btn"
-                >
-                    حفظ الموظف
-                </button>
 
             </form>
 
@@ -1578,9 +2238,272 @@
 </div>
 
 
-<!-- =========================
-     LOADING
-========================= -->
+<!-- =====================================================
+     نافذة تسجيل وضعية
+===================================================== -->
+
+<div
+    id="addAssignmentModal"
+    class="modal-overlay hidden"
+>
+
+    <div class="modal">
+
+        <div class="modal-head">
+
+            <h2>
+                تسجيل وضعية إدارية
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeAddAssignmentModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <form id="addAssignmentForm">
+
+                <div class="form-grid">
+
+
+                    <div class="form-section-title">
+                        بيانات الوضعية
+                    </div>
+
+
+                    <!-- الموظف -->
+
+                    <div class="field full">
+
+                        <label>
+                            الموظف
+                            <span class="required">*</span>
+                        </label>
+
+                        <select
+                            id="assignmentEmployee"
+                            required
+                        >
+
+                            <option value="">
+                                اختر الموظف
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- النوع -->
+
+                    <div class="field">
+
+                        <label>
+                            نوع الوضعية
+                            <span class="required">*</span>
+                        </label>
+
+                        <select
+                            id="assignmentType"
+                            required
+                        >
+
+                            <option value="">
+                                اختر النوع
+                            </option>
+
+                            <option value="انتداب">
+                                انتداب
+                            </option>
+
+                            <option value="تحت التصرف">
+                                تحت التصرف
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- الاتجاه -->
+
+                    <div class="field">
+
+                        <label>
+                            الاتجاه
+                            <span class="required">*</span>
+                        </label>
+
+                        <select
+                            id="assignmentDirection"
+                            required
+                        >
+
+                            <option value="">
+                                اختر الاتجاه
+                            </option>
+
+                            <option value="من المؤسسة">
+                                من المؤسسة
+                            </option>
+
+                            <option value="إلى المؤسسة">
+                                إلى المؤسسة
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- المؤسسة -->
+
+                    <div class="field full">
+
+                        <label>
+                            المؤسسة المستقبلة
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="receivingInstitution"
+                            type="text"
+                            required
+                            placeholder="اكتب اسم المؤسسة"
+                        >
+
+                    </div>
+
+
+                    <!-- التواريخ -->
+
+                    <div class="form-section-title">
+                        مدة الوضعية
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            تاريخ البداية
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="assignmentStartDate"
+                            type="date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            تاريخ النهاية
+                        </label>
+
+                        <input
+                            id="assignmentEndDate"
+                            type="date"
+                        >
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <div class="checkbox-row">
+
+                            <input
+                                id="assignmentIndefinite"
+                                type="checkbox"
+                            >
+
+                            <label
+                                for="assignmentIndefinite"
+                            >
+                                الوضعية غير محددة المدة
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ملاحظات -->
+
+                    <div class="form-section-title">
+                        ملاحظات
+                    </div>
+
+
+                    <div class="field full">
+
+                        <textarea
+                            id="assignmentNotes"
+                            placeholder="أدخل أي ملاحظات إضافية..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-note full">
+
+                        <strong>
+                            ملاحظة:
+                        </strong>
+
+                        عند تحديد
+                        <strong>
+                            غير محددة المدة
+                        </strong>
+                        لن يتم إدخال تاريخ نهاية،
+                        ولن تظهر الوضعية ضمن تنبيهات قرب الانتهاء.
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="button"
+                            class="secondary-btn"
+                            onclick="closeAddAssignmentModal()"
+                        >
+                            إلغاء
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="primary-btn"
+                        >
+                            تسجيل الوضعية
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     التحميل
+===================================================== -->
 
 <div
     id="loading"
@@ -1604,317 +2527,351 @@
 
 <script>
 
-    /* =====================================================
-       إعداد Supabase
-    ===================================================== */
+/* =========================================================
+   إعداد Supabase
+========================================================= */
 
-    const SUPABASE_URL =
-        "https://etqbcnskmzlumfguryjk.supabase.co";
+const SUPABASE_URL =
+    "https://etqbcnskmzlumfguryjk.supabase.co";
 
-    const SUPABASE_KEY =
-        "sb_publishable_lTuyKeXZOPZO5AzVzRuGUA_6wZwjz1m";
+const SUPABASE_KEY =
+    "sb_publishable_lTuyKeXZOPZO5AzVzRuGUA_6wZwjz1m";
 
-    const db =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
+const db =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   المتغيرات
+========================================================= */
+
+let currentUser = null;
+
+let employees = [];
+
+let assignments = [];
+
+let alerts = [];
+
+
+/* =========================================================
+   عناصر عامة
+========================================================= */
+
+const loginScreen =
+    document.getElementById("loginScreen");
+
+const app =
+    document.getElementById("app");
+
+const sidebar =
+    document.getElementById("sidebar");
+
+const loading =
+    document.getElementById("loading");
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginError =
+    document.getElementById("loginError");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+
+/* =========================================================
+   الأدوات
+========================================================= */
+
+function showLoading(){
+
+    loading.classList.remove("hidden");
+
+}
+
+function hideLoading(){
+
+    loading.classList.add("hidden");
+
+}
+
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent =
+        message;
+
+    toast.classList.remove(
+        "hidden"
+    );
+
+    setTimeout(
+        () => {
+
+            toast.classList.add(
+                "hidden"
+            );
+
+        },
+        3500
+    );
+
+}
+
+
+function escapeHtml(value){
+
+    if(
+        value === null ||
+        value === undefined
+    ){
+        return "";
+    }
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+
+function formatDate(date){
+
+    if(!date){
+        return "—";
+    }
+
+    const d =
+        new Date(
+            date + "T00:00:00"
         );
 
-
-    /* =====================================================
-       متغيرات عامة
-    ===================================================== */
-
-    let currentUser = null;
-    let employees = [];
-    let assignments = [];
-    let alerts = [];
-
-
-    /* =====================================================
-       عناصر الواجهة
-    ===================================================== */
-
-    const loginScreen =
-        document.getElementById("loginScreen");
-
-    const app =
-        document.getElementById("app");
-
-    const loginForm =
-        document.getElementById("loginForm");
-
-    const loginError =
-        document.getElementById("loginError");
-
-    const loginButton =
-        document.getElementById("loginButton");
-
-    const loading =
-        document.getElementById("loading");
-
-    const sidebar =
-        document.getElementById("sidebar");
-
-
-    /* =====================================================
-       أدوات مساعدة
-    ===================================================== */
-
-    function showLoading() {
-        loading.classList.remove("hidden");
-    }
-
-    function hideLoading() {
-        loading.classList.add("hidden");
-    }
-
-
-    function showToast(message) {
-
-        const toast =
-            document.getElementById("toast");
-
-        toast.textContent = message;
-
-        toast.classList.remove("hidden");
-
-        setTimeout(() => {
-            toast.classList.add("hidden");
-        }, 3000);
-    }
-
-
-    function formatDate(date) {
-
-        if (!date) {
-            return "—";
+    return d.toLocaleDateString(
+        "ar-DZ",
+        {
+            year:"numeric",
+            month:"2-digit",
+            day:"2-digit"
         }
+    );
 
-        const d =
-            new Date(date + "T00:00:00");
+}
 
-        return d.toLocaleDateString(
-            "ar-DZ",
-            {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit"
-            }
+
+/* =========================================================
+   الصلاحيات
+========================================================= */
+
+async function checkAdminRole(userId){
+
+    const {data,error} =
+        await db
+            .from("user_roles")
+            .select("role")
+            .eq("user_id",userId)
+            .maybeSingle();
+
+    if(error){
+        throw error;
+    }
+
+    return data &&
+           data.role === "admin";
+
+}
+
+
+/* =========================================================
+   تسجيل الدخول
+========================================================= */
+
+loginForm.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+        loginError.classList.add(
+            "hidden"
         );
-    }
 
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
 
-    function escapeHtml(value) {
+        const password =
+            document
+                .getElementById("password")
+                .value;
 
-        if (value === null || value === undefined) {
-            return "";
-        }
+        try{
 
-        return String(value)
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("'", "&#039;");
-    }
+            loginButton.disabled =
+                true;
 
-
-    /* =====================================================
-       التحقق من الصلاحية
-    ===================================================== */
-
-    async function checkAdminRole(userId) {
-
-        const { data, error } =
-            await db
-                .from("user_roles")
-                .select("role")
-                .eq("user_id", userId)
-                .maybeSingle();
-
-        if (error) {
-            throw error;
-        }
-
-        if (!data) {
-            return false;
-        }
-
-        return data.role === "admin";
-    }
-
-
-    /* =====================================================
-       تسجيل الدخول
-    ===================================================== */
-
-    loginForm.addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-            loginError.classList.add("hidden");
-
-            const email =
-                document
-                    .getElementById("email")
-                    .value
-                    .trim();
-
-            const password =
-                document
-                    .getElementById("password")
-                    .value;
-
-            if (!email || !password) {
-                return;
-            }
-
-            loginButton.disabled = true;
             loginButton.textContent =
                 "جارٍ تسجيل الدخول...";
 
-            try {
 
-                const { data, error } =
-                    await db.auth.signInWithPassword({
+            const {data,error} =
+                await db.auth
+                    .signInWithPassword({
                         email,
                         password
                     });
 
-                if (error) {
-                    throw error;
-                }
-
-                if (!data.user) {
-                    throw new Error(
-                        "تعذر الحصول على بيانات المستخدم."
-                    );
-                }
-
-                const isAdmin =
-                    await checkAdminRole(
-                        data.user.id
-                    );
-
-                if (!isAdmin) {
-
-                    await db.auth.signOut();
-
-                    throw new Error(
-                        "هذا الحساب لا يملك صلاحية مسؤول النظام."
-                    );
-                }
-
-                currentUser =
-                    data.user;
-
-                await openApplication();
-
-            } catch (error) {
-
-                console.error(error);
-
-                loginError.textContent =
-                    error.message ||
-                    "حدث خطأ أثناء تسجيل الدخول.";
-
-                loginError.classList.remove(
-                    "hidden"
-                );
-
-            } finally {
-
-                loginButton.disabled = false;
-
-                loginButton.textContent =
-                    "تسجيل الدخول";
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       فتح التطبيق
-    ===================================================== */
-
-    async function openApplication() {
-
-        loginScreen.classList.add("hidden");
-
-        app.classList.remove("hidden");
-
-        document.getElementById(
-            "userEmail"
-        ).textContent =
-            currentUser?.email ||
-            "المسؤول";
-
-        updateDate();
-
-        await loadDashboard();
-
-        await loadEmployees();
-
-        await loadAssignments();
-
-        await loadAlerts();
-    }
-
-
-    /* =====================================================
-       التاريخ
-    ===================================================== */
-
-    function updateDate() {
-
-        const today =
-            new Date();
-
-        document.getElementById(
-            "todayDate"
-        ).textContent =
-            today.toLocaleDateString(
-                "ar-DZ",
-                {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
-                }
-            );
-    }
-
-
-    /* =====================================================
-       لوحة التحكم
-    ===================================================== */
-
-    async function loadDashboard() {
-
-        try {
-
-            const { data, error } =
-                await db.rpc(
-                    "dashboard_statistics"
-                );
-
-            if (error) {
+            if(error){
                 throw error;
             }
 
-            let stats = data;
-
-            if (Array.isArray(data)) {
-                stats = data[0];
+            if(!data.user){
+                throw new Error(
+                    "تعذر الحصول على بيانات المستخدم."
+                );
             }
 
-            if (!stats) {
-                return;
+
+            const isAdmin =
+                await checkAdminRole(
+                    data.user.id
+                );
+
+
+            if(!isAdmin){
+
+                await db.auth.signOut();
+
+                throw new Error(
+                    "هذا الحساب لا يملك صلاحية مسؤول النظام."
+                );
             }
+
+
+            currentUser =
+                data.user;
+
+            await openApplication();
+
+        }
+        catch(error){
+
+            console.error(error);
+
+            loginError.textContent =
+                error.message ||
+                "حدث خطأ أثناء تسجيل الدخول.";
+
+            loginError.classList.remove(
+                "hidden"
+            );
+
+        }
+        finally{
+
+            loginButton.disabled =
+                false;
+
+            loginButton.textContent =
+                "تسجيل الدخول";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   فتح التطبيق
+========================================================= */
+
+async function openApplication(){
+
+    loginScreen.classList.add(
+        "hidden"
+    );
+
+    app.classList.remove(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "userEmail"
+    ).textContent =
+        currentUser?.email ||
+        "المسؤول";
+
+
+    updateDate();
+
+
+    await Promise.all([
+        loadDashboard(),
+        loadEmployees(),
+        loadAssignments(),
+        loadAlerts()
+    ]);
+
+}
+
+
+/* =========================================================
+   التاريخ
+========================================================= */
+
+function updateDate(){
+
+    document.getElementById(
+        "todayDate"
+    ).textContent =
+        new Date().toLocaleDateString(
+            "ar-DZ",
+            {
+                weekday:"long",
+                year:"numeric",
+                month:"long",
+                day:"numeric"
+            }
+        );
+
+}
+
+
+/* =========================================================
+   لوحة التحكم
+========================================================= */
+
+async function loadDashboard(){
+
+    try{
+
+        const {data,error} =
+            await db.rpc(
+                "dashboard_statistics"
+            );
+
+        if(error){
+            throw error;
+        }
+
+        let stats =
+            Array.isArray(data)
+                ? data[0]
+                : data;
+
+
+        if(stats){
 
             document.getElementById(
                 "statEmployees"
@@ -1923,6 +2880,7 @@
                 stats.employees_count ??
                 0;
 
+
             document.getElementById(
                 "statActive"
             ).textContent =
@@ -1930,11 +2888,13 @@
                 stats.active_count ??
                 0;
 
+
             document.getElementById(
                 "statAlerts"
             ).textContent =
                 stats.alerts_count ??
                 0;
+
 
             document.getElementById(
                 "statExpired"
@@ -1943,166 +2903,198 @@
                 stats.expired_count ??
                 0;
 
-        } catch (error) {
-
-            console.error(
-                "dashboard_statistics:",
-                error
-            );
-
-            /*
-             * في حال اختلاف شكل نتيجة الدالة،
-             * نحسب الإحصائيات مباشرة.
-             */
-
-            try {
-
-                const { count: employeesCount } =
-                    await db
-                        .from("employees")
-                        .select(
-                            "id",
-                            {
-                                count: "exact",
-                                head: true
-                            }
-                        )
-                        .eq(
-                            "is_active",
-                            true
-                        );
-
-                const { data: activeData } =
-                    await db
-                        .from("active_assignments")
-                        .select("assignment_id");
-
-                const { data: alertData } =
-                    await db
-                        .from("assignment_alerts")
-                        .select("assignment_id");
-
-                const { data: expiredData } =
-                    await db
-                        .from("expired_assignments")
-                        .select("assignment_id");
-
-                document.getElementById(
-                    "statEmployees"
-                ).textContent =
-                    employeesCount || 0;
-
-                document.getElementById(
-                    "statActive"
-                ).textContent =
-                    activeData?.length || 0;
-
-                document.getElementById(
-                    "statAlerts"
-                ).textContent =
-                    alertData?.length || 0;
-
-                document.getElementById(
-                    "statExpired"
-                ).textContent =
-                    expiredData?.length || 0;
-
-            } catch (fallbackError) {
-
-                console.error(
-                    fallbackError
-                );
-            }
         }
 
-        renderDashboardAlerts();
+    }
+    catch(error){
+
+        console.error(
+            "dashboard:",
+            error
+        );
+
+        await loadDashboardFallback();
+
     }
 
+    renderDashboardAlerts();
 
-    /* =====================================================
-       الموظفون
-    ===================================================== */
+}
 
-    async function loadEmployees() {
 
-        const tbody =
-            document.getElementById(
-                "employeesTable"
+/* =========================================================
+   إحصائيات احتياطية
+========================================================= */
+
+async function loadDashboardFallback(){
+
+    try{
+
+        const employeesResult =
+            await db
+                .from("employees")
+                .select(
+                    "id",
+                    {
+                        count:"exact",
+                        head:true
+                    }
+                )
+                .eq(
+                    "is_active",
+                    true
+                );
+
+
+        const activeResult =
+            await db
+                .from("active_assignments")
+                .select(
+                    "assignment_id"
+                );
+
+
+        const alertsResult =
+            await db
+                .from("assignment_alerts")
+                .select(
+                    "assignment_id"
+                );
+
+
+        const expiredResult =
+            await db
+                .from("expired_assignments")
+                .select(
+                    "assignment_id"
+                );
+
+
+        document.getElementById(
+            "statEmployees"
+        ).textContent =
+            employeesResult.count || 0;
+
+
+        document.getElementById(
+            "statActive"
+        ).textContent =
+            activeResult.data?.length || 0;
+
+
+        document.getElementById(
+            "statAlerts"
+        ).textContent =
+            alertsResult.data?.length || 0;
+
+
+        document.getElementById(
+            "statExpired"
+        ).textContent =
+            expiredResult.data?.length || 0;
+
+    }
+    catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   تحميل الموظفين
+========================================================= */
+
+async function loadEmployees(){
+
+    const tbody =
+        document.getElementById(
+            "employeesTable"
+        );
+
+
+    const {data,error} =
+        await db
+            .from("employees")
+            .select("*")
+            .order(
+                "last_name",
+                {
+                    ascending:true
+                }
             );
+
+
+    if(error){
+
+        console.error(error);
 
         tbody.innerHTML = `
             <tr>
                 <td colspan="5">
                     <div class="empty">
-                        جارٍ تحميل الموظفين...
+                        تعذر تحميل الموظفين.
                     </div>
                 </td>
             </tr>
         `;
 
-        const { data, error } =
-            await db
-                .from("employees")
-                .select("*")
-                .order(
-                    "last_name",
-                    {
-                        ascending: true
-                    }
-                );
-
-        if (error) {
-
-            console.error(error);
-
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="5">
-                        <div class="empty">
-                            تعذر تحميل الموظفين.
-                        </div>
-                    </td>
-                </tr>
-            `;
-
-            return;
-        }
-
-        employees =
-            Array.isArray(data)
-                ? data
-                : [];
-
-        renderEmployees(employees);
+        return;
     }
 
 
-    function renderEmployees(list) {
+    employees =
+        Array.isArray(data)
+            ? data
+            : [];
 
-        const tbody =
-            document.getElementById(
-                "employeesTable"
-            );
 
-        if (!list.length) {
+    renderEmployees(
+        employees
+    );
 
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="5">
-                        <div class="empty">
-                            لا توجد بيانات.
-                        </div>
-                    </td>
-                </tr>
-            `;
 
-            return;
-        }
+    populateEmployeeSelect();
 
-        tbody.innerHTML =
-            list.map(employee => {
+}
+
+
+/* =========================================================
+   عرض الموظفين
+========================================================= */
+
+function renderEmployees(list){
+
+    const tbody =
+        document.getElementById(
+            "employeesTable"
+        );
+
+
+    if(!list.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    <div class="empty">
+                        لا توجد بيانات.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    tbody.innerHTML =
+        list.map(
+            employee => {
 
                 return `
+
                     <tr>
 
                         <td>
@@ -2133,16 +3125,18 @@
 
                             ${
                                 employee.is_active
-                                    ? `
-                                        <span class="status active">
-                                            نشط
-                                        </span>
-                                    `
-                                    : `
-                                        <span class="status danger">
-                                            غير نشط
-                                        </span>
-                                    `
+                                ?
+                                `
+                                    <span class="status active">
+                                        نشط
+                                    </span>
+                                `
+                                :
+                                `
+                                    <span class="status danger">
+                                        غير نشط
+                                    </span>
+                                `
                             }
 
                         </td>
@@ -2151,9 +3145,7 @@
 
                             <button
                                 class="action-btn"
-                                onclick="openEmployee(
-                                    '${employee.id}'
-                                )"
+                                onclick="openEmployee('${employee.id}')"
                             >
                                 عرض الملف
                             </button>
@@ -2161,463 +3153,273 @@
                         </td>
 
                     </tr>
+
                 `;
 
-            }).join("");
-    }
-
-
-    /* =====================================================
-       البحث
-    ===================================================== */
-
-    document
-        .getElementById("employeeSearch")
-        .addEventListener(
-            "input",
-            async function() {
-
-                const value =
-                    this.value.trim();
-
-                if (!value) {
-
-                    renderEmployees(
-                        employees
-                    );
-
-                    return;
-                }
-
-                try {
-
-                    const { data, error } =
-                        await db.rpc(
-                            "search_employees",
-                            {
-                                search_text:
-                                    value
-                            }
-                        );
-
-                    if (error) {
-                        throw error;
-                    }
-
-                    renderEmployees(
-                        data || []
-                    );
-
-                } catch (error) {
-
-                    console.error(error);
-
-                    /*
-                     * بحث احتياطي محلي
-                     */
-
-                    const search =
-                        value.toLowerCase();
-
-                    const filtered =
-                        employees.filter(
-                            employee => {
-
-                                const name =
-                                    (
-                                        employee.first_name +
-                                        " " +
-                                        employee.last_name
-                                    ).toLowerCase();
-
-                                const number =
-                                    (
-                                        employee.employee_number ||
-                                        ""
-                                    ).toLowerCase();
-
-                                return (
-                                    name.includes(search) ||
-                                    number.includes(search)
-                                );
-                            }
-                        );
-
-                    renderEmployees(
-                        filtered
-                    );
-                }
             }
-        );
+        ).join("");
+
+}
 
 
-    /* =====================================================
-       ملف الموظف
-    ===================================================== */
+/* =========================================================
+   البحث
+========================================================= */
 
-    async function openEmployee(employeeId) {
+document
+    .getElementById("employeeSearch")
+    .addEventListener(
+        "input",
+        async function(){
 
-        const modal =
-            document.getElementById(
-                "employeeModal"
-            );
+            const value =
+                this.value.trim();
 
-        const body =
-            document.getElementById(
-                "employeeModalBody"
-            );
 
-        modal.classList.remove(
-            "hidden"
-        );
+            if(!value){
 
-        body.innerHTML = `
-            <div class="empty">
-                جارٍ تحميل ملف الموظف...
-            </div>
-        `;
-
-        try {
-
-            const { data, error } =
-                await db.rpc(
-                    "get_employee_file",
-                    {
-                        p_employee_id:
-                            employeeId
-                    }
+                renderEmployees(
+                    employees
                 );
-
-            if (error) {
-                throw error;
-            }
-
-            const rows =
-                Array.isArray(data)
-                    ? data
-                    : [];
-
-            if (!rows.length) {
-
-                body.innerHTML = `
-                    <div class="empty">
-                        لم يتم العثور على بيانات الموظف.
-                    </div>
-                `;
 
                 return;
             }
 
-            const first =
-                rows[0];
 
-            document.getElementById(
-                "modalEmployeeTitle"
-            ).textContent =
-                "ملف " +
-                (first.employee_name || "");
+            try{
 
-            const assignmentsHtml =
-                rows.map(row => {
+                const {data,error} =
+                    await db.rpc(
+                        "search_employees",
+                        {
+                            search_text:value
+                        }
+                    );
 
-                    return `
-                        <div class="assignment-card">
 
-                            <div class="assignment-card-head">
-
-                                <strong>
-                                    ${escapeHtml(
-                                        row.assignment_type
-                                    )}
-                                </strong>
-
-                                ${
-                                    row.calculated_status === "سارية"
-                                        ? `
-                                            <span class="status active">
-                                                سارية
-                                            </span>
-                                        `
-                                        : `
-                                            <span class="status warning">
-                                                ${escapeHtml(
-                                                    row.calculated_status ||
-                                                    "—"
-                                                )}
-                                            </span>
-                                        `
-                                }
-
-                            </div>
-
-                            <div class="assignment-details">
-
-                                <div>
-                                    <strong>
-                                        الاتجاه:
-                                    </strong>
-                                    ${escapeHtml(
-                                        row.assignment_direction
-                                    )}
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        المؤسسة:
-                                    </strong>
-                                    ${escapeHtml(
-                                        row.receiving_institution
-                                    )}
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        البداية:
-                                    </strong>
-                                    ${formatDate(
-                                        row.start_date
-                                    )}
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        النهاية:
-                                    </strong>
-                                    ${
-                                        row.is_indefinite
-                                            ? "غير محددة"
-                                            : formatDate(
-                                                row.end_date
-                                            )
-                                    }
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        المدة:
-                                    </strong>
-                                    ${escapeHtml(
-                                        row.duration ||
-                                        "—"
-                                    )}
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        المتبقي:
-                                    </strong>
-                                    ${
-                                        row.days_remaining === null ||
-                                        row.days_remaining === undefined
-                                            ? "—"
-                                            : row.days_remaining +
-                                              " يوم"
-                                    }
-                                </div>
-
-                            </div>
-
-                            ${
-                                row.notes
-                                    ? `
-                                        <div style="
-                                            margin-top:10px;
-                                            color:#77748a;
-                                            font-size:12px;
-                                        ">
-                                            ملاحظات:
-                                            ${escapeHtml(
-                                                row.notes
-                                            )}
-                                        </div>
-                                    `
-                                    : ""
-                            }
-
-                        </div>
-                    `;
-
-                }).join("");
-
-            body.innerHTML = `
-
-                <div class="employee-profile">
-
-                    <div class="profile-box">
-
-                        <small>
-                            الاسم واللقب
-                        </small>
-
-                        <strong>
-                            ${escapeHtml(
-                                first.employee_name
-                            )}
-                        </strong>
-
-                    </div>
-
-                    <div class="profile-box">
-
-                        <small>
-                            رقم الموظف
-                        </small>
-
-                        <strong>
-                            ${escapeHtml(
-                                first.employee_number ||
-                                "—"
-                            )}
-                        </strong>
-
-                    </div>
-
-                    <div class="profile-box">
-
-                        <small>
-                            الرتبة
-                        </small>
-
-                        <strong>
-                            ${escapeHtml(
-                                first.grade
-                            )}
-                        </strong>
-
-                    </div>
-
-                    <div class="profile-box">
-
-                        <small>
-                            عدد الوضعيات
-                        </small>
-
-                        <strong>
-                            ${rows.length}
-                        </strong>
-
-                    </div>
-
-                </div>
-
-                <h3 style="
-                    font-size:15px;
-                    margin-bottom:12px;
-                ">
-                    سجل الوضعيات
-                </h3>
-
-                ${
-                    assignmentsHtml ||
-                    `
-                        <div class="empty">
-                            لا توجد وضعيات مسجلة.
-                        </div>
-                    `
+                if(error){
+                    throw error;
                 }
 
-            `;
 
-        } catch (error) {
-
-            console.error(error);
-
-            body.innerHTML = `
-                <div class="empty">
-                    تعذر تحميل ملف الموظف.
-                    <br>
-                    ${escapeHtml(
-                        error.message || ""
-                    )}
-                </div>
-            `;
-        }
-    }
-
-
-    function closeEmployeeModal() {
-
-        document
-            .getElementById("employeeModal")
-            .classList.add("hidden");
-    }
-
-
-    /* =====================================================
-       الوضعيات
-    ===================================================== */
-
-    async function loadAssignments() {
-
-        const tbody =
-            document.getElementById(
-                "assignmentsTable"
-            );
-
-        const { data, error } =
-            await db
-                .from("active_assignments")
-                .select("*")
-                .order(
-                    "end_date",
-                    {
-                        ascending: true,
-                        nullsFirst: false
-                    }
+                renderEmployees(
+                    data || []
                 );
 
-        if (error) {
+            }
+            catch(error){
 
-            console.error(error);
+                console.error(error);
 
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="7">
-                        <div class="empty">
-                            تعذر تحميل الوضعيات.
-                        </div>
-                    </td>
-                </tr>
-            `;
 
-            return;
+                const search =
+                    value.toLowerCase();
+
+
+                const filtered =
+                    employees.filter(
+                        employee => {
+
+                            const name =
+                                (
+                                    employee.first_name +
+                                    " " +
+                                    employee.last_name
+                                ).toLowerCase();
+
+
+                            const number =
+                                (
+                                    employee.employee_number ||
+                                    ""
+                                ).toLowerCase();
+
+
+                            return (
+                                name.includes(search) ||
+                                number.includes(search)
+                            );
+
+                        }
+                    );
+
+
+                renderEmployees(
+                    filtered
+                );
+
+            }
+
         }
+    );
 
-        assignments =
-            Array.isArray(data)
-                ? data
-                : [];
 
-        if (!assignments.length) {
+/* =========================================================
+   قائمة الموظفين داخل نموذج الوضعية
+========================================================= */
 
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="7">
-                        <div class="empty">
-                            لا توجد وضعيات سارية.
-                        </div>
-                    </td>
-                </tr>
-            `;
+function populateEmployeeSelect(){
 
-            return;
-        }
+    const select =
+        document.getElementById(
+            "assignmentEmployee"
+        );
 
-        tbody.innerHTML =
-            assignments.map(row => {
+
+    const current =
+        select.value;
+
+
+    select.innerHTML = `
+        <option value="">
+            اختر الموظف
+        </option>
+    `;
+
+
+    employees
+        .filter(
+            employee =>
+                employee.is_active
+        )
+        .forEach(
+            employee => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    employee.id;
+
+
+                option.textContent =
+                    employee.first_name +
+                    " " +
+                    employee.last_name +
+                    " — " +
+                    employee.grade;
+
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+    if(current){
+        select.value =
+            current;
+    }
+
+}
+
+
+/* =========================================================
+   تحميل الوضعيات
+========================================================= */
+
+async function loadAssignments(){
+
+    const tbody =
+        document.getElementById(
+            "assignmentsTable"
+        );
+
+
+    const {data,error} =
+        await db
+            .from("active_assignments")
+            .select("*")
+            .order(
+                "end_date",
+                {
+                    ascending:true,
+                    nullsFirst:false
+                }
+            );
+
+
+    if(error){
+
+        console.error(error);
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8">
+                    <div class="empty">
+                        تعذر تحميل الوضعيات.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    assignments =
+        Array.isArray(data)
+            ? data
+            : [];
+
+
+    renderAssignments();
+
+}
+
+
+/* =========================================================
+   عرض الوضعيات
+========================================================= */
+
+function renderAssignments(){
+
+    const tbody =
+        document.getElementById(
+            "assignmentsTable"
+        );
+
+
+    if(!assignments.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8">
+                    <div class="empty">
+                        لا توجد وضعيات سارية.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    tbody.innerHTML =
+        assignments.map(
+            row => {
 
                 let statusClass =
                     "active";
 
-                if (
+
+                if(
                     row.calculated_status !==
                     "سارية"
-                ) {
+                ){
                     statusClass =
                         "warning";
                 }
 
+
                 return `
+
                     <tr>
 
                         <td>
@@ -2655,11 +3457,20 @@
                         <td>
                             ${
                                 row.is_indefinite
-                                    ? "غير محددة"
-                                    : formatDate(
-                                        row.end_date
-                                    )
+                                ?
+                                "غير محددة"
+                                :
+                                formatDate(
+                                    row.end_date
+                                )
                             }
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                row.duration ||
+                                "—"
+                            )}
                         </td>
 
                         <td>
@@ -2676,261 +3487,297 @@
                         </td>
 
                     </tr>
+
                 `;
 
-            }).join("");
+            }
+        ).join("");
+
+}
+
+
+/* =========================================================
+   التنبيهات
+========================================================= */
+
+async function loadAlerts(){
+
+    const {data,error} =
+        await db
+            .from("assignment_alerts")
+            .select("*")
+            .order(
+                "days_remaining",
+                {
+                    ascending:true
+                }
+            );
+
+
+    if(error){
+
+        console.error(error);
+
+        return;
     }
 
 
-    /* =====================================================
-       التنبيهات
-    ===================================================== */
-
-    async function loadAlerts() {
-
-        const { data, error } =
-            await db
-                .from("assignment_alerts")
-                .select("*")
-                .order(
-                    "days_remaining",
-                    {
-                        ascending: true
-                    }
-                );
-
-        if (error) {
-
-            console.error(error);
-
-            return;
-        }
-
-        alerts =
-            Array.isArray(data)
-                ? data
-                : [];
-
-        renderAlerts();
-        renderDashboardAlerts();
-
-        document.getElementById(
-            "statAlerts"
-        ).textContent =
-            alerts.length;
-    }
+    alerts =
+        Array.isArray(data)
+            ? data
+            : [];
 
 
-    function alertHtml(row) {
+    renderAlerts();
 
-        const danger =
-            Number(row.days_remaining) <= 7;
+    renderDashboardAlerts();
 
-        return `
-            <div class="alert-item">
 
-                <div class="alert-main">
+    document.getElementById(
+        "statAlerts"
+    ).textContent =
+        alerts.length;
 
-                    <div
-                        class="alert-dot ${
-                            danger ? "danger" : ""
-                        }"
-                    ></div>
+}
 
-                    <div>
 
-                        <strong>
-                            ${escapeHtml(
-                                row.employee_name
-                            )}
-                        </strong>
+function alertHtml(row){
 
-                        <span>
-                            ${escapeHtml(
-                                row.assignment_type
-                            )}
-                            —
-                            ${escapeHtml(
-                                row.receiving_institution
-                            )}
-                        </span>
+    const danger =
+        Number(
+            row.days_remaining
+        ) <= 7;
 
-                    </div>
 
-                </div>
+    return `
+
+        <div class="alert-item">
+
+            <div class="alert-main">
 
                 <div
-                    class="alert-badge ${
+                    class="alert-dot ${
                         danger ? "danger" : ""
                     }"
-                >
-                    ${escapeHtml(
-                        row.alert_level
-                    )}
+                ></div>
+
+                <div>
+
+                    <strong>
+                        ${escapeHtml(
+                            row.employee_name
+                        )}
+                    </strong>
+
+                    <span>
+                        ${escapeHtml(
+                            row.assignment_type
+                        )}
+                        —
+                        ${escapeHtml(
+                            row.receiving_institution
+                        )}
+                    </span>
+
                 </div>
 
             </div>
+
+
+            <div
+                class="alert-badge ${
+                    danger ? "danger" : ""
+                }"
+            >
+                ${escapeHtml(
+                    row.alert_level
+                )}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+function renderAlerts(){
+
+    const container =
+        document.getElementById(
+            "alertsList"
+        );
+
+
+    if(!alerts.length){
+
+        container.innerHTML = `
+            <div class="empty">
+                لا توجد تنبيهات حاليًا.
+            </div>
         `;
+
+        return;
     }
 
 
-    function renderAlerts() {
+    container.innerHTML =
+        alerts
+            .map(alertHtml)
+            .join("");
 
-        const container =
-            document.getElementById(
-                "alertsList"
-            );
+}
 
-        if (!alerts.length) {
 
-            container.innerHTML = `
-                <div class="empty">
-                    لا توجد تنبيهات حاليًا.
-                </div>
-            `;
+function renderDashboardAlerts(){
 
-            return;
-        }
+    const container =
+        document.getElementById(
+            "dashboardAlerts"
+        );
 
-        container.innerHTML =
-            alerts
-                .map(alertHtml)
-                .join("");
+
+    if(!container){
+        return;
     }
 
 
-    function renderDashboardAlerts() {
+    if(!alerts.length){
 
-        const container =
-            document.getElementById(
-                "dashboardAlerts"
-            );
+        container.innerHTML = `
+            <div class="empty">
+                لا توجد تنبيهات داخلية حاليًا.
+            </div>
+        `;
 
-        if (!container) {
-            return;
-        }
-
-        if (!alerts.length) {
-
-            container.innerHTML = `
-                <div class="empty">
-                    لا توجد تنبيهات داخلية حاليًا.
-                </div>
-            `;
-
-            return;
-        }
-
-        container.innerHTML =
-            `
-                <div class="alert-list">
-                    ${
-                        alerts
-                            .slice(0, 5)
-                            .map(alertHtml)
-                            .join("")
-                    }
-                </div>
-            `;
+        return;
     }
 
 
-    /* =====================================================
-       التنقل
-    ===================================================== */
+    container.innerHTML = `
 
-    function showPage(page) {
+        <div class="alert-list">
 
-        const pages = [
-            "dashboard",
-            "employees",
-            "assignments",
-            "alerts"
-        ];
+            ${
+                alerts
+                    .slice(0,5)
+                    .map(alertHtml)
+                    .join("")
+            }
 
-        pages.forEach(name => {
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   التنقل
+========================================================= */
+
+function showPage(page){
+
+    const pages = [
+        "dashboard",
+        "employees",
+        "assignments",
+        "alerts"
+    ];
+
+
+    pages.forEach(
+        name => {
 
             const element =
                 document.getElementById(
                     "page-" + name
                 );
 
-            if (element) {
+
+            if(element){
 
                 element.classList.toggle(
                     "hidden",
                     name !== page
                 );
+
             }
-        });
+
+        }
+    );
 
 
-        document
-            .querySelectorAll(".nav-btn")
-            .forEach(button => {
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(
+            button => {
 
                 button.classList.toggle(
                     "active",
                     button.dataset.page === page
                 );
 
-            });
-
-
-        const titles = {
-
-            dashboard: [
-                "لوحة التحكم",
-                "نظرة عامة على الوضعيات الإدارية"
-            ],
-
-            employees: [
-                "الموظفون",
-                "البحث والوصول إلى الملفات الإدارية"
-            ],
-
-            assignments: [
-                "الوضعيات",
-                "الانتداب والوضع تحت التصرف"
-            ],
-
-            alerts: [
-                "التنبيهات",
-                "الوضعيات التي تحتاج إلى متابعة"
-            ]
-
-        };
-
-
-        const title =
-            titles[page] ||
-            titles.dashboard;
-
-
-        document.getElementById(
-            "pageTitle"
-        ).textContent =
-            title[0];
-
-        document.getElementById(
-            "pageSubtitle"
-        ).textContent =
-            title[1];
-
-
-        sidebar.classList.remove(
-            "open"
+            }
         );
-    }
 
 
-    window.showPage =
-        showPage;
+    const titles = {
+
+        dashboard:[
+            "لوحة التحكم",
+            "نظرة عامة على الوضعيات الإدارية"
+        ],
+
+        employees:[
+            "الموظفون",
+            "البحث والوصول إلى الملفات الإدارية"
+        ],
+
+        assignments:[
+            "الوضعيات الإدارية",
+            "الانتداب والوضع تحت التصرف"
+        ],
+
+        alerts:[
+            "التنبيهات",
+            "الوضعيات التي تحتاج إلى متابعة"
+        ]
+
+    };
 
 
-    document
-        .querySelectorAll(".nav-btn")
-        .forEach(button => {
+    const title =
+        titles[page];
+
+
+    document.getElementById(
+        "pageTitle"
+    ).textContent =
+        title[0];
+
+
+    document.getElementById(
+        "pageSubtitle"
+    ).textContent =
+        title[1];
+
+
+    sidebar.classList.remove(
+        "open"
+    );
+
+}
+
+
+window.showPage =
+    showPage;
+
+
+document
+    .querySelectorAll(".nav-btn")
+    .forEach(
+        button => {
 
             button.addEventListener(
                 "click",
@@ -2943,306 +3790,202 @@
                 }
             );
 
-        });
+        }
+    );
 
 
-    /* =====================================================
-       القائمة في الهاتف
-    ===================================================== */
+/* =========================================================
+   القائمة الهاتفية
+========================================================= */
 
-    document
-        .getElementById("mobileMenu")
-        .addEventListener(
-            "click",
-            () => {
+document
+    .getElementById("mobileMenu")
+    .addEventListener(
+        "click",
+        () => {
 
-                sidebar.classList.toggle(
-                    "open"
-                );
-
-            }
-        );
-
-
-    /* =====================================================
-       تسجيل الخروج
-    ===================================================== */
-
-    document
-        .getElementById("logoutButton")
-        .addEventListener(
-            "click",
-            async () => {
-
-                await db.auth.signOut();
-
-                currentUser = null;
-
-                app.classList.add(
-                    "hidden"
-                );
-
-                loginScreen.classList.remove(
-                    "hidden"
-                );
-
-                document
-                    .getElementById("password")
-                    .value = "";
-
-            }
-        );
-
-
-    /* =====================================================
-       إضافة موظف
-    ===================================================== */
-
-    document
-        .getElementById("addEmployeeButton")
-        .addEventListener(
-            "click",
-            () => {
-
-                document
-                    .getElementById(
-                        "addEmployeeModal"
-                    )
-                    .classList.remove(
-                        "hidden"
-                    );
-
-            }
-        );
-
-
-    function closeAddEmployeeModal() {
-
-        document
-            .getElementById(
-                "addEmployeeModal"
-            )
-            .classList.add(
-                "hidden"
+            sidebar.classList.toggle(
+                "open"
             );
-    }
+
+        }
+    );
 
 
-    window.closeAddEmployeeModal =
-        closeAddEmployeeModal;
+/* =========================================================
+   تسجيل الخروج
+========================================================= */
 
+document
+    .getElementById("logoutButton")
+    .addEventListener(
+        "click",
+        async () => {
 
-    document
-        .getElementById("addEmployeeForm")
-        .addEventListener(
-            "submit",
-            async function(event) {
-
-                event.preventDefault();
-
-                const employeeNumber =
-                    document
-                        .getElementById(
-                            "newEmployeeNumber"
-                        )
-                        .value
-                        .trim();
-
-                const firstName =
-                    document
-                        .getElementById(
-                            "newFirstName"
-                        )
-                        .value
-                        .trim();
-
-                const lastName =
-                    document
-                        .getElementById(
-                            "newLastName"
-                        )
-                        .value
-                        .trim();
-
-                const grade =
-                    document
-                        .getElementById(
-                            "newGrade"
-                        )
-                        .value
-                        .trim();
-
-                try {
-
-                    showLoading();
-
-                    const { error } =
-                        await db
-                            .from("employees")
-                            .insert({
-                                employee_number:
-                                    employeeNumber ||
-                                    null,
-
-                                first_name:
-                                    firstName,
-
-                                last_name:
-                                    lastName,
-
-                                grade:
-                                    grade
-                            });
-
-                    if (error) {
-                        throw error;
-                    }
-
-                    closeAddEmployeeModal();
-
-                    this.reset();
-
-                    showToast(
-                        "تمت إضافة الموظف بنجاح."
-                    );
-
-                    await loadEmployees();
-
-                    await loadDashboard();
-
-                } catch (error) {
-
-                    console.error(error);
-
-                    showToast(
-                        error.message ||
-                        "تعذر إضافة الموظف."
-                    );
-
-                } finally {
-
-                    hideLoading();
-                }
-
-            }
-        );
-
-
-    /* =====================================================
-       إغلاق النوافذ بالنقر خارجها
-    ===================================================== */
-
-    document
-        .getElementById("employeeModal")
-        .addEventListener(
-            "click",
-            function(event) {
-
-                if (
-                    event.target === this
-                ) {
-                    closeEmployeeModal();
-                }
-
-            }
-        );
-
-
-    document
-        .getElementById("addEmployeeModal")
-        .addEventListener(
-            "click",
-            function(event) {
-
-                if (
-                    event.target === this
-                ) {
-                    closeAddEmployeeModal();
-                }
-
-            }
-        );
-
-
-    /* =====================================================
-       الجلسة الحالية
-    ===================================================== */
-
-    async function initialize() {
-
-        try {
-
-            const {
-                data: {
-                    session
-                }
-            } =
-                await db.auth.getSession();
-
-            if (!session) {
-                return;
-            }
-
-            const isAdmin =
-                await checkAdminRole(
-                    session.user.id
-                );
-
-            if (!isAdmin) {
-
-                await db.auth.signOut();
-
-                return;
-            }
+            await db.auth.signOut();
 
             currentUser =
-                session.user;
+                null;
 
-            await openApplication();
-
-        } catch (error) {
-
-            console.error(
-                "Initialization error:",
-                error
+            app.classList.add(
+                "hidden"
             );
+
+            loginScreen.classList.remove(
+                "hidden"
+            );
+
+            document.getElementById(
+                "password"
+            ).value = "";
+
         }
-    }
+    );
 
 
-    /* =====================================================
-       مراقبة الجلسة
-    ===================================================== */
+/* =========================================================
+   إضافة موظف
+========================================================= */
 
-    db.auth.onAuthStateChange(
-        async (event, session) => {
+document
+    .getElementById("addEmployeeButton")
+    .addEventListener(
+        "click",
+        () => {
 
-            if (
-                event === "SIGNED_OUT"
-            ) {
-
-                currentUser = null;
-
-                app.classList.add(
+            document
+                .getElementById(
+                    "addEmployeeModal"
+                )
+                .classList.remove(
                     "hidden"
                 );
 
-                loginScreen.classList.remove(
-                    "hidden"
+        }
+    );
+
+
+function closeAddEmployeeModal(){
+
+    document
+        .getElementById(
+            "addEmployeeModal"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+}
+
+window.closeAddEmployeeModal =
+    closeAddEmployeeModal;
+
+
+document
+    .getElementById("addEmployeeForm")
+    .addEventListener(
+        "submit",
+        async function(event){
+
+            event.preventDefault();
+
+
+            const employeeNumber =
+                document
+                    .getElementById(
+                        "newEmployeeNumber"
+                    )
+                    .value
+                    .trim();
+
+
+            const firstName =
+                document
+                    .getElementById(
+                        "newFirstName"
+                    )
+                    .value
+                    .trim();
+
+
+            const lastName =
+                document
+                    .getElementById(
+                        "newLastName"
+                    )
+                    .value
+                    .trim();
+
+
+            const grade =
+                document
+                    .getElementById(
+                        "newGrade"
+                    )
+                    .value
+                    .trim();
+
+
+            try{
+
+                showLoading();
+
+
+                const {error} =
+                    await db
+                        .from("employees")
+                        .insert({
+
+                            employee_number:
+                                employeeNumber ||
+                                null,
+
+                            first_name:
+                                firstName,
+
+                            last_name:
+                                lastName,
+
+                            grade:
+                                grade
+
+                        });
+
+
+                if(error){
+                    throw error;
+                }
+
+
+                this.reset();
+
+
+                closeAddEmployeeModal();
+
+
+                showToast(
+                    "تمت إضافة الموظف بنجاح."
                 );
 
-                return;
+
+                await loadEmployees();
+
+                await loadDashboard();
+
             }
+            catch(error){
 
-            if (
-                event === "SIGNED_IN" &&
-                session
-            ) {
+                console.error(error);
 
-                /*
-                 * تسجيل الدخول الأساسي يعالج
-                 * عملية الفتح، لذلك لا نكررها هنا.
-                 */
+                showToast(
+                    error.message ||
+                    "تعذر إضافة الموظف."
+                );
+
+            }
+            finally{
+
+                hideLoading();
 
             }
 
@@ -3250,11 +3993,842 @@
     );
 
 
-    /* =====================================================
-       تشغيل المنصة
-    ===================================================== */
+/* =========================================================
+   فتح نموذج الوضعية
+========================================================= */
 
-    initialize();
+document
+    .getElementById(
+        "addAssignmentButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            populateEmployeeSelect();
+
+
+            document
+                .getElementById(
+                    "addAssignmentModal"
+                )
+                .classList.remove(
+                    "hidden"
+                );
+
+        }
+    );
+
+
+function closeAddAssignmentModal(){
+
+    document
+        .getElementById(
+            "addAssignmentModal"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+}
+
+window.closeAddAssignmentModal =
+    closeAddAssignmentModal;
+
+
+/* =========================================================
+   التحكم في غير محددة المدة
+========================================================= */
+
+document
+    .getElementById(
+        "assignmentIndefinite"
+    )
+    .addEventListener(
+        "change",
+        function(){
+
+            const endDate =
+                document.getElementById(
+                    "assignmentEndDate"
+                );
+
+
+            if(this.checked){
+
+                endDate.value =
+                    "";
+
+                endDate.disabled =
+                    true;
+
+                endDate.required =
+                    false;
+
+            }
+            else{
+
+                endDate.disabled =
+                    false;
+
+                endDate.required =
+                    false;
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   تسجيل الوضعية
+========================================================= */
+
+document
+    .getElementById(
+        "addAssignmentForm"
+    )
+    .addEventListener(
+        "submit",
+        async function(event){
+
+            event.preventDefault();
+
+
+            const employeeId =
+                document
+                    .getElementById(
+                        "assignmentEmployee"
+                    )
+                    .value;
+
+
+            const assignmentType =
+                document
+                    .getElementById(
+                        "assignmentType"
+                    )
+                    .value;
+
+
+            const assignmentDirection =
+                document
+                    .getElementById(
+                        "assignmentDirection"
+                    )
+                    .value;
+
+
+            const institution =
+                document
+                    .getElementById(
+                        "receivingInstitution"
+                    )
+                    .value
+                    .trim();
+
+
+            const startDate =
+                document
+                    .getElementById(
+                        "assignmentStartDate"
+                    )
+                    .value;
+
+
+            const endDate =
+                document
+                    .getElementById(
+                        "assignmentEndDate"
+                    )
+                    .value;
+
+
+            const indefinite =
+                document
+                    .getElementById(
+                        "assignmentIndefinite"
+                    )
+                    .checked;
+
+
+            const notes =
+                document
+                    .getElementById(
+                        "assignmentNotes"
+                    )
+                    .value
+                    .trim();
+
+
+            /* التحقق */
+
+            if(!employeeId){
+
+                showToast(
+                    "يرجى اختيار الموظف."
+                );
+
+                return;
+            }
+
+
+            if(!assignmentType){
+
+                showToast(
+                    "يرجى اختيار نوع الوضعية."
+                );
+
+                return;
+            }
+
+
+            if(!assignmentDirection){
+
+                showToast(
+                    "يرجى اختيار الاتجاه."
+                );
+
+                return;
+            }
+
+
+            if(!institution){
+
+                showToast(
+                    "يرجى إدخال المؤسسة."
+                );
+
+                return;
+            }
+
+
+            if(!startDate){
+
+                showToast(
+                    "يرجى إدخال تاريخ البداية."
+                );
+
+                return;
+            }
+
+
+            if(
+                !indefinite &&
+                !endDate
+            ){
+
+                showToast(
+                    "يرجى إدخال تاريخ النهاية أو اختيار غير محددة المدة."
+                );
+
+                return;
+            }
+
+
+            if(
+                !indefinite &&
+                endDate < startDate
+            ){
+
+                showToast(
+                    "تاريخ النهاية لا يمكن أن يكون قبل تاريخ البداية."
+                );
+
+                return;
+            }
+
+
+            try{
+
+                showLoading();
+
+
+                const {data,error} =
+                    await db
+                        .from("assignments")
+                        .insert({
+
+                            employee_id:
+                                employeeId,
+
+                            assignment_type:
+                                assignmentType,
+
+                            assignment_direction:
+                                assignmentDirection,
+
+                            receiving_institution:
+                                institution,
+
+                            start_date:
+                                startDate,
+
+                            end_date:
+                                indefinite
+                                    ? null
+                                    : endDate,
+
+                            is_indefinite:
+                                indefinite,
+
+                            notes:
+                                notes || null,
+
+                            created_by:
+                                currentUser?.id || null
+
+                        })
+                        .select()
+                        .single();
+
+
+                if(error){
+                    throw error;
+                }
+
+
+                this.reset();
+
+
+                document
+                    .getElementById(
+                        "assignmentEndDate"
+                    )
+                    .disabled =
+                    false;
+
+
+                closeAddAssignmentModal();
+
+
+                showToast(
+                    "تم تسجيل الوضعية بنجاح."
+                );
+
+
+                await Promise.all([
+                    loadAssignments(),
+                    loadAlerts(),
+                    loadDashboard()
+                ]);
+
+            }
+            catch(error){
+
+                console.error(
+                    "add assignment:",
+                    error
+                );
+
+
+                showToast(
+                    error.message ||
+                    "تعذر تسجيل الوضعية."
+                );
+
+            }
+            finally{
+
+                hideLoading();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   ملف الموظف
+========================================================= */
+
+async function openEmployee(employeeId){
+
+    const modal =
+        document.getElementById(
+            "employeeModal"
+        );
+
+
+    const body =
+        document.getElementById(
+            "employeeModalBody"
+        );
+
+
+    modal.classList.remove(
+        "hidden"
+    );
+
+
+    body.innerHTML = `
+        <div class="empty">
+            جارٍ تحميل ملف الموظف...
+        </div>
+    `;
+
+
+    try{
+
+        const {data,error} =
+            await db.rpc(
+                "get_employee_file",
+                {
+                    p_employee_id:
+                        employeeId
+                }
+            );
+
+
+        if(error){
+            throw error;
+        }
+
+
+        const rows =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        if(!rows.length){
+
+            body.innerHTML = `
+                <div class="empty">
+                    لم يتم العثور على بيانات الموظف.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        const first =
+            rows[0];
+
+
+        document.getElementById(
+            "modalEmployeeTitle"
+        ).textContent =
+            "ملف " +
+            first.employee_name;
+
+
+        const assignmentCards =
+            rows.map(
+                row => {
+
+                    return `
+
+                        <div class="assignment-card">
+
+                            <div class="assignment-card-head">
+
+                                <strong>
+                                    ${escapeHtml(
+                                        row.assignment_type
+                                    )}
+                                </strong>
+
+                                <span class="status ${
+                                    row.calculated_status ===
+                                    "سارية"
+                                    ?
+                                    "active"
+                                    :
+                                    "warning"
+                                }">
+                                    ${escapeHtml(
+                                        row.calculated_status ||
+                                        "—"
+                                    )}
+                                </span>
+
+                            </div>
+
+
+                            <div class="assignment-details">
+
+                                <div>
+                                    <strong>
+                                        الاتجاه:
+                                    </strong>
+
+                                    ${escapeHtml(
+                                        row.assignment_direction
+                                    )}
+                                </div>
+
+
+                                <div>
+                                    <strong>
+                                        المؤسسة:
+                                    </strong>
+
+                                    ${escapeHtml(
+                                        row.receiving_institution
+                                    )}
+                                </div>
+
+
+                                <div>
+                                    <strong>
+                                        البداية:
+                                    </strong>
+
+                                    ${formatDate(
+                                        row.start_date
+                                    )}
+                                </div>
+
+
+                                <div>
+                                    <strong>
+                                        النهاية:
+                                    </strong>
+
+                                    ${
+                                        row.is_indefinite
+                                        ?
+                                        "غير محددة"
+                                        :
+                                        formatDate(
+                                            row.end_date
+                                        )
+                                    }
+                                </div>
+
+
+                                <div>
+                                    <strong>
+                                        المدة:
+                                    </strong>
+
+                                    ${escapeHtml(
+                                        row.duration ||
+                                        "—"
+                                    )}
+                                </div>
+
+
+                                <div>
+                                    <strong>
+                                        المتبقي:
+                                    </strong>
+
+                                    ${
+                                        row.days_remaining ===
+                                        null
+                                        ||
+                                        row.days_remaining ===
+                                        undefined
+                                        ?
+                                        "—"
+                                        :
+                                        row.days_remaining +
+                                        " يوم"
+                                    }
+
+                                </div>
+
+                            </div>
+
+
+                            ${
+                                row.notes
+                                ?
+                                `
+                                    <div
+                                        style="
+                                            margin-top:9px;
+                                            color:#77748a;
+                                            font-size:11px;
+                                        "
+                                    >
+                                        ملاحظات:
+                                        ${escapeHtml(
+                                            row.notes
+                                        )}
+                                    </div>
+                                `
+                                :
+                                ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+            ).join("");
+
+
+        body.innerHTML = `
+
+            <div class="employee-profile">
+
+                <div class="profile-box">
+
+                    <small>
+                        الاسم واللقب
+                    </small>
+
+                    <strong>
+                        ${escapeHtml(
+                            first.employee_name
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-box">
+
+                    <small>
+                        رقم الموظف
+                    </small>
+
+                    <strong>
+                        ${escapeHtml(
+                            first.employee_number ||
+                            "—"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-box">
+
+                    <small>
+                        الرتبة
+                    </small>
+
+                    <strong>
+                        ${escapeHtml(
+                            first.grade
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-box">
+
+                    <small>
+                        عدد الوضعيات
+                    </small>
+
+                    <strong>
+                        ${rows.length}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <h3
+                style="
+                    font-size:14px;
+                    margin-bottom:11px;
+                "
+            >
+                سجل الوضعيات
+            </h3>
+
+
+            ${
+                assignmentCards ||
+                `
+                    <div class="empty">
+                        لا توجد وضعيات.
+                    </div>
+                `
+            }
+
+        `;
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        body.innerHTML = `
+            <div class="empty">
+                تعذر تحميل ملف الموظف.
+                <br>
+                ${escapeHtml(
+                    error.message || ""
+                )}
+            </div>
+        `;
+
+    }
+
+}
+
+
+window.openEmployee =
+    openEmployee;
+
+
+function closeEmployeeModal(){
+
+    document
+        .getElementById(
+            "employeeModal"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+}
+
+
+window.closeEmployeeModal =
+    closeEmployeeModal;
+
+
+/* =========================================================
+   إغلاق النوافذ
+========================================================= */
+
+document
+    .getElementById("employeeModal")
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+                closeEmployeeModal();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("addEmployeeModal")
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+                closeAddEmployeeModal();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("addAssignmentModal")
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+                closeAddAssignmentModal();
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   التهيئة
+========================================================= */
+
+async function initialize(){
+
+    try{
+
+        const {
+            data:{
+                session
+            }
+        } =
+            await db.auth.getSession();
+
+
+        if(!session){
+            return;
+        }
+
+
+        const isAdmin =
+            await checkAdminRole(
+                session.user.id
+            );
+
+
+        if(!isAdmin){
+
+            await db.auth.signOut();
+
+            return;
+        }
+
+
+        currentUser =
+            session.user;
+
+
+        await openApplication();
+
+    }
+    catch(error){
+
+        console.error(
+            "initialize:",
+            error
+        );
+
+    }
+
+}
+
+
+db.auth.onAuthStateChange(
+    async (
+        event,
+        session
+    ) => {
+
+        if(
+            event ===
+            "SIGNED_OUT"
+        ){
+
+            currentUser =
+                null;
+
+            app.classList.add(
+                "hidden"
+            );
+
+            loginScreen.classList.remove(
+                "hidden"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   بدء المنصة
+========================================================= */
+
+initialize();
 
 </script>
 

@@ -216,6 +216,14 @@ button{
     min-height:90px;
 }
 
+.field input:disabled,
+.field select:disabled,
+.field textarea:disabled{
+    background:#f2f5f8;
+    color:#7b8796;
+    cursor:not-allowed;
+}
+
 .password-wrap{
     position:relative;
 }
@@ -1744,6 +1752,7 @@ tr:hover td{
                                     <option value="all">
                                         الكل
                                     </option>
+
                                 </select>
 
                             </div>
@@ -1860,6 +1869,8 @@ tr:hover td{
 
                         <input
                             id="firstName"
+                            type="text"
+                            autocomplete="off"
                             required
                         >
 
@@ -1871,6 +1882,8 @@ tr:hover td{
 
                         <input
                             id="lastName"
+                            type="text"
+                            autocomplete="off"
                             required
                         >
 
@@ -1882,6 +1895,8 @@ tr:hover td{
 
                         <input
                             id="employeeNumber"
+                            type="text"
+                            autocomplete="off"
                         >
 
                     </div>
@@ -1892,6 +1907,8 @@ tr:hover td{
 
                         <input
                             id="grade"
+                            type="text"
+                            autocomplete="off"
                             required
                         >
 
@@ -1955,6 +1972,7 @@ tr:hover td{
 
                         <input
                             id="originalInstitution"
+                            type="text"
                             value="المؤسسة العمومية الاستشفائية بأولف"
                             required
                         >
@@ -1967,6 +1985,7 @@ tr:hover td{
 
                         <input
                             id="receivingInstitution"
+                            type="text"
                             required
                         >
 
@@ -2152,7 +2171,18 @@ let employees = [];
 
 let assignments = [];
 
+/*
+ * الموظف الذي يتم تعديله.
+ */
 let editingEmployeeId = null;
+
+/*
+ * الوضعية المحددة التي يتم تعديلها.
+ *
+ * هذا المتغير يمنع تعديل أول وضعية للموظف
+ * بالخطأ عندما يكون لديه أكثر من وضعية.
+ */
+let editingAssignmentId = null;
 
 /* =========================================================
    أدوات عامة
@@ -2178,7 +2208,10 @@ function formatDate(date){
         return "غير محدد";
     }
 
-    const d = new Date(date + "T00:00:00");
+    const d =
+        new Date(
+            date + "T00:00:00"
+        );
 
     if(Number.isNaN(d.getTime())){
         return date;
@@ -2198,20 +2231,33 @@ function todayDate(){
 
     const d = new Date();
 
-    const y = d.getFullYear();
+    const y =
+        d.getFullYear();
 
-    const m = String(d.getMonth()+1).padStart(2,"0");
+    const m =
+        String(
+            d.getMonth()+1
+        ).padStart(2,"0");
 
-    const day = String(d.getDate()).padStart(2,"0");
+    const day =
+        String(
+            d.getDate()
+        ).padStart(2,"0");
 
     return `${y}-${m}-${day}`;
 }
 
 function daysBetween(start,end){
 
-    const a = new Date(start + "T00:00:00");
+    const a =
+        new Date(
+            start + "T00:00:00"
+        );
 
-    const b = new Date(end + "T00:00:00");
+    const b =
+        new Date(
+            end + "T00:00:00"
+        );
 
     return Math.ceil(
         (b-a) / 86400000
@@ -2228,19 +2274,31 @@ function calculateDuration(start,end){
         return "غير محددة المدة";
     }
 
-    const s = new Date(start + "T00:00:00");
+    const s =
+        new Date(
+            start + "T00:00:00"
+        );
 
-    const e = new Date(end + "T00:00:00");
+    const e =
+        new Date(
+            end + "T00:00:00"
+        );
 
     if(e < s){
         return "تاريخ غير صحيح";
     }
 
-    let years = e.getFullYear() - s.getFullYear();
+    let years =
+        e.getFullYear() -
+        s.getFullYear();
 
-    let months = e.getMonth() - s.getMonth();
+    let months =
+        e.getMonth() -
+        s.getMonth();
 
-    let days = e.getDate() - s.getDate();
+    let days =
+        e.getDate() -
+        s.getDate();
 
     if(days < 0){
 
@@ -2253,7 +2311,8 @@ function calculateDuration(start,end){
                 0
             );
 
-        days += previousMonth.getDate();
+        days +=
+            previousMonth.getDate();
     }
 
     if(months < 0){
@@ -2266,10 +2325,12 @@ function calculateDuration(start,end){
     const totalMonths =
         years * 12 + months;
 
-    let result = `${totalMonths} شهر`;
+    let result =
+        `${totalMonths} شهر`;
 
     if(days > 0){
-        result += ` و ${days} يوم`;
+        result +=
+            ` و ${days} يوم`;
     }
 
     return result;
@@ -2278,12 +2339,14 @@ function calculateDuration(start,end){
 function assignmentState(a){
 
     if(a.is_indefinite){
+
         return {
             text:"سارية - غير محددة المدة",
             class:"badge-success",
             alert:null,
             remaining:null
         };
+
     }
 
     if(!a.end_date){
@@ -2294,6 +2357,7 @@ function assignmentState(a){
             alert:null,
             remaining:null
         };
+
     }
 
     const remaining =
@@ -2654,7 +2718,8 @@ function friendlyError(error){
 
     }
 
-    return message || "حدث خطأ غير متوقع.";
+    return message ||
+        "حدث خطأ غير متوقع.";
 
 }
 
@@ -2677,7 +2742,8 @@ function showPage(page){
     document
         .querySelectorAll(".page")
         .forEach(
-            el => el.classList.add("hidden")
+            el =>
+                el.classList.add("hidden")
         );
 
     const target =
@@ -2710,7 +2776,8 @@ function showPage(page){
     document
         .getElementById("pageTitle")
         .textContent =
-        titles[page] || "الرئيسية";
+        titles[page] ||
+        "الرئيسية";
 
     closeSidebar();
 
@@ -2814,8 +2881,10 @@ function renderAll(){
 function approvedAssignments(){
 
     return assignments.filter(
-        a => a.approval_status === "approved"
+        a =>
+            a.approval_status === "approved"
     );
+
 }
 
 function renderStats(){
@@ -2825,13 +2894,15 @@ function renderStats(){
 
     const active =
         approved.filter(
-            a => assignmentState(a).remaining === null ||
-            assignmentState(a).remaining >= 0
+            a =>
+                assignmentState(a).remaining === null ||
+                assignmentState(a).remaining >= 0
         );
 
     const alerts =
         approved.filter(
-            a => assignmentState(a).alert
+            a =>
+                assignmentState(a).alert
         );
 
     document
@@ -2843,14 +2914,16 @@ function renderStats(){
         .getElementById("statSecond")
         .textContent =
         approved.filter(
-            a => a.assignment_type === "انتداب"
+            a =>
+                a.assignment_type === "انتداب"
         ).length;
 
     document
         .getElementById("statThird")
         .textContent =
         approved.filter(
-            a => a.assignment_type === "تحت التصرف"
+            a =>
+                a.assignment_type === "تحت التصرف"
         ).length;
 
     document
@@ -2906,7 +2979,9 @@ function renderEmployees(){
 
     const status =
         document
-            .getElementById("employeeStatusFilter")
+            .getElementById(
+                "employeeStatusFilter"
+            )
             ?.value ||
         "all";
 
@@ -2930,8 +3005,14 @@ function renderEmployees(){
 
             const matchesStatus =
                 status === "all" ||
-                (status === "active" && e.is_active) ||
-                (status === "inactive" && !e.is_active);
+                (
+                    status === "active" &&
+                    e.is_active
+                ) ||
+                (
+                    status === "inactive" &&
+                    !e.is_active
+                );
 
             return matchesSearch &&
                    matchesStatus;
@@ -2943,12 +3024,17 @@ function renderEmployees(){
         tbody.innerHTML = `
             <tr>
                 <td colspan="6">
+
                     <div class="empty">
+
                         <div class="empty-icon">
                             <i data-lucide="users"></i>
                         </div>
+
                         لا توجد بيانات.
+
                     </div>
+
                 </td>
             </tr>
         `;
@@ -2968,14 +3054,19 @@ function renderEmployees(){
                 <tr>
 
                     <td>
+
                         <strong>
                             ${esc(e.first_name)}
                             ${esc(e.last_name)}
                         </strong>
+
                     </td>
 
                     <td>
-                        ${esc(e.employee_number || "—")}
+                        ${esc(
+                            e.employee_number ||
+                            "—"
+                        )}
                     </td>
 
                     <td>
@@ -2983,12 +3074,15 @@ function renderEmployees(){
                     </td>
 
                     <td>
+
                         <span class="badge badge-info">
                             ${count}
                         </span>
+
                     </td>
 
                     <td>
+
                         ${
                             e.is_active
                             ?
@@ -2996,6 +3090,7 @@ function renderEmployees(){
                             :
                             '<span class="badge badge-warning">غير نشط</span>'
                         }
+
                     </td>
 
                     <td>
@@ -3007,7 +3102,10 @@ function renderEmployees(){
                                 title="عرض الملف"
                                 onclick="openProfile('${e.id}')"
                             >
-                                <i data-lucide="folder-open" size="16"></i>
+                                <i
+                                    data-lucide="folder-open"
+                                    size="16"
+                                ></i>
                             </button>
 
                             <button
@@ -3015,7 +3113,10 @@ function renderEmployees(){
                                 title="تعديل"
                                 onclick="openEmployeeModal('${e.id}')"
                             >
-                                <i data-lucide="pencil" size="16"></i>
+                                <i
+                                    data-lucide="pencil"
+                                    size="16"
+                                ></i>
                             </button>
 
                             <button
@@ -3023,7 +3124,10 @@ function renderEmployees(){
                                 title="حذف"
                                 onclick="deleteEmployee('${e.id}')"
                             >
-                                <i data-lucide="trash-2" size="16"></i>
+                                <i
+                                    data-lucide="trash-2"
+                                    size="16"
+                                ></i>
                             </button>
 
                         </div>
@@ -3040,16 +3144,68 @@ function renderEmployees(){
 }
 
 /* =========================================================
-   إضافة / تعديل موظف
+   حماية وإعادة تفعيل حقول النموذج
 ========================================================= */
 
-function openEmployeeModal(id=null){
+function enableEmployeeFields(){
 
-    editingEmployeeId = id;
+    const fields = [
 
-    document
-        .getElementById("employeeForm")
-        .reset();
+        "firstName",
+        "lastName",
+        "employeeNumber",
+        "grade",
+
+        "assignmentType",
+        "assignmentDirection",
+
+        "originalInstitution",
+        "receivingInstitution",
+
+        "startDate",
+        "endDate",
+
+        "isIndefinite",
+
+        "notes"
+
+    ];
+
+    fields.forEach(id => {
+
+        const el =
+            document.getElementById(id);
+
+        if(!el){
+            return;
+        }
+
+        el.disabled = false;
+
+        el.readOnly = false;
+
+        el.removeAttribute("disabled");
+
+        el.removeAttribute("readonly");
+
+    });
+
+}
+
+function resetEmployeeForm(){
+
+    const form =
+        document.getElementById(
+            "employeeForm"
+        );
+
+    form.reset();
+
+    editingEmployeeId = null;
+
+    editingAssignmentId = null;
+
+    enableEmployeeFields();
 
     document
         .getElementById("employeeId")
@@ -3058,7 +3214,7 @@ function openEmployeeModal(id=null){
     document
         .getElementById("employeeModalTitle")
         .textContent =
-        id ? "تعديل بيانات الموظف" : "إضافة موظف";
+        "إضافة موظف";
 
     document
         .getElementById("originalInstitution")
@@ -3069,7 +3225,50 @@ function openEmployeeModal(id=null){
         .getElementById("isIndefinite")
         .checked = false;
 
-    toggleEndDate();
+    document
+        .getElementById("endDate")
+        .disabled = false;
+
+    document
+        .getElementById("endDate")
+        .style.opacity = "1";
+
+    document
+        .getElementById("durationPreview")
+        .textContent =
+        "المدة: —";
+
+}
+
+/* =========================================================
+   إضافة / تعديل موظف
+========================================================= */
+
+function openEmployeeModal(id=null){
+
+    /*
+     * نبدأ دائمًا بتنظيف النموذج.
+     *
+     * هذا مهم حتى لا تنتقل حالة disabled
+     * أو بيانات الموظف السابق إلى نموذج جديد.
+     */
+
+    resetEmployeeForm();
+
+    editingEmployeeId = id;
+
+    document
+        .getElementById("employeeModalTitle")
+        .textContent =
+        id
+        ? "تعديل بيانات الموظف"
+        : "إضافة موظف";
+
+    /*
+     * تأكيد إضافي أن الحقول قابلة للكتابة.
+     */
+
+    enableEmployeeFields();
 
     if(id){
 
@@ -3077,28 +3276,47 @@ function openEmployeeModal(id=null){
             getEmployee(id);
 
         if(!employee){
+
+            showToast(
+                "تعذر العثور على الموظف.",
+                "error"
+            );
+
             return;
         }
 
         document
             .getElementById("employeeId")
-            .value = employee.id;
+            .value =
+            employee.id;
 
         document
             .getElementById("firstName")
-            .value = employee.first_name || "";
+            .value =
+            employee.first_name || "";
 
         document
             .getElementById("lastName")
-            .value = employee.last_name || "";
+            .value =
+            employee.last_name || "";
 
         document
             .getElementById("employeeNumber")
-            .value = employee.employee_number || "";
+            .value =
+            employee.employee_number || "";
 
         document
             .getElementById("grade")
-            .value = employee.grade || "";
+            .value =
+            employee.grade || "";
+
+        /*
+         * عند تعديل الموظف من قائمة الموظفين:
+         * نستعمل أول وضعية له كبيانات افتراضية.
+         *
+         * أما عند تعديل وضعية محددة من جدول الوضعيات،
+         * فإن editAssignment() يحدد editingAssignmentId.
+         */
 
         const firstAssignment =
             assignments.find(
@@ -3108,35 +3326,44 @@ function openEmployeeModal(id=null){
 
         if(firstAssignment){
 
+            editingAssignmentId =
+                firstAssignment.id;
+
             document
                 .getElementById("assignmentType")
                 .value =
-                firstAssignment.assignment_type;
+                firstAssignment.assignment_type ||
+                "انتداب";
 
             document
                 .getElementById("assignmentDirection")
                 .value =
-                firstAssignment.assignment_direction;
+                firstAssignment.assignment_direction ||
+                "من المؤسسة";
 
             document
                 .getElementById("originalInstitution")
                 .value =
-                firstAssignment.original_institution || "";
+                firstAssignment.original_institution ||
+                "المؤسسة العمومية الاستشفائية بأولف";
 
             document
                 .getElementById("receivingInstitution")
                 .value =
-                firstAssignment.receiving_institution || "";
+                firstAssignment.receiving_institution ||
+                "";
 
             document
                 .getElementById("startDate")
                 .value =
-                firstAssignment.start_date || "";
+                firstAssignment.start_date ||
+                "";
 
             document
                 .getElementById("endDate")
                 .value =
-                firstAssignment.end_date || "";
+                firstAssignment.end_date ||
+                "";
 
             document
                 .getElementById("isIndefinite")
@@ -3146,17 +3373,56 @@ function openEmployeeModal(id=null){
             document
                 .getElementById("notes")
                 .value =
-                firstAssignment.notes || "";
+                firstAssignment.notes ||
+                "";
 
         }
 
     }
+
+    toggleEndDate();
 
     updateDurationPreview();
 
     document
         .getElementById("employeeModal")
         .classList.add("show");
+
+    /*
+     * عند الإضافة:
+     * نضع المؤشر في الاسم تلقائيًا.
+     *
+     * وعند التعديل:
+     * نضعه أيضًا في الاسم حتى يكون الحقل
+     * قابلًا للتعديل مباشرة.
+     */
+
+    setTimeout(() => {
+
+        const firstName =
+            document.getElementById(
+                "firstName"
+            );
+
+        if(firstName){
+
+            firstName.disabled = false;
+
+            firstName.readOnly = false;
+
+            firstName.removeAttribute(
+                "disabled"
+            );
+
+            firstName.removeAttribute(
+                "readonly"
+            );
+
+            firstName.focus();
+
+        }
+
+    },100);
 
     lucide.createIcons();
 
@@ -3176,22 +3442,27 @@ async function saveEmployee(e){
     const firstName =
         document
             .getElementById("firstName")
-            .value.trim();
+            .value
+            .trim();
 
     const lastName =
         document
             .getElementById("lastName")
-            .value.trim();
+            .value
+            .trim();
 
     const employeeNumber =
         document
             .getElementById("employeeNumber")
-            .value.trim() || null;
+            .value
+            .trim() ||
+        null;
 
     const grade =
         document
             .getElementById("grade")
-            .value.trim();
+            .value
+            .trim();
 
     const type =
         document
@@ -3206,12 +3477,14 @@ async function saveEmployee(e){
     const original =
         document
             .getElementById("originalInstitution")
-            .value.trim();
+            .value
+            .trim();
 
     const receiving =
         document
             .getElementById("receivingInstitution")
-            .value.trim();
+            .value
+            .trim();
 
     const start =
         document
@@ -3229,14 +3502,21 @@ async function saveEmployee(e){
         :
         document
             .getElementById("endDate")
-            .value || null;
+            .value ||
+        null;
 
     const notes =
         document
             .getElementById("notes")
-            .value.trim() || null;
+            .value
+            .trim() ||
+        null;
 
-    if(!firstName || !lastName || !grade){
+    if(
+        !firstName ||
+        !lastName ||
+        !grade
+    ){
 
         showToast(
             "يرجى إدخال الاسم واللقب والرتبة.",
@@ -3260,7 +3540,10 @@ async function saveEmployee(e){
         return;
     }
 
-    if(!indefinite && !end){
+    if(
+        !indefinite &&
+        !end
+    ){
 
         showToast(
             "أدخل تاريخ نهاية الوضعية أو اختر غير محددة المدة.",
@@ -3287,16 +3570,29 @@ async function saveEmployee(e){
 
         if(editingEmployeeId){
 
+            /*
+             * تحديث بيانات الموظف.
+             */
+
             const {
                 error
             } =
                 await db
                     .from("employees")
                     .update({
-                        first_name:firstName,
-                        last_name:lastName,
-                        employee_number:employeeNumber,
-                        grade:grade
+
+                        first_name:
+                            firstName,
+
+                        last_name:
+                            lastName,
+
+                        employee_number:
+                            employeeNumber,
+
+                        grade:
+                            grade
+
                     })
                     .eq(
                         "id",
@@ -3308,11 +3604,22 @@ async function saveEmployee(e){
             }
 
             /*
-             * عند تعديل الموظف، نعدل أول وضعية مرتبطة به.
-             * الوضعية المعتمدة تعود إلى قيد الاعتماد.
+             * إذا كانت هناك وضعية محددة
+             * في editingAssignmentId نستخدمها.
+             *
+             * وإذا لم توجد، نبحث عن أول وضعية
+             * للموظف كحل احتياطي.
              */
 
             const existing =
+                editingAssignmentId
+                ?
+                assignments.find(
+                    a =>
+                        a.id ===
+                        editingAssignmentId
+                )
+                :
                 assignments.find(
                     a =>
                         a.employee_id ===
@@ -3322,35 +3629,54 @@ async function saveEmployee(e){
             if(existing){
 
                 const {
-                    error:assignmentError
+                    error:
+                        assignmentError
                 } =
                     await db
                         .from("assignments")
                         .update({
 
-                            assignment_type:type,
+                            assignment_type:
+                                type,
 
-                            assignment_direction:direction,
+                            assignment_direction:
+                                direction,
 
-                            original_institution:original,
+                            original_institution:
+                                original,
 
-                            receiving_institution:receiving,
+                            receiving_institution:
+                                receiving,
 
-                            start_date:start,
+                            start_date:
+                                start,
 
-                            end_date:end,
+                            end_date:
+                                end,
 
-                            is_indefinite:indefinite,
+                            is_indefinite:
+                                indefinite,
 
-                            notes,
+                            notes:
+                                notes,
 
-                            approval_status:"pending",
+                            /*
+                             * أي تعديل على وضعية معتمدة
+                             * يعيدها إلى المراجعة.
+                             */
 
-                            approved_by:null,
+                            approval_status:
+                                "pending",
 
-                            approved_at:null,
+                            approved_by:
+                                null,
 
-                            updated_at:new Date().toISOString()
+                            approved_at:
+                                null,
+
+                            updated_at:
+                                new Date()
+                                    .toISOString()
 
                         })
                         .eq(
@@ -3364,8 +3690,14 @@ async function saveEmployee(e){
 
             }else{
 
+                /*
+                 * إذا كان الموظف لا يملك وضعية،
+                 * ننشئ وضعية جديدة.
+                 */
+
                 const {
-                    error:assignmentError
+                    error:
+                        assignmentError
                 } =
                     await db
                         .from("assignments")
@@ -3374,26 +3706,36 @@ async function saveEmployee(e){
                             employee_id:
                                 editingEmployeeId,
 
-                            assignment_type:type,
+                            assignment_type:
+                                type,
 
-                            assignment_direction:direction,
+                            assignment_direction:
+                                direction,
 
-                            original_institution:original,
+                            original_institution:
+                                original,
 
-                            receiving_institution:receiving,
+                            receiving_institution:
+                                receiving,
 
-                            start_date:start,
+                            start_date:
+                                start,
 
-                            end_date:end,
+                            end_date:
+                                end,
 
-                            is_indefinite:indefinite,
+                            is_indefinite:
+                                indefinite,
 
-                            notes,
+                            notes:
+                                notes,
 
                             created_by:
-                                currentUser?.id || null,
+                                currentUser?.id ||
+                                null,
 
-                            approval_status:"pending"
+                            approval_status:
+                                "pending"
 
                         });
 
@@ -3415,6 +3757,10 @@ async function saveEmployee(e){
 
         }else{
 
+            /*
+             * إضافة موظف جديد.
+             */
+
             const {
                 data:employee,
                 error
@@ -3423,15 +3769,20 @@ async function saveEmployee(e){
                     .from("employees")
                     .insert({
 
-                        first_name:firstName,
+                        first_name:
+                            firstName,
 
-                        last_name:lastName,
+                        last_name:
+                            lastName,
 
-                        employee_number:employeeNumber,
+                        employee_number:
+                            employeeNumber,
 
-                        grade,
+                        grade:
+                            grade,
 
-                        is_active:true
+                        is_active:
+                            true
 
                     })
                     .select()
@@ -3441,8 +3792,13 @@ async function saveEmployee(e){
                 throw error;
             }
 
+            /*
+             * إضافة الوضعية المرتبطة بالموظف.
+             */
+
             const {
-                error:assignmentError
+                error:
+                    assignmentError
             } =
                 await db
                     .from("assignments")
@@ -3451,35 +3807,54 @@ async function saveEmployee(e){
                         employee_id:
                             employee.id,
 
-                        assignment_type:type,
+                        assignment_type:
+                            type,
 
-                        assignment_direction:direction,
+                        assignment_direction:
+                            direction,
 
-                        original_institution:original,
+                        original_institution:
+                            original,
 
-                        receiving_institution:receiving,
+                        receiving_institution:
+                            receiving,
 
-                        start_date:start,
+                        start_date:
+                            start,
 
-                        end_date:end,
+                        end_date:
+                            end,
 
-                        is_indefinite:indefinite,
+                        is_indefinite:
+                            indefinite,
 
-                        notes,
+                        notes:
+                            notes,
 
                         created_by:
-                            currentUser?.id || null,
+                            currentUser?.id ||
+                            null,
 
-                        approval_status:"pending"
+                        approval_status:
+                            "pending"
 
                     });
 
             if(assignmentError){
 
+                /*
+                 * في حالة فشل إضافة الوضعية،
+                 * نحذف الموظف الذي أُضيف للتو
+                 * حتى لا يبقى سجل ناقص.
+                 */
+
                 await db
                     .from("employees")
                     .delete()
-                    .eq("id",employee.id);
+                    .eq(
+                        "id",
+                        employee.id
+                    );
 
                 throw assignmentError;
             }
@@ -3496,7 +3871,17 @@ async function saveEmployee(e){
 
         }
 
-        closeModal("employeeModal");
+        closeModal(
+            "employeeModal"
+        );
+
+        /*
+         * تصفير معرفات التعديل بعد الحفظ.
+         */
+
+        editingEmployeeId = null;
+
+        editingAssignmentId = null;
 
         await loadAll();
 
@@ -3538,7 +3923,8 @@ async function deleteEmployee(id){
     try{
 
         const {
-            error:assignmentError
+            error:
+                assignmentError
         } =
             await db
                 .from("assignments")
@@ -3558,7 +3944,10 @@ async function deleteEmployee(id){
             await db
                 .from("employees")
                 .delete()
-                .eq("id",id);
+                .eq(
+                    "id",
+                    id
+                );
 
         if(error){
             throw error;
@@ -3603,7 +3992,9 @@ function renderAssignments(){
     const search =
         (
             document
-                .getElementById("assignmentSearch")
+                .getElementById(
+                    "assignmentSearch"
+                )
                 ?.value ||
             ""
         )
@@ -3612,7 +4003,9 @@ function renderAssignments(){
 
     const filter =
         document
-            .getElementById("assignmentFilter")
+            .getElementById(
+                "assignmentFilter"
+            )
             ?.value ||
         "pending";
 
@@ -3620,7 +4013,9 @@ function renderAssignments(){
         assignments.filter(a => {
 
             const employee =
-                getEmployee(a.employee_id);
+                getEmployee(
+                    a.employee_id
+                );
 
             const employeeName =
                 employee
@@ -3646,7 +4041,8 @@ function renderAssignments(){
 
             const matchFilter =
                 filter === "all" ||
-                a.approval_status === filter;
+                a.approval_status ===
+                    filter;
 
             return matchSearch &&
                    matchFilter;
@@ -3657,7 +4053,9 @@ function renderAssignments(){
 
         tbody.innerHTML = `
             <tr>
+
                 <td colspan="7">
+
                     <div class="empty">
 
                         <div class="empty-icon">
@@ -3667,7 +4065,9 @@ function renderAssignments(){
                         لا توجد وضعيات في هذه القائمة.
 
                     </div>
+
                 </td>
+
             </tr>
         `;
 
@@ -3680,18 +4080,22 @@ function renderAssignments(){
         rows.map(a => {
 
             const employee =
-                getEmployee(a.employee_id);
+                getEmployee(
+                    a.employee_id
+                );
 
             const state =
                 assignmentState(a);
 
             const pending =
-                a.approval_status === "pending";
+                a.approval_status ===
+                "pending";
 
             return `
                 <tr>
 
                     <td>
+
                         <strong>
                             ${
                                 employee
@@ -3703,20 +4107,30 @@ function renderAssignments(){
                                 "موظف محذوف"
                             }
                         </strong>
+
                     </td>
 
                     <td>
+
                         <span class="badge badge-purple">
-                            ${esc(a.assignment_type)}
+                            ${esc(
+                                a.assignment_type
+                            )}
                         </span>
+
                     </td>
 
                     <td>
-                        ${esc(a.original_institution || "—")}
+                        ${esc(
+                            a.original_institution ||
+                            "—"
+                        )}
                     </td>
 
                     <td>
-                        ${esc(a.receiving_institution)}
+                        ${esc(
+                            a.receiving_institution
+                        )}
                     </td>
 
                     <td>
@@ -3749,7 +4163,10 @@ function renderAssignments(){
                                 title="تعديل"
                                 onclick="editAssignment('${a.id}')"
                             >
-                                <i data-lucide="pencil" size="16"></i>
+                                <i
+                                    data-lucide="pencil"
+                                    size="16"
+                                ></i>
                             </button>
 
                             ${
@@ -3761,7 +4178,10 @@ function renderAssignments(){
                                     title="اعتماد"
                                     onclick="approveAssignment('${a.id}')"
                                 >
-                                    <i data-lucide="check" size="16"></i>
+                                    <i
+                                        data-lucide="check"
+                                        size="16"
+                                    ></i>
                                 </button>
                                 `
                                 :
@@ -3773,7 +4193,10 @@ function renderAssignments(){
                                 title="حذف"
                                 onclick="deleteAssignment('${a.id}')"
                             >
-                                <i data-lucide="trash-2" size="16"></i>
+                                <i
+                                    data-lucide="trash-2"
+                                    size="16"
+                                ></i>
                             </button>
 
                         </div>
@@ -3818,19 +4241,26 @@ async function approveAssignment(id){
                 .from("assignments")
                 .update({
 
-                    approval_status:"approved",
+                    approval_status:
+                        "approved",
 
                     approved_by:
-                        currentUser?.id || null,
+                        currentUser?.id ||
+                        null,
 
                     approved_at:
-                        new Date().toISOString(),
+                        new Date()
+                            .toISOString(),
 
                     updated_at:
-                        new Date().toISOString()
+                        new Date()
+                            .toISOString()
 
                 })
-                .eq("id",id);
+                .eq(
+                    "id",
+                    id
+                );
 
         if(error){
             throw error;
@@ -3880,7 +4310,10 @@ async function deleteAssignment(id){
             await db
                 .from("assignments")
                 .delete()
-                .eq("id",id);
+                .eq(
+                    "id",
+                    id
+                );
 
         if(error){
             throw error;
@@ -3911,10 +4344,10 @@ async function deleteAssignment(id){
 
 }
 
-/*
- * تعديل الوضعية:
- * نستخدم نافذة الموظف ونملأ بياناتها.
- */
+/* =========================================================
+   تعديل وضعية محددة
+========================================================= */
+
 function editAssignment(id){
 
     const assignment =
@@ -3923,6 +4356,12 @@ function editAssignment(id){
         );
 
     if(!assignment){
+
+        showToast(
+            "تعذر العثور على الوضعية.",
+            "error"
+        );
+
         return;
     }
 
@@ -3932,89 +4371,178 @@ function editAssignment(id){
         );
 
     if(!employee){
+
+        showToast(
+            "تعذر العثور على الموظف المرتبط بهذه الوضعية.",
+            "error"
+        );
+
         return;
     }
+
+    /*
+     * نحدد الموظف والوضعية بالضبط.
+     */
 
     editingEmployeeId =
         employee.id;
 
+    editingAssignmentId =
+        assignment.id;
+
+    /*
+     * نضمن أن جميع الحقول قابلة للكتابة.
+     */
+
+    enableEmployeeFields();
+
     document
-        .getElementById("employeeModalTitle")
+        .getElementById(
+            "employeeModalTitle"
+        )
         .textContent =
         "تعديل الموظف والوضعية";
 
     document
-        .getElementById("employeeId")
+        .getElementById(
+            "employeeId"
+        )
         .value =
         employee.id;
 
     document
-        .getElementById("firstName")
+        .getElementById(
+            "firstName"
+        )
         .value =
-        employee.first_name || "";
+        employee.first_name ||
+        "";
 
     document
-        .getElementById("lastName")
+        .getElementById(
+            "lastName"
+        )
         .value =
-        employee.last_name || "";
+        employee.last_name ||
+        "";
 
     document
-        .getElementById("employeeNumber")
+        .getElementById(
+            "employeeNumber"
+        )
         .value =
-        employee.employee_number || "";
+        employee.employee_number ||
+        "";
 
     document
-        .getElementById("grade")
+        .getElementById(
+            "grade"
+        )
         .value =
-        employee.grade || "";
+        employee.grade ||
+        "";
 
     document
-        .getElementById("assignmentType")
+        .getElementById(
+            "assignmentType"
+        )
         .value =
-        assignment.assignment_type;
+        assignment.assignment_type ||
+        "انتداب";
 
     document
-        .getElementById("assignmentDirection")
+        .getElementById(
+            "assignmentDirection"
+        )
         .value =
-        assignment.assignment_direction;
+        assignment.assignment_direction ||
+        "من المؤسسة";
 
     document
-        .getElementById("originalInstitution")
+        .getElementById(
+            "originalInstitution"
+        )
         .value =
-        assignment.original_institution || "";
+        assignment.original_institution ||
+        "المؤسسة العمومية الاستشفائية بأولف";
 
     document
-        .getElementById("receivingInstitution")
+        .getElementById(
+            "receivingInstitution"
+        )
         .value =
-        assignment.receiving_institution || "";
+        assignment.receiving_institution ||
+        "";
 
     document
-        .getElementById("startDate")
+        .getElementById(
+            "startDate"
+        )
         .value =
-        assignment.start_date || "";
+        assignment.start_date ||
+        "";
 
     document
-        .getElementById("endDate")
+        .getElementById(
+            "endDate"
+        )
         .value =
-        assignment.end_date || "";
+        assignment.end_date ||
+        "";
 
     document
-        .getElementById("isIndefinite")
+        .getElementById(
+            "isIndefinite"
+        )
         .checked =
         !!assignment.is_indefinite;
 
     document
-        .getElementById("notes")
+        .getElementById(
+            "notes"
+        )
         .value =
-        assignment.notes || "";
+        assignment.notes ||
+        "";
 
     toggleEndDate();
 
     updateDurationPreview();
 
     document
-        .getElementById("employeeModal")
+        .getElementById(
+            "employeeModal"
+        )
         .classList.add("show");
+
+    setTimeout(() => {
+
+        const firstName =
+            document.getElementById(
+                "firstName"
+            );
+
+        if(firstName){
+
+            firstName.disabled =
+                false;
+
+            firstName.readOnly =
+                false;
+
+            firstName.removeAttribute(
+                "disabled"
+            );
+
+            firstName.removeAttribute(
+                "readonly"
+            );
+
+            firstName.focus();
+
+        }
+
+    },100);
 
     lucide.createIcons();
 
@@ -4051,8 +4579,14 @@ function buildAlerts(){
         .filter(Boolean)
         .sort(
             (a,b) =>
-                (a.state.remaining ?? 999999) -
-                (b.state.remaining ?? 999999)
+                (
+                    a.state.remaining ??
+                    999999
+                ) -
+                (
+                    b.state.remaining ??
+                    999999
+                )
         );
 
 }
@@ -4064,18 +4598,27 @@ function renderAlerts(){
 
     const dashboard =
         document
-            .getElementById("dashboardAlerts");
+            .getElementById(
+                "dashboardAlerts"
+            );
 
     const all =
         document
-            .getElementById("allAlerts");
+            .getElementById(
+                "allAlerts"
+            );
 
     function html(limit=null){
 
         const list =
             limit
-            ? alerts.slice(0,limit)
-            : alerts;
+            ?
+            alerts.slice(
+                0,
+                limit
+            )
+            :
+            alerts;
 
         if(!list.length){
 
@@ -4102,42 +4645,55 @@ function renderAlerts(){
                 item.employee;
 
             const danger =
-                item.state.alert === "danger";
+                item.state.alert ===
+                "danger";
 
             const warning =
-                item.state.alert === "warning";
+                item.state.alert ===
+                "warning";
 
             const cls =
                 danger
-                ? "alert-danger"
+                ?
+                "alert-danger"
                 :
                 warning
-                ? "alert-warning"
+                ?
+                "alert-warning"
                 :
                 "alert-info";
 
             let title =
                 danger
-                ? "تنبيه عاجل"
+                ?
+                "تنبيه عاجل"
                 :
                 warning
-                ? "اقتراب انتهاء الوضعية"
+                ?
+                "اقتراب انتهاء الوضعية"
                 :
                 "تنبيه مسبق";
 
-            if(item.state.remaining < 0){
-                title = "وضعية منتهية";
+            if(
+                item.state.remaining < 0
+            ){
+                title =
+                    "وضعية منتهية";
             }
 
             return `
                 <div class="alert-item ${cls}">
 
                     <div class="alert-icon">
+
                         <i data-lucide="${
                             danger
-                            ? "alert-triangle"
-                            : "bell"
+                            ?
+                            "alert-triangle"
+                            :
+                            "bell"
                         }"></i>
+
                     </div>
 
                     <div style="flex:1">
@@ -4159,19 +4715,29 @@ function renderAlerts(){
                             }
 
                             —
-                            ${esc(a.assignment_type)}
+
+                            ${esc(
+                                a.assignment_type
+                            )}
 
                             —
-                            ${esc(a.receiving_institution)}
+
+                            ${esc(
+                                a.receiving_institution
+                            )}
 
                             <br>
 
                             ${
                                 item.state.remaining < 0
                                 ?
-                                `انتهت في ${formatDate(a.end_date)}`
+                                `انتهت في ${formatDate(
+                                    a.end_date
+                                )}`
                                 :
-                                `تنتهي في ${formatDate(a.end_date)} — ${item.state.remaining} يوم متبقي`
+                                `تنتهي في ${formatDate(
+                                    a.end_date
+                                )} — ${item.state.remaining} يوم متبقي`
                             }
 
                         </span>
@@ -4215,28 +4781,42 @@ function openProfile(id){
         assignments.filter(
             a =>
                 a.employee_id === id &&
-                a.approval_status === "pending"
+                a.approval_status ===
+                    "pending"
         );
 
     document
-        .getElementById("profileContent")
+        .getElementById(
+            "profileContent"
+        )
         .innerHTML = `
 
             <div class="profile-header">
 
                 <div class="profile-avatar">
-                    <i data-lucide="user" size="31"></i>
+
+                    <i
+                        data-lucide="user"
+                        size="31"
+                    ></i>
+
                 </div>
 
                 <div>
 
                     <h2>
-                        ${esc(employee.first_name)}
-                        ${esc(employee.last_name)}
+                        ${esc(
+                            employee.first_name
+                        )}
+                        ${esc(
+                            employee.last_name
+                        )}
                     </h2>
 
                     <p>
-                        ${esc(employee.grade)}
+                        ${esc(
+                            employee.grade
+                        )}
                     </p>
 
                 </div>
@@ -4252,8 +4832,12 @@ function openProfile(id){
                     </label>
 
                     <strong>
-                        ${esc(employee.first_name)}
-                        ${esc(employee.last_name)}
+                        ${esc(
+                            employee.first_name
+                        )}
+                        ${esc(
+                            employee.last_name
+                        )}
                     </strong>
 
                 </div>
@@ -4265,7 +4849,10 @@ function openProfile(id){
                     </label>
 
                     <strong>
-                        ${esc(employee.employee_number || "غير مسجل")}
+                        ${esc(
+                            employee.employee_number ||
+                            "غير مسجل"
+                        )}
                     </strong>
 
                 </div>
@@ -4277,7 +4864,9 @@ function openProfile(id){
                     </label>
 
                     <strong>
-                        ${esc(employee.grade)}
+                        ${esc(
+                            employee.grade
+                        )}
                     </strong>
 
                 </div>
@@ -4307,14 +4896,23 @@ function openProfile(id){
                                 <thead>
 
                                     <tr>
+
                                         <th>النوع</th>
+
                                         <th>الاتجاه</th>
+
                                         <th>المؤسسة الأصلية</th>
+
                                         <th>الوجهة</th>
+
                                         <th>من</th>
+
                                         <th>إلى</th>
+
                                         <th>المدة</th>
+
                                         <th>الحالة</th>
+
                                     </tr>
 
                                 </thead>
@@ -4322,55 +4920,76 @@ function openProfile(id){
                                 <tbody>
 
                                     ${
-                                        approved.map(a => {
+                                        approved
+                                            .map(a => {
 
-                                            const state =
-                                                assignmentState(a);
+                                                const state =
+                                                    assignmentState(
+                                                        a
+                                                    );
 
-                                            return `
-                                                <tr>
+                                                return `
+                                                    <tr>
 
-                                                    <td>
-                                                        ${esc(a.assignment_type)}
-                                                    </td>
+                                                        <td>
+                                                            ${esc(
+                                                                a.assignment_type
+                                                            )}
+                                                        </td>
 
-                                                    <td>
-                                                        ${esc(a.assignment_direction)}
-                                                    </td>
+                                                        <td>
+                                                            ${esc(
+                                                                a.assignment_direction
+                                                            )}
+                                                        </td>
 
-                                                    <td>
-                                                        ${esc(a.original_institution || "—")}
-                                                    </td>
+                                                        <td>
+                                                            ${esc(
+                                                                a.original_institution ||
+                                                                "—"
+                                                            )}
+                                                        </td>
 
-                                                    <td>
-                                                        ${esc(a.receiving_institution)}
-                                                    </td>
+                                                        <td>
+                                                            ${esc(
+                                                                a.receiving_institution
+                                                            )}
+                                                        </td>
 
-                                                    <td>
-                                                        ${formatDate(a.start_date)}
-                                                    </td>
+                                                        <td>
+                                                            ${formatDate(
+                                                                a.start_date
+                                                            )}
+                                                        </td>
 
-                                                    <td>
-                                                        ${formatDate(a.end_date)}
-                                                    </td>
+                                                        <td>
+                                                            ${formatDate(
+                                                                a.end_date
+                                                            )}
+                                                        </td>
 
-                                                    <td>
-                                                        ${calculateDuration(
-                                                            a.start_date,
-                                                            a.end_date
-                                                        )}
-                                                    </td>
+                                                        <td>
+                                                            ${calculateDuration(
+                                                                a.start_date,
+                                                                a.end_date
+                                                            )}
+                                                        </td>
 
-                                                    <td>
-                                                        <span class="badge ${state.class}">
-                                                            ${state.text}
-                                                        </span>
-                                                    </td>
+                                                        <td>
 
-                                                </tr>
-                                            `;
+                                                            <span
+                                                                class="badge ${state.class}"
+                                                            >
+                                                                ${state.text}
+                                                            </span>
 
-                                        }).join("")
+                                                        </td>
+
+                                                    </tr>
+                                                `;
+
+                                            })
+                                            .join("")
                                     }
 
                                 </tbody>
@@ -4408,31 +5027,53 @@ function openProfile(id){
                     <div class="section-body">
 
                         ${pending.map(a => `
+
                             <div
                                 class="alert-item alert-warning"
                             >
 
                                 <div class="alert-icon">
-                                    <i data-lucide="clock"></i>
+
+                                    <i
+                                        data-lucide="clock"
+                                    ></i>
+
                                 </div>
 
                                 <div>
 
                                     <strong>
-                                        ${esc(a.assignment_type)}
+                                        ${esc(
+                                            a.assignment_type
+                                        )}
                                     </strong>
 
                                     <span>
-                                        ${esc(a.original_institution || "—")}
+
+                                        ${esc(
+                                            a.original_institution ||
+                                            "—"
+                                        )}
+
                                         ←
-                                        ${esc(a.receiving_institution)}
+
+                                        ${esc(
+                                            a.receiving_institution
+                                        )}
+
                                         <br>
-                                        من ${formatDate(a.start_date)}
+
+                                        من
+                                        ${formatDate(
+                                            a.start_date
+                                        )}
+
                                     </span>
 
                                 </div>
 
                             </div>
+
                         `).join("")}
 
                     </div>
@@ -4446,7 +5087,9 @@ function openProfile(id){
         `;
 
     document
-        .getElementById("profileModal")
+        .getElementById(
+            "profileModal"
+        )
         .classList.add("show");
 
     lucide.createIcons();
@@ -4475,8 +5118,10 @@ function printEmployees(){
 
     setTimeout(
         () => {
+
             document.title =
                 original;
+
         },
         1000
     );
@@ -4493,6 +5138,21 @@ function closeModal(id){
         .getElementById(id)
         .classList.remove("show");
 
+    /*
+     * عند إغلاق نافذة الموظف:
+     * لا نحذف البيانات من قاعدة البيانات،
+     * لكن نصفر حالة التعديل حتى لا يحدث
+     * تعديل غير مقصود عند فتح نافذة جديدة.
+     */
+
+    if(id === "employeeModal"){
+
+        editingEmployeeId = null;
+
+        editingAssignmentId = null;
+
+    }
+
 }
 
 document
@@ -4504,7 +5164,24 @@ document
             function(e){
 
                 if(e.target === modal){
-                    modal.classList.remove("show");
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                    if(
+                        modal.id ===
+                        "employeeModal"
+                    ){
+
+                        editingEmployeeId =
+                            null;
+
+                        editingAssignmentId =
+                            null;
+
+                    }
+
                 }
 
             }
@@ -4520,11 +5197,15 @@ function toggleEndDate(){
 
     const checkbox =
         document
-            .getElementById("isIndefinite");
+            .getElementById(
+                "isIndefinite"
+            );
 
     const end =
         document
-            .getElementById("endDate");
+            .getElementById(
+                "endDate"
+            );
 
     if(checkbox.checked){
 
@@ -4550,20 +5231,27 @@ function updateDurationPreview(){
 
     const start =
         document
-            .getElementById("startDate")
+            .getElementById(
+                "startDate"
+            )
             .value;
 
     const indefinite =
         document
-            .getElementById("isIndefinite")
+            .getElementById(
+                "isIndefinite"
+            )
             .checked;
 
     const end =
         document
-            .getElementById("endDate")
+            .getElementById(
+                "endDate"
+            )
             .value;
 
-    let text = "المدة: ";
+    let text =
+        "المدة: ";
 
     if(!start){
 
@@ -4571,24 +5259,30 @@ function updateDurationPreview(){
 
     }else if(indefinite){
 
-        text += "غير محددة المدة";
+        text +=
+            "غير محددة المدة";
 
     }else if(!end){
 
-        text += "أدخل تاريخ النهاية";
+        text +=
+            "أدخل تاريخ النهاية";
 
     }else{
 
-        text += calculateDuration(
-            start,
-            end
-        );
+        text +=
+            calculateDuration(
+                start,
+                end
+            );
 
     }
 
     document
-        .getElementById("durationPreview")
-        .textContent = text;
+        .getElementById(
+            "durationPreview"
+        )
+        .textContent =
+        text;
 
 }
 
@@ -4600,12 +5294,16 @@ function togglePassword(){
 
     const input =
         document
-            .getElementById("loginPassword");
+            .getElementById(
+                "loginPassword"
+            );
 
     input.type =
         input.type === "password"
-        ? "text"
-        : "password";
+        ?
+        "text"
+        :
+        "password";
 
 }
 
@@ -4626,7 +5324,8 @@ async function logActivity(
             .insert({
 
                 user_id:
-                    currentUser?.id || null,
+                    currentUser?.id ||
+                    null,
 
                 action,
 
@@ -4660,11 +5359,14 @@ function updatePendingBadge(){
     const count =
         assignments.filter(
             a =>
-                a.approval_status === "pending"
+                a.approval_status ===
+                "pending"
         ).length;
 
     document
-        .getElementById("pendingBadge")
+        .getElementById(
+            "pendingBadge"
+        )
         .textContent =
         count;
 
@@ -4675,10 +5377,14 @@ function updatePendingBadge(){
 ========================================================= */
 
 db.auth.onAuthStateChange(
-    async (event,session) => {
+    async (
+        event,
+        session
+    ) => {
 
         if(
-            event === "SIGNED_OUT"
+            event ===
+            "SIGNED_OUT"
         ){
 
             currentUser = null;

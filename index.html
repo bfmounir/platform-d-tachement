@@ -763,6 +763,63 @@ tr:hover td{
     background:#fff;
 }
 
+.employee-type-filters{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    flex-wrap:wrap;
+}
+
+.employee-type-filter{
+    border:1px solid var(--border);
+    background:#fff;
+    color:#647286;
+    border-radius:12px;
+    padding:11px 14px;
+    font-size:12px;
+    font-weight:800;
+    transition:.2s;
+}
+
+.employee-type-filter:hover{
+    border-color:#cbd9e2;
+    background:#f8fbfd;
+}
+
+.employee-type-filter.active{
+    background:linear-gradient(135deg,#e7f8fc,#eeeaff);
+    border-color:#cfe6ed;
+    color:#287c91;
+}
+
+.assignment-summary{
+    line-height:1.7;
+    min-width:240px;
+}
+
+.assignment-summary .assignment-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px 8px;
+    margin-top:5px;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.assignment-summary .assignment-meta strong{
+    color:#4b5b70;
+}
+
+@media(max-width:700px){
+    .employee-type-filters{
+        width:100%;
+    }
+    .employee-type-filter{
+        flex:1;
+        min-width:100px;
+    }
+}
+
 /* =========================================================
    النوافذ
 ========================================================= */
@@ -1651,6 +1708,37 @@ tr:hover td{
 
                                 </div>
 
+                                <div class="employee-type-filters" role="group" aria-label="تصفية نوع الوضعية">
+
+                                    <button
+                                        type="button"
+                                        id="employeeTypeAll"
+                                        class="employee-type-filter active"
+                                        onclick="setEmployeeTypeFilter('all')"
+                                    >
+                                        الكل
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        id="employeeTypeSecond"
+                                        class="employee-type-filter"
+                                        onclick="setEmployeeTypeFilter('انتداب')"
+                                    >
+                                        المنتدبون
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        id="employeeTypeThird"
+                                        class="employee-type-filter"
+                                        onclick="setEmployeeTypeFilter('تحت التصرف')"
+                                    >
+                                        الموضوعون تحت التصرف
+                                    </button>
+
+                                </div>
+
                                 <select
                                     id="employeeStatusFilter"
                                     class="filter-select"
@@ -1673,7 +1761,9 @@ tr:hover td{
                                             <th>الموظف</th>
                                             <th>الرقم الوظيفي</th>
                                             <th>الرتبة</th>
-                                            <th>الوضعيات المعتمدة</th>
+                                            <th>الوضعية الحالية</th>
+                                            <th>تاريخ البداية</th>
+                                            <th>المدة المحددة</th>
                                             <th>الحالة</th>
                                             <th>إجراءات</th>
                                         </tr>
@@ -2168,6 +2258,7 @@ const db =
 let currentUser = null;
 
 let employees = [];
+let employeeTypeFilter = "all";
 
 let assignments = [];
 
@@ -2960,6 +3051,70 @@ function getEmployee(id){
 
 }
 
+function getLatestApprovedAssignment(employeeId){
+
+    const list =
+        employeeAssignments(employeeId);
+
+    if(!list.length){
+        return null;
+    }
+
+    return [...list].sort((a,b) => {
+
+        const dateA =
+            a.start_date || "0000-00-00";
+
+        const dateB =
+            b.start_date || "0000-00-00";
+
+        if(dateA !== dateB){
+            return dateB.localeCompare(dateA);
+        }
+
+        const createdA =
+            a.created_at || "";
+
+        const createdB =
+            b.created_at || "";
+
+        return createdB.localeCompare(createdA);
+
+    })[0];
+
+}
+
+function setEmployeeTypeFilter(type){
+
+    const input =
+        document.getElementById("employeeSearch");
+
+    const buttons = [
+        ["employeeTypeAll","all"],
+        ["employeeTypeSecond","انتداب"],
+        ["employeeTypeThird","تحت التصرف"]
+    ];
+
+    buttons.forEach(([id,value]) => {
+
+        const button =
+            document.getElementById(id);
+
+        if(button){
+            button.classList.toggle(
+                "active",
+                value === type
+            );
+        }
+
+    });
+
+    employeeTypeFilter = type;
+
+    renderEmployees();
+
+}
+
 function renderEmployees(){
 
     const tbody =
@@ -2985,15 +3140,25 @@ function renderEmployees(){
             ?.value ||
         "all";
 
+    const typeFilter =
+        employeeTypeFilter ||
+        "all";
+
     let rows =
         employees.filter(e => {
+
+            const currentAssignment =
+                getLatestApprovedAssignment(e.id);
 
             const text =
                 [
                     e.first_name,
                     e.last_name,
                     e.employee_number,
-                    e.grade
+                    e.grade,
+                    currentAssignment?.assignment_type,
+                    currentAssignment?.original_institution,
+                    currentAssignment?.receiving_institution
                 ]
                 .filter(Boolean)
                 .join(" ")
@@ -3014,8 +3179,13 @@ function renderEmployees(){
                     !e.is_active
                 );
 
+            const matchesType =
+                typeFilter === "all" ||
+                currentAssignment?.assignment_type === typeFilter;
+
             return matchesSearch &&
-                   matchesStatus;
+                   matchesStatus &&
+                   matchesType;
 
         });
 
@@ -3023,7 +3193,7 @@ function renderEmployees(){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="6">
+                <td colspan="8">
 
                     <div class="empty">
 
@@ -3031,7 +3201,7 @@ function renderEmployees(){
                             <i data-lucide="users"></i>
                         </div>
 
-                        لا توجد بيانات.
+                        لا توجد بيانات مطابقة.
 
                     </div>
 
@@ -3047,19 +3217,69 @@ function renderEmployees(){
     tbody.innerHTML =
         rows.map(e => {
 
-            const count =
-                employeeAssignments(e.id).length;
+            const currentAssignment =
+                getLatestApprovedAssignment(e.id);
+
+            let typeHtml =
+                '<span style="color:#758195">لا توجد وضعية معتمدة</span>';
+
+            let startHtml = "—";
+            let durationHtml = "—";
+
+            if(currentAssignment){
+
+                const typeClass =
+                    currentAssignment.assignment_type === "انتداب"
+                    ? "badge-purple"
+                    : "badge-info";
+
+                typeHtml = `
+                    <div class="assignment-summary">
+                        <span class="badge ${typeClass}">
+                            ${esc(currentAssignment.assignment_type)}
+                        </span>
+                        <div class="assignment-meta">
+                            <span>
+                                ${esc(
+                                    currentAssignment.assignment_direction ||
+                                    ""
+                                )}
+                            </span>
+                            <span>
+                                ${esc(
+                                    currentAssignment.receiving_institution ||
+                                    "—"
+                                )}
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                startHtml =
+                    formatDate(currentAssignment.start_date);
+
+                durationHtml =
+                    currentAssignment.is_indefinite
+                    ? '<span class="badge badge-info">غير محددة المدة</span>'
+                    : `<span class="badge badge-warning">
+                        ${esc(
+                            calculateDuration(
+                                currentAssignment.start_date,
+                                currentAssignment.end_date
+                            )
+                        )}
+                    </span>`;
+
+            }
 
             return `
                 <tr>
 
                     <td>
-
                         <strong>
                             ${esc(e.first_name)}
                             ${esc(e.last_name)}
                         </strong>
-
                     </td>
 
                     <td>
@@ -3074,15 +3294,18 @@ function renderEmployees(){
                     </td>
 
                     <td>
-
-                        <span class="badge badge-info">
-                            ${count}
-                        </span>
-
+                        ${typeHtml}
                     </td>
 
                     <td>
+                        ${startHtml}
+                    </td>
 
+                    <td>
+                        ${durationHtml}
+                    </td>
+
+                    <td>
                         ${
                             e.is_active
                             ?
@@ -3090,11 +3313,9 @@ function renderEmployees(){
                             :
                             '<span class="badge badge-warning">غير نشط</span>'
                         }
-
                     </td>
 
                     <td>
-
                         <div class="actions">
 
                             <button
@@ -3131,7 +3352,6 @@ function renderEmployees(){
                             </button>
 
                         </div>
-
                     </td>
 
                 </tr>

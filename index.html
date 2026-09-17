@@ -12,6 +12,8 @@
 
 <style>
 
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+
 :root{
     --primary:#20a9c7;
     --primary-dark:#138da9;
@@ -41,6 +43,7 @@ body{
     margin:0;
     padding:0;
     font-family:
+        "Cairo",
         Tahoma,
         Arial,
         "Noto Sans Arabic",
@@ -1144,6 +1147,11 @@ tr:hover td{
         grid-template-columns:1fr;
     }
 
+    .assignment-first-step,
+    .form-section-divider{
+        align-items:flex-start;
+    }
+
     .form-grid .full{
         grid-column:auto;
     }
@@ -1251,6 +1259,180 @@ tr:hover td{
 
 #employeesTable td:nth-child(6){
     min-width:210px;
+}
+
+/* =========================================================
+   تحسينات الواجهة والجمالية
+========================================================= */
+
+body{
+    line-height:1.65;
+}
+
+.topbar{
+    box-shadow:0 4px 18px rgba(37,55,75,.035);
+}
+
+.page-title h2,
+.section-header h3,
+.hero h1,
+.login-card h1{
+    letter-spacing:-.2px;
+}
+
+.section-card{
+    border-radius:20px;
+}
+
+.section-header{
+    background:linear-gradient(180deg,#fff,#fbfdff);
+    padding:18px 20px;
+}
+
+th{
+    background:linear-gradient(180deg,#f5f8fb,#eef3f7);
+    color:#536276;
+    font-weight:800;
+    padding:14px 13px;
+}
+
+td{
+    padding:14px 13px;
+}
+
+tbody tr{
+    transition:background .18s, transform .18s;
+}
+
+tbody tr:hover td{
+    background:#f9fcfd;
+}
+
+.employee-number-badge{
+    min-width:44px;
+    height:34px;
+    padding:0 10px;
+    border-radius:10px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#f0efff,#e8e5ff);
+    color:#5b50b5;
+    font-weight:900;
+    font-size:12px;
+    border:1px solid #ded9ff;
+}
+
+.institution-cell{
+    line-height:1.6;
+}
+
+.institution-cell strong{
+    font-weight:700;
+    color:#344258;
+}
+
+.field label{
+    color:#3b485a;
+}
+
+.field input,
+.field select,
+.field textarea{
+    min-height:46px;
+    border-radius:13px;
+    background:#fafcfe;
+}
+
+.field input:read-only{
+    background:#f2f1ff;
+    color:#5a50ad;
+    border-color:#ddd9fa;
+    font-weight:800;
+}
+
+.assignment-first-step,
+.form-section-divider{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px 14px;
+    margin:2px 0 16px;
+    border:1px solid #e8ebf2;
+    border-radius:15px;
+    background:linear-gradient(90deg,#f8fbfd,#f8f7ff);
+}
+
+.form-section-divider{
+    margin-top:7px;
+}
+
+.step-badge{
+    width:31px;
+    height:31px;
+    flex:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:#fff;
+    font-size:12px;
+    font-weight:900;
+    box-shadow:0 5px 12px rgba(92,91,184,.16);
+}
+
+.step-title{
+    font-size:13px;
+    font-weight:900;
+    color:#344258;
+}
+
+.step-help,
+.field-hint{
+    color:#7b8797;
+    font-size:11px;
+    line-height:1.7;
+}
+
+.auto-number-wrap{
+    position:relative;
+}
+
+.auto-number-wrap input{
+    padding-right:46px;
+}
+
+.auto-number-icon{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#675bc1;
+    z-index:2;
+}
+
+.auto-number-field .field-hint{
+    display:block;
+    margin-top:5px;
+}
+
+.assignment-choice-grid{
+    margin-bottom:4px;
+}
+
+.btn{
+    border-radius:12px;
+    font-weight:800;
+}
+
+.icon-btn{
+    transition:transform .15s, box-shadow .15s;
+}
+
+.icon-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 5px 12px rgba(35,55,75,.08);
 }
 
 /* =========================================================
@@ -2108,82 +2290,24 @@ tr:hover td{
                     type="hidden"
                 >
 
-                <div class="form-grid">
+                <div class="assignment-first-step">
 
-                    <div class="field">
+                    <div class="step-badge">1</div>
 
-                        <label>الاسم *</label>
-
-                        <input
-                            id="firstName"
-                            type="text"
-                            autocomplete="off"
-                            required
-                        >
-
-                    </div>
-
-                    <div class="field">
-
-                        <label>اللقب *</label>
-
-                        <input
-                            id="lastName"
-                            type="text"
-                            autocomplete="off"
-                            required
-                        >
-
-                    </div>
-
-                    <div class="field">
-
-                        <label>الرقم الوظيفي</label>
-
-                        <input
-                            id="employeeNumber"
-                            type="text"
-                            autocomplete="off"
-                            readonly
-                            placeholder="يُمنح تلقائيًا"
-                        >
-
-                    </div>
-
-                    <div class="field">
-
-                        <label>الرتبة *</label>
-
-                        <input
-                            id="grade"
-                            type="text"
-                            autocomplete="off"
-                            required
-                        >
-
+                    <div>
+                        <div class="step-title">تحديد الوضعية الإدارية أولًا</div>
+                        <div class="step-help">اختر الوضعية، وسيتم منح رقم المتابعة تلقائيًا ضمن تسلسل هذه الوضعية.</div>
                     </div>
 
                 </div>
 
-                <div
-                    style="margin:15px 0;border-top:1px solid #eef1f4;padding-top:18px"
-                >
-
-                    <h4
-                        style="margin:0 0 14px;font-size:15px"
-                    >
-                        الوضعية الإدارية
-                    </h4>
-
-                </div>
-
-                <div class="form-grid">
+                <div class="form-grid assignment-choice-grid">
 
                     <div class="field">
 
                         <label>نوع الوضعية *</label>
 
-                        <select id="assignmentType">
+                        <select id="assignmentType" onchange="updateAutoEmployeeNumber()">
 
                             <option value="انتداب">
                                 انتداب
@@ -2214,6 +2338,85 @@ tr:hover td{
                         </select>
 
                     </div>
+
+                    <div class="field auto-number-field">
+
+                        <label>رقم المتابعة</label>
+
+                        <div class="auto-number-wrap">
+                            <span class="auto-number-icon"><i data-lucide="hash" size="17"></i></span>
+                            <input
+                                id="employeeNumber"
+                                type="text"
+                                autocomplete="off"
+                                readonly
+                                placeholder="يُمنح تلقائيًا"
+                            >
+                        </div>
+                        <small id="numberHint" class="field-hint">رقم مستقل حسب نوع الوضعية</small>
+
+                    </div>
+
+                </div>
+
+                <div class="form-section-divider">
+                    <span class="step-badge">2</span>
+                    <div>
+                        <div class="step-title">بيانات الموظف</div>
+                        <div class="step-help">أدخل المعلومات الأساسية للموظف.</div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="field">
+
+                        <label>الاسم *</label>
+
+                        <input
+                            id="firstName"
+                            type="text"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="field">
+
+                        <label>اللقب *</label>
+
+                        <input
+                            id="lastName"
+                            type="text"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="field full">
+
+                        <label>الرتبة *</label>
+
+                        <input
+                            id="grade"
+                            type="text"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-section-divider legacy-divider">
+                    <span class="step-badge">3</span>
+                    <div>
+                        <div class="step-title">تفاصيل الوضعية</div>
+                        <div class="step-help">أكمل بيانات المؤسسة والتواريخ والمدة.</div>
+                    </div>
+                </div>
 
                     <div class="field">
 
@@ -2503,10 +2706,29 @@ function todayDate(){
     return `${y}-${m}-${day}`;
 }
 
-function generateEmployeeNumber(){
+function generateEmployeeNumber(assignmentType = null){
 
+    const type =
+        assignmentType ||
+        document.getElementById("assignmentType")?.value ||
+        "انتداب";
+
+    /*
+     * الترقيم مستقل لكل وضعية:
+     * 001، 002، 003... للمنتدبين
+     * 001، 002، 003... للموضوعين تحت التصرف
+     * وذلك بالاعتماد على آخر وضعية معتمدة لكل موظف.
+     */
     const numbers =
         employees
+            .filter(e => {
+
+                const current =
+                    getLatestApprovedAssignment(e.id);
+
+                return current?.assignment_type === type;
+
+            })
             .map(e => String(e.employee_number || "").trim())
             .filter(value => /^\d+$/.test(value))
             .map(value => Number(value))
@@ -2517,7 +2739,38 @@ function generateEmployeeNumber(){
         ? Math.max(...numbers)
         : 0;
 
-    return String(maxNumber + 1);
+    return String(maxNumber + 1).padStart(3, "0");
+}
+
+function updateAutoEmployeeNumber(){
+
+    if(editingEmployeeId){
+        return;
+    }
+
+    const type =
+        document.getElementById("assignmentType")?.value ||
+        "انتداب";
+
+    const number =
+        generateEmployeeNumber(type);
+
+    const input =
+        document.getElementById("employeeNumber");
+
+    if(input){
+        input.value = number;
+    }
+
+    const hint =
+        document.getElementById("numberHint");
+
+    if(hint){
+        hint.textContent =
+            type === "انتداب"
+            ? "ترقيم مستقل للموظفين المنتدبين"
+            : "ترقيم مستقل للموظفين الموضوعين تحت التصرف";
+    }
 }
 
 function daysBetween(start,end){
@@ -3625,7 +3878,9 @@ function resetEmployeeForm(){
 
     document
         .getElementById("employeeNumber")
-        .value = generateEmployeeNumber();
+        .value = "";
+
+    updateAutoEmployeeNumber();
 
     document
         .getElementById("employeeModalTitle")
@@ -3750,6 +4005,8 @@ function openEmployeeModal(id=null){
                 .value =
                 firstAssignment.assignment_type ||
                 "انتداب";
+
+            updateAutoEmployeeNumber();
 
             document
                 .getElementById("assignmentDirection")
@@ -3876,7 +4133,11 @@ async function saveEmployee(e){
                 .trim() ||
             null
         )
-        : generateEmployeeNumber();
+        : generateEmployeeNumber(
+            document
+                .getElementById("assignmentType")
+                .value
+        );
 
     document
         .getElementById("employeeNumber")

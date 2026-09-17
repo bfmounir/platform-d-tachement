@@ -1197,55 +1197,213 @@ tr:hover td{
 }
 
 /* =========================================================
+   تحسين قائمة الموظفين
+========================================================= */
+
+.employee-number-badge{
+    min-width:38px;
+    height:32px;
+    padding:0 9px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background:#f1edff;
+    color:#5f52ba;
+    font-weight:900;
+    font-size:12px;
+}
+
+.employee-name-cell strong{
+    display:block;
+    font-size:13px;
+    color:#172235;
+}
+
+.grade-cell{
+    font-weight:700;
+    color:#334155;
+}
+
+.institution-cell{
+    line-height:1.6;
+    max-width:280px;
+}
+
+.institution-cell strong{
+    font-size:12px;
+    color:#334155;
+}
+
+#employeesTable td{
+    padding-top:14px;
+    padding-bottom:14px;
+}
+
+#employeesTable td:nth-child(1){
+    width:70px;
+    text-align:center;
+}
+
+#employeesTable td:nth-child(2){
+    min-width:150px;
+}
+
+#employeesTable td:nth-child(6){
+    min-width:210px;
+}
+
+/* =========================================================
    الطباعة
 ========================================================= */
 
+.employee-print-area{
+    display:none;
+}
+
+.employee-print-header{
+    text-align:center;
+    margin-bottom:22px;
+    border-bottom:2px solid #222;
+    padding-bottom:14px;
+}
+
+.employee-print-header .institution{
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:5px;
+}
+
+.employee-print-header .department{
+    font-size:13px;
+    color:#333;
+    margin-bottom:14px;
+}
+
+.employee-print-header h1{
+    margin:0;
+    font-size:19px;
+    font-weight:900;
+}
+
+.employee-print-header .print-date{
+    margin-top:8px;
+    font-size:11px;
+    color:#444;
+}
+
+.employee-print-table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+}
+
+.employee-print-table th,
+.employee-print-table td{
+    border:1px solid #444;
+    padding:9px 7px;
+    font-size:11px;
+    text-align:center;
+    vertical-align:middle;
+}
+
+.employee-print-table th{
+    background:#f0f0f0;
+    color:#111;
+    font-weight:800;
+}
+
+.employee-print-table th:nth-child(1){width:7%;}
+.employee-print-table th:nth-child(2){width:21%;}
+.employee-print-table th:nth-child(3){width:18%;}
+.employee-print-table th:nth-child(4){width:13%;}
+.employee-print-table th:nth-child(5){width:14%;}
+.employee-print-table th:nth-child(6){width:27%;}
+
+.employee-print-table tr{
+    page-break-inside:avoid;
+}
+
+.employee-print-footer{
+    margin-top:18px;
+    font-size:10px;
+    color:#444;
+    display:flex;
+    justify-content:space-between;
+}
+
 @media print{
+
+    @page{
+        size:A4 portrait;
+        margin:14mm;
+    }
 
     body{
         background:#fff;
     }
 
-    .sidebar,
-    .topbar,
-    .no-print,
-    #toastContainer,
-    .modal-header,
-    .modal-footer{
+    body.printing-employees #app,
+    body.printing-employees #loadingScreen,
+    body.printing-employees #employeeModal,
+    body.printing-employees #profileModal,
+    body.printing-employees #toastContainer{
         display:none!important;
     }
 
-    .main{
+    body.printing-employees #employeePrintArea{
+        display:block!important;
+    }
+
+    body.printing-employees .employee-print-table thead{
+        display:table-header-group;
+    }
+
+    body.printing-employees .employee-print-table tfoot{
+        display:table-footer-group;
+    }
+
+    body.printing-profile #employeePrintArea{
+        display:none!important;
+    }
+
+    body.printing-profile .sidebar,
+    body.printing-profile .topbar,
+    body.printing-profile .no-print,
+    body.printing-profile #toastContainer{
+        display:none!important;
+    }
+
+    body.printing-profile .main{
         margin:0!important;
     }
 
-    .content{
+    body.printing-profile .content{
         padding:0;
     }
 
-    .modal{
+    body.printing-profile .modal{
         position:static;
         display:block!important;
         background:#fff;
         padding:0;
     }
 
-    .modal-card{
+    body.printing-profile .modal-card{
         width:100%;
         max-height:none;
         box-shadow:none;
         border:0;
     }
 
-    .modal-body{
+    body.printing-profile .modal-body{
         padding:0;
     }
 
-    .section-card{
+    body.printing-profile .section-card{
         box-shadow:none;
     }
 }
-
 </style>
 </head>
 
@@ -1758,13 +1916,12 @@ tr:hover td{
                                     <thead>
 
                                         <tr>
+                                            <th>الرقم</th>
                                             <th>الموظف</th>
-                                            <th>الرقم الوظيفي</th>
                                             <th>الرتبة</th>
-                                            <th>الوضعية الحالية</th>
-                                            <th>تاريخ البداية</th>
-                                            <th>المدة المحددة</th>
-                                            <th>الحالة</th>
+                                            <th>الوضعية</th>
+                                            <th>المدة</th>
+                                            <th>المؤسسة</th>
                                             <th>إجراءات</th>
                                         </tr>
 
@@ -1987,6 +2144,8 @@ tr:hover td{
                             id="employeeNumber"
                             type="text"
                             autocomplete="off"
+                            readonly
+                            placeholder="يُمنح تلقائيًا"
                         >
 
                     </div>
@@ -2233,6 +2392,12 @@ tr:hover td{
 
 <div id="toastContainer"></div>
 
+<!-- =========================================================
+     مساحة طباعة مستقلة لقائمة الموظفين
+========================================================= -->
+
+<div id="employeePrintArea" class="employee-print-area"></div>
+
 <script>
 
 /* =========================================================
@@ -2336,6 +2501,23 @@ function todayDate(){
         ).padStart(2,"0");
 
     return `${y}-${m}-${day}`;
+}
+
+function generateEmployeeNumber(){
+
+    const numbers =
+        employees
+            .map(e => String(e.employee_number || "").trim())
+            .filter(value => /^\d+$/.test(value))
+            .map(value => Number(value))
+            .filter(Number.isFinite);
+
+    const maxNumber =
+        numbers.length
+        ? Math.max(...numbers)
+        : 0;
+
+    return String(maxNumber + 1);
 }
 
 function daysBetween(start,end){
@@ -3189,32 +3371,26 @@ function renderEmployees(){
 
         });
 
-    // ترتيب الموظفين حسب الرقم الوظيفي تصاعديًا
-    // الأرقام الوظيفية غير المسجلة تظهر في النهاية.
-    rows.sort((a, b) => {
+    rows.sort((a,b) => {
 
-        const numberA = String(a.employee_number || "").trim();
-        const numberB = String(b.employee_number || "").trim();
+        const numberA = Number(a.employee_number);
+        const numberB = Number(b.employee_number);
 
-        if(!numberA && !numberB){
-            return 0;
+        if(Number.isFinite(numberA) && Number.isFinite(numberB)){
+            return numberA - numberB;
         }
 
-        if(!numberA){
-            return 1;
-        }
-
-        if(!numberB){
+        if(Number.isFinite(numberA)){
             return -1;
         }
 
-        return numberA.localeCompare(
-            numberB,
-            "ar",
-            {
-                numeric: true,
-                sensitivity: "base"
-            }
+        if(Number.isFinite(numberB)){
+            return 1;
+        }
+
+        return String(a.last_name || "").localeCompare(
+            String(b.last_name || ""),
+            "ar"
         );
     });
 
@@ -3222,7 +3398,7 @@ function renderEmployees(){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="8">
+                <td colspan="7">
 
                     <div class="empty">
 
@@ -3252,40 +3428,24 @@ function renderEmployees(){
             let typeHtml =
                 '<span style="color:#758195">لا توجد وضعية معتمدة</span>';
 
-            let startHtml = "—";
             let durationHtml = "—";
+            let institutionHtml = "—";
 
             if(currentAssignment){
 
+                const isSecondment =
+                    currentAssignment.assignment_type === "انتداب";
+
                 const typeClass =
-                    currentAssignment.assignment_type === "انتداب"
+                    isSecondment
                     ? "badge-purple"
                     : "badge-info";
 
                 typeHtml = `
-                    <div class="assignment-summary">
-                        <span class="badge ${typeClass}">
-                            ${esc(currentAssignment.assignment_type)}
-                        </span>
-                        <div class="assignment-meta">
-                            <span>
-                                ${esc(
-                                    currentAssignment.assignment_direction ||
-                                    ""
-                                )}
-                            </span>
-                            <span>
-                                ${esc(
-                                    currentAssignment.receiving_institution ||
-                                    "—"
-                                )}
-                            </span>
-                        </div>
-                    </div>
+                    <span class="badge ${typeClass}">
+                        ${esc(currentAssignment.assignment_type)}
+                    </span>
                 `;
-
-                startHtml =
-                    formatDate(currentAssignment.start_date);
 
                 durationHtml =
                     currentAssignment.is_indefinite
@@ -3299,27 +3459,41 @@ function renderEmployees(){
                         )}
                     </span>`;
 
+                institutionHtml = `
+                    <div class="institution-cell">
+                        <strong>
+                            ${esc(
+                                isSecondment
+                                ? currentAssignment.original_institution
+                                : currentAssignment.receiving_institution
+                            )}
+                        </strong>
+                    </div>
+                `;
             }
 
             return `
                 <tr>
 
                     <td>
-                        <strong>
-                            ${esc(e.first_name)}
-                            ${esc(e.last_name)}
-                        </strong>
+                        <span class="employee-number-badge">
+                            ${esc(e.employee_number || "—")}
+                        </span>
                     </td>
 
                     <td>
-                        ${esc(
-                            e.employee_number ||
-                            "—"
-                        )}
+                        <div class="employee-name-cell">
+                            <strong>
+                                ${esc(e.first_name)}
+                                ${esc(e.last_name)}
+                            </strong>
+                        </div>
                     </td>
 
                     <td>
-                        ${esc(e.grade)}
+                        <span class="grade-cell">
+                            ${esc(e.grade)}
+                        </span>
                     </td>
 
                     <td>
@@ -3327,21 +3501,11 @@ function renderEmployees(){
                     </td>
 
                     <td>
-                        ${startHtml}
-                    </td>
-
-                    <td>
                         ${durationHtml}
                     </td>
 
                     <td>
-                        ${
-                            e.is_active
-                            ?
-                            '<span class="badge badge-success">نشط</span>'
-                            :
-                            '<span class="badge badge-warning">غير نشط</span>'
-                        }
+                        ${institutionHtml}
                     </td>
 
                     <td>
@@ -3402,7 +3566,6 @@ function enableEmployeeFields(){
 
         "firstName",
         "lastName",
-        "employeeNumber",
         "grade",
 
         "assignmentType",
@@ -3459,6 +3622,10 @@ function resetEmployeeForm(){
     document
         .getElementById("employeeId")
         .value = "";
+
+    document
+        .getElementById("employeeNumber")
+        .value = generateEmployeeNumber();
 
     document
         .getElementById("employeeModalTitle")
@@ -3701,11 +3868,20 @@ async function saveEmployee(e){
             .trim();
 
     const employeeNumber =
-        document
-            .getElementById("employeeNumber")
-            .value
-            .trim() ||
-        null;
+        editingEmployeeId
+        ? (
+            document
+                .getElementById("employeeNumber")
+                .value
+                .trim() ||
+            null
+        )
+        : generateEmployeeNumber();
+
+    document
+        .getElementById("employeeNumber")
+        .value =
+        employeeNumber || "";
 
     const grade =
         document
@@ -5351,29 +5527,237 @@ function openProfile(id){
 
 function printProfile(){
 
-    window.print();
+    document.body.classList.remove(
+        "printing-employees"
+    );
 
-}
-
-function printEmployees(){
+    document.body.classList.add(
+        "printing-profile"
+    );
 
     const original =
         document.title;
 
     document.title =
-        "قائمة الموظفين";
+        "ملف الموظف";
 
     window.print();
 
-    setTimeout(
-        () => {
+    setTimeout(() => {
 
-            document.title =
-                original;
+        document.title = original;
 
-        },
-        1000
+        document.body.classList.remove(
+            "printing-profile"
+        );
+
+    },1000);
+
+}
+
+function printEmployees(){
+
+    const search =
+        (
+            document
+                .getElementById("employeeSearch")
+                ?.value ||
+            ""
+        )
+        .trim()
+        .toLowerCase();
+
+    const status =
+        document
+            .getElementById("employeeStatusFilter")
+            ?.value ||
+        "all";
+
+    const typeFilter =
+        employeeTypeFilter ||
+        "all";
+
+    let rows =
+        employees.filter(e => {
+
+            const assignment =
+                getLatestApprovedAssignment(e.id);
+
+            const text =
+                [
+                    e.first_name,
+                    e.last_name,
+                    e.employee_number,
+                    e.grade,
+                    assignment?.assignment_type,
+                    assignment?.original_institution,
+                    assignment?.receiving_institution
+                ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+            const matchesSearch =
+                !search ||
+                text.includes(search);
+
+            const matchesStatus =
+                status === "all" ||
+                (status === "active" && e.is_active) ||
+                (status === "inactive" && !e.is_active);
+
+            const matchesType =
+                typeFilter === "all" ||
+                assignment?.assignment_type === typeFilter;
+
+            return matchesSearch &&
+                   matchesStatus &&
+                   matchesType;
+        });
+
+    rows.sort((a,b) => {
+        const numberA = Number(a.employee_number);
+        const numberB = Number(b.employee_number);
+
+        if(Number.isFinite(numberA) && Number.isFinite(numberB)){
+            return numberA - numberB;
+        }
+        if(Number.isFinite(numberA)){
+            return -1;
+        }
+        if(Number.isFinite(numberB)){
+            return 1;
+        }
+        return String(a.last_name || "").localeCompare(
+            String(b.last_name || ""),
+            "ar"
+        );
+    });
+
+    const title =
+        typeFilter === "انتداب"
+        ? "قائمة الموظفين المنتدبين"
+        : typeFilter === "تحت التصرف"
+        ? "قائمة الموظفين الموضوعين تحت التصرف"
+        : "قائمة الموظفين المنتدبين والموضوعين تحت التصرف";
+
+    const printArea =
+        document.getElementById(
+            "employeePrintArea"
+        );
+
+    printArea.innerHTML = `
+        <div class="employee-print-header">
+            <div class="institution">
+                المؤسسة العمومية الاستشفائية بأولف
+            </div>
+            <div class="department">
+                مصلحة الموارد البشرية
+            </div>
+            <h1>${esc(title)}</h1>
+            <div class="print-date">
+                تاريخ استخراج القائمة: ${formatDate(todayDate())}
+            </div>
+        </div>
+
+        <table class="employee-print-table">
+            <thead>
+                <tr>
+                    <th>الرقم</th>
+                    <th>الموظف</th>
+                    <th>الرتبة</th>
+                    <th>الوضعية</th>
+                    <th>المدة</th>
+                    <th>المؤسسة</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${
+                    rows.length
+                    ? rows.map(e => {
+
+                        const a =
+                            getLatestApprovedAssignment(e.id);
+
+                        const isSecondment =
+                            a?.assignment_type === "انتداب";
+
+                        const institution =
+                            a
+                            ? (
+                                isSecondment
+                                ? a.original_institution
+                                : a.receiving_institution
+                            )
+                            : "—";
+
+                        const duration =
+                            a
+                            ? (
+                                a.is_indefinite
+                                ? "غير محددة المدة"
+                                : calculateDuration(
+                                    a.start_date,
+                                    a.end_date
+                                )
+                            )
+                            : "—";
+
+                        return `
+                            <tr>
+                                <td>${esc(e.employee_number || "—")}</td>
+                                <td>
+                                    ${esc(e.first_name)}
+                                    ${esc(e.last_name)}
+                                </td>
+                                <td>${esc(e.grade || "—")}</td>
+                                <td>${esc(a?.assignment_type || "لا توجد وضعية معتمدة")}</td>
+                                <td>${esc(duration)}</td>
+                                <td>${esc(institution || "—")}</td>
+                            </tr>
+                        `;
+                    }).join("")
+                    : `
+                        <tr>
+                            <td colspan="6">لا توجد بيانات مطابقة.</td>
+                        </tr>
+                    `
+                }
+            </tbody>
+        </table>
+
+        <div class="employee-print-footer">
+            <span>عدد الموظفين: ${rows.length}</span>
+            <span>منصة متابعة الانتداب والوضع تحت التصرف</span>
+        </div>
+    `;
+
+    const original =
+        document.title;
+
+    document.body.classList.remove(
+        "printing-profile"
     );
+
+    document.body.classList.add(
+        "printing-employees"
+    );
+
+    document.title = title;
+
+    window.print();
+
+    setTimeout(() => {
+
+        document.title = original;
+
+        document.body.classList.remove(
+            "printing-employees"
+        );
+
+        printArea.innerHTML = "";
+
+    },1000);
 
 }
 

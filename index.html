@@ -1766,6 +1766,15 @@ tbody tr:hover td{
                     التنبيهات
                 </button>
 
+                <button
+                    class="nav-btn"
+                    type="button"
+                    onclick="openMovementsPage()"
+                >
+                    <i data-lucide="bar-chart-3"></i>
+                    حصيلة حركة الموظفين
+                </button>
+
             </nav>
 
             <div class="sidebar-footer">
@@ -3308,6 +3317,10 @@ function showPage(page){
     closeSidebar();
 
     lucide.createIcons();
+}
+
+function openMovementsPage(){
+    window.location.href = "movements.html";
 }
 
 function toggleSidebar(){

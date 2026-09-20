@@ -2425,6 +2425,18 @@ function formatDate(v){
 }
 
 
+function formatYear(year){
+
+  const y = Number(year);
+
+  if(!Number.isFinite(y))
+    return "";
+
+  return String(y);
+
+}
+
+
 function yearOf(v){
 
   if(!v)

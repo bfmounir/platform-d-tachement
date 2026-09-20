@@ -32,19 +32,7 @@ main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-st
 </style>
 </head>
 <body>
-<div id="loginView" class="login">
-  <div class="login-card">
-    <div class="login-brand">
-      <div class="brand-logo"><i data-lucide="bar-chart-3"></i></div>
-      <h2>حصيلة حركة الموظفين</h2>
-      <p>منصة متابعة الانتداب والوضع تحت التصرف</p>
-    </div>
-    <div id="loginError" class="login-error hidden"></div>
-    <div class="field"><label>البريد الإلكتروني</label><input id="loginEmail" type="email" autocomplete="username" placeholder="البريد الإلكتروني"></div>
-    <div class="field"><label>كلمة المرور</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="كلمة المرور"></div>
-    <button id="loginBtn" class="btn btn-primary" style="width:100%"><i data-lucide="log-in"></i> تسجيل الدخول</button>
-  </div>
-</div>
+<div id="loginView" class="hidden"></div>
 
 <div id="appView" class="app hidden">
   <header class="topbar no-print">
@@ -120,7 +108,7 @@ main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-st
 
 <script>
 const SUPABASE_URL = "https://etqbcnskmzlumfguryjk.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0cWJjbnNrLm16bHVtZmd1cnlqayIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzU3ODAwMDAwLCJleHAiOjIwNzMzNzYwMDB9.placeholder";
+const SUPABASE_ANON_KEY = "sb_publishable_lTuyKeXZOPZO5AzVzRuGUA_6wZwjz1m";
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser=null;
@@ -160,8 +148,22 @@ async function login(){
 }
 async function init(){
   lucide.createIcons();
-  const {data}=await db.auth.getSession();
-  if(data.session){currentUser=data.session.user;try{await checkAdmin();openApp();await loadAll()}catch(e){await db.auth.signOut();}}
+  try{
+    const {data,error}=await db.auth.getSession();
+    if(error) throw error;
+    if(!data.session){
+      window.location.href="index.html";
+      return;
+    }
+    currentUser=data.session.user;
+    await checkAdmin();
+    openApp();
+    await loadAll();
+  }catch(e){
+    console.error(e);
+    await db.auth.signOut();
+    window.location.href="index.html";
+  }
 }
 function openApp(){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");lucide.createIcons()}
 

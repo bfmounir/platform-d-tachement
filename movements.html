@@ -29,7 +29,7 @@ main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-st
 @media(max-width:460px){.stats{grid-template-columns:1fr 1fr}.filter-grid{grid-template-columns:1fr}.filter-grid .field:nth-child(2){grid-column:auto}.head-actions{flex-direction:column}.head-actions .btn{width:100%}}
 @media print{
   @page{size:A4 landscape;margin:10mm}body{background:#fff!important;color:#000}.no-print,.topbar,.sidebar,.sidebar-overlay,.filters,.head-actions,.actions,.toast,.modal-back{display:none!important}.layout{display:block;min-height:0}.print-only{display:block}.print-header{text-align:center;margin-bottom:12px}.print-header h1{font-size:18px;margin:0 0 4px}.print-header p{font-size:10px;margin:2px}.card{box-shadow:none;border:1px solid #ddd;border-radius:0;margin:0}.stats{grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:8px}.stat{box-shadow:none;border:1px solid #ddd;border-radius:0;padding:7px}.stat .value{font-size:16px}.stat .label{font-size:8px}.table{min-width:0}.table th,.table td{font-size:8px;padding:5px;border-color:#ddd}.table th{background:#f2f2f2!important}.badge{font-size:7px;padding:2px 5px}.table-head{padding:7px;border-bottom:1px solid #ddd}.table-head strong{font-size:10px}.summary-line{font-size:8px;margin-bottom:6px}}
-</style>
+\n/* تحسينات واجهة حصيلة الحركة */\n.page-head{background:linear-gradient(135deg,#ffffff,#f8fcfd);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}\n.page-head h2{letter-spacing:-.2px}.head-actions .btn{min-height:42px}.stat{transition:.18s}.stat:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(35,58,78,.11)}\n.filters{background:linear-gradient(180deg,#fff,#fbfdfe)}.filter-grid .field input,.filter-grid .field select{min-height:42px}.table-head{background:linear-gradient(90deg,#fff,#f8fcfd)}\n.modal{border:1px solid rgba(228,235,241,.9)}.modal-body{background:#fff}.modal-foot{background:#fbfcfd}.field input,.field select,.field textarea{min-height:42px}\n@media(max-width:760px){.page-head{padding:15px}.page-head .head-actions{gap:7px}.stat .label{font-size:10px}.table-head{padding:13px}.modal-body{padding:14px}}\n</style>
 </head>
 <body>
 <div id="loginView" class="login hidden">
@@ -73,11 +73,11 @@ main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-st
       </section>
       <div id="printSummary" class="print-only summary-line"></div>
       <section class="stats">
-        <div class="stat"><i class="ico" data-lucide="activity"></i><div class="label">إجمالي الحركات</div><div id="totalCount" class="value">٠</div></div>
-        <div class="stat"><i class="ico" data-lucide="user-plus"></i><div class="label">التوظيف</div><div id="hireCount" class="value">٠</div></div>
-        <div class="stat"><i class="ico" data-lucide="log-out"></i><div class="label">الاستقالة</div><div id="resignCount" class="value">٠</div></div>
-        <div class="stat"><i class="ico" data-lucide="clock-3"></i><div class="label">الإحالة على التقاعد</div><div id="retireCount" class="value">٠</div></div>
-        <div class="stat"><i class="ico" data-lucide="list"></i><div class="label">حركات أخرى</div><div id="otherCount" class="value">٠</div></div>
+        <div class="stat"><i class="ico" data-lucide="activity"></i><div class="label">إجمالي الحركات</div><div id="totalCount" class="value">0</div></div>
+        <div class="stat"><i class="ico" data-lucide="user-plus"></i><div class="label">التوظيف</div><div id="hireCount" class="value">0</div></div>
+        <div class="stat"><i class="ico" data-lucide="log-out"></i><div class="label">الاستقالة</div><div id="resignCount" class="value">0</div></div>
+        <div class="stat"><i class="ico" data-lucide="clock-3"></i><div class="label">الإحالة على التقاعد</div><div id="retireCount" class="value">0</div></div>
+        <div class="stat"><i class="ico" data-lucide="list"></i><div class="label">حركات أخرى</div><div id="otherCount" class="value">0</div></div>
       </section>
       <section class="card filters no-print">
         <div class="filter-grid">
@@ -131,12 +131,11 @@ let allMovements=[];
 let filteredMovements=[];
 let editingId=null;
 
-const MANUAL_TYPES=["توظيف","استقالة","إحالة على التقاعد","ترقية","إنهاء مهام","تحويل","إلحاق","إعادة إدماج","انتداب","تحت التصرف","وفاة","أخرى"];
+const MANUAL_TYPES=["توظيف","استقالة","إحالة على التقاعد","ترقية","الترقية في الدرجة","الترقية في الرتبة","تحويل","نقل","إنهاء المهام","الإحالة على الاستيداع","إعادة الإدماج","الإلحاق","الوضع في الخدمة الوطنية","العودة من الخدمة الوطنية","الوفاة","العزل","التسريح","الإنهاء النهائي لعلاقة العمل","التثبيت","التربص","العودة إلى العمل","التمديد","التكليف","تغيير الرتبة","تغيير الوضعية القانونية","أخرى"];
 
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replace(/[&<>'"]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[s]));}
 function showToast(msg,type=""){const t=$("toast");t.textContent=msg;t.className="toast "+type;t.classList.remove("hidden");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.add("hidden"),3500)}
-function arabicDigits(v){return String(v??"").replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d));}
 function formatNumber(v){return Number(v||0).toLocaleString("en-US");}
 function formatDate(v){if(!v)return "—";const d=new Date(v+((String(v).length===10)?"T00:00:00":""));if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("ar-DZ-u-nu-latn",{day:"2-digit",month:"long",year:"numeric"}).format(d);}
 function formatDateTime(v){if(!v)return "—";const d=new Date(v);if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("ar-DZ-u-nu-latn",{dateStyle:"medium",timeStyle:"short"}).format(d);}
@@ -145,7 +144,7 @@ function yearOf(v){if(!v)return null;const y=Number(String(v).slice(0,4));return
 function norm(v){return String(v??"").trim().toLowerCase();}
 function employeeName(e){return [e?.first_name,e?.last_name].filter(Boolean).join(" ").trim()||"بدون اسم";}
 function employeeMap(){const m=new Map();employees.forEach(e=>m.set(String(e.id),e));return m;}
-function typeBadge(type){if(type==="توظيف")return "b-green";if(type==="انتداب")return "b-blue";if(type==="تحت التصرف")return "b-purple";if(type==="ترقية")return "b-gold";if(["استقالة","وفاة","إنهاء مهام"].includes(type))return "b-red";return "b-gray";}
+function typeBadge(type){if(type==="توظيف")return "b-green";if(["ترقية","الترقية في الدرجة","الترقية في الرتبة","تغيير الرتبة"].includes(type))return "b-gold";if(["تحويل","نقل","الإلحاق","إعادة الإدماج","العودة إلى العمل"].includes(type))return "b-blue";if(["استقالة","الوفاة","إنهاء المهام","العزل","التسريح","الإنهاء النهائي لعلاقة العمل"].includes(type))return "b-red";if(["الإحالة على الاستيداع","الوضع في الخدمة الوطنية"].includes(type))return "b-purple";return "b-gray";}
 
 async function checkAdmin(){
   const {data,error}=await db.from("user_roles").select("role").eq("user_id",currentUser.id).eq("role","admin").maybeSingle();

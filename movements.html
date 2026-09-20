@@ -11,10 +11,10 @@
 <style>
 *{box-sizing:border-box}
 :root{--primary:#20a9c7;--primary-dark:#14869e;--secondary:#7567d8;--gold:#f0a84b;--success:#18a66a;--danger:#dc4c64;--warning:#e9a227;--ink:#17212b;--muted:#6d7884;--bg:#f4f8fb;--card:#fff;--line:#e4ebf1;--shadow:0 10px 28px rgba(35,58,78,.08)}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"Cairo","Tahoma",Arial,sans-serif}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"Cairo","Tahoma",Arial,sans-serif;font-variant-numeric:normal} input,select,textarea{font-variant-numeric:normal}
 body{min-height:100vh}.hidden{display:none!important}.app{min-height:100vh}
 button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:30;box-shadow:0 3px 14px rgba(25,50,70,.05)}
-.brand{display:flex;align-items:center;gap:12px}.brand-logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:grid;place-items:center}.brand h1{font-size:17px;margin:0;font-weight:800}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.top-actions{display:flex;align-items:center;gap:8px}.icon-btn,.menu-btn{width:42px;height:42px;border-radius:11px;background:#f3f7fa;color:#30404c;display:grid;place-items:center}.menu-btn{display:none}
+.brand{display:flex;align-items:center;gap:12px}.brand-logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#20a9c7,#7567d8);color:#fff;display:grid;place-items:center}.brand h1{font-size:17px;margin:0;font-weight:800}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.top-actions{display:flex;align-items:center;gap:8px}.icon-btn,.menu-btn{width:42px;height:42px;border-radius:11px;background:#f3f7fa;color:#30404c;display:grid;place-items:center}.menu-btn{display:none}
 .layout{display:flex;min-height:calc(100vh - 68px)}.sidebar{width:255px;background:#fff;border-left:1px solid var(--line);padding:18px 14px;position:sticky;top:68px;height:calc(100vh - 68px);overflow:auto}.side-title{font-size:11px;color:#8a96a2;padding:4px 10px 9px}.nav-item{display:flex;align-items:center;gap:11px;padding:12px 12px;border-radius:12px;color:#46535f;text-decoration:none;margin-bottom:5px;font-size:13px;font-weight:700}.nav-item:hover{background:#f3f8fb;color:var(--primary-dark)}.nav-item.active{background:linear-gradient(90deg,#e9f9fc,#f1efff);color:var(--primary-dark)}.nav-item i{width:19px}.side-footer{margin-top:25px;border-top:1px solid var(--line);padding:15px 10px;color:var(--muted);font-size:11px;line-height:1.8}
 main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.page-head h2{margin:0 0 5px;font-size:24px}.page-head p{margin:0;color:var(--muted);font-size:12px}.head-actions{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 14px;border-radius:10px;font-weight:800;font-size:12px;transition:.15s}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--primary);color:#fff}.btn-secondary{background:var(--secondary);color:#fff}.btn-light{background:#fff;color:#44515d;border:1px solid var(--line)}.btn-danger{background:#fff0f2;color:#bd3049}.btn-success{background:#eafaf3;color:#138257}
 .stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:16px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:var(--shadow);position:relative;overflow:hidden}.stat:after{content:"";position:absolute;width:70px;height:70px;border-radius:50%;left:-24px;bottom:-30px;background:rgba(32,169,199,.08)}.stat .label{color:var(--muted);font-size:11px;font-weight:700}.stat .value{font-size:25px;font-weight:900;margin-top:4px}.stat .ico{position:absolute;left:13px;top:13px;color:var(--primary)}
@@ -48,7 +48,7 @@ main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-st
 
 <div id="appView" class="app hidden">
   <header class="topbar no-print">
-    <div class="brand"><button id="menuBtn" class="menu-btn"><i data-lucide="menu"></i></button><div class="brand-logo"><i data-lucide="bar-chart-3"></i></div><div><h1>منصة متابعة الانتداب والوضع تحت التصرف</h1><small>حصيلة حركة الموظفين السنوية</small></div></div>
+    <div class="brand"><button id="menuBtn" class="menu-btn"><i data-lucide="menu"></i></button><div class="brand-logo"><i data-lucide="bar-chart-3"></i></div><div><h1>منصة متابعة الانتداب والوضع تحت التصرف</h1><small>حصيلة حركة الموظفين</small></div></div>
     <div class="top-actions"><button id="refreshBtn" class="icon-btn" title="تحديث"><i data-lucide="refresh-cw"></i></button><button id="logoutBtn" class="btn btn-light"><i data-lucide="log-out"></i><span class="logout-label">خروج</span></button></div>
   </header>
   <div id="sideOverlay" class="sidebar-overlay hidden no-print"></div>
@@ -59,25 +59,25 @@ main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-st
       <a class="nav-item" href="index.html#employees"><i data-lucide="users"></i><span>الموظفون</span></a>
       <a class="nav-item" href="index.html#assignments"><i data-lucide="arrow-left-right"></i><span>الانتداب والوضع تحت التصرف</span></a>
       <a class="nav-item active" href="movements.html"><i data-lucide="bar-chart-3"></i><span>حصيلة حركة الموظفين</span></a>
-      <div class="side-footer">هذه الصفحة تعتمد على الحركات الفعلية المسجلة فقط. وجود الموظف في جدول الموظفين لا يُنشئ حركة توظيف تلقائيًا.</div>
+      <div class="side-footer">هذه الصفحة تعتمد على الحركات الفعلية المسجلة فقط. وجود الموظف في جدول الموظفين لا يُنشئ أي حركة تلقائيًا.</div>
     </aside>
     <main>
       <div class="print-only print-header">
         <h1>المؤسسة العمومية الاستشفائية بأولف</h1>
         <p>مصلحة الموارد البشرية</p>
-        <p>حصيلة حركة الموظفين السنوية</p>
+        <p>حصيلة حركة الموظفين</p>
       </div>
       <section class="page-head no-print">
-        <div><h2>حصيلة حركة الموظفين</h2><p>تجميع الحركات الفعلية خلال السنة المختارة مع استخراج الانتداب والوضع تحت التصرف تلقائيًا من سجل الوضعيات.</p></div>
-        <div class="head-actions"><button id="addBtn" class="btn btn-primary"><i data-lucide="plus"></i> إضافة حركة</button><button id="printBtn" class="btn btn-secondary"><i data-lucide="printer"></i> طباعة / PDF</button><button id="excelBtn" class="btn btn-success"><i data-lucide="file-spreadsheet"></i> Excel</button></div>
+        <div><h2>حصيلة حركة الموظفين</h2><p>تسجيل الحركات الفعلية للموظفين خلال كل سنة واستخراج الإحصائيات حسب الوضعية المهنية.</p></div>
+        <div class="head-actions"><button id="addBtn" class="btn btn-primary"><i data-lucide="plus"></i> إضافة موظف</button><button id="printBtn" class="btn btn-secondary"><i data-lucide="printer"></i> طباعة / PDF</button><button id="excelBtn" class="btn btn-success"><i data-lucide="file-spreadsheet"></i> Excel</button></div>
       </section>
       <div id="printSummary" class="print-only summary-line"></div>
       <section class="stats">
-        <div class="stat"><i class="ico" data-lucide="activity"></i><div class="label">إجمالي الحركات</div><div id="totalCount" class="value">0</div></div>
-        <div class="stat"><i class="ico" data-lucide="user-plus"></i><div class="label">التوظيف</div><div id="hireCount" class="value">0</div></div>
-        <div class="stat"><i class="ico" data-lucide="send"></i><div class="label">الانتداب</div><div id="assignCount" class="value">0</div></div>
-        <div class="stat"><i class="ico" data-lucide="briefcase-business"></i><div class="label">تحت التصرف</div><div id="disposalCount" class="value">0</div></div>
-        <div class="stat"><i class="ico" data-lucide="list"></i><div class="label">حركات أخرى</div><div id="otherCount" class="value">0</div></div>
+        <div class="stat"><i class="ico" data-lucide="activity"></i><div class="label">إجمالي الحركات</div><div id="totalCount" class="value">٠</div></div>
+        <div class="stat"><i class="ico" data-lucide="user-plus"></i><div class="label">التوظيف</div><div id="hireCount" class="value">٠</div></div>
+        <div class="stat"><i class="ico" data-lucide="log-out"></i><div class="label">الاستقالة</div><div id="resignCount" class="value">٠</div></div>
+        <div class="stat"><i class="ico" data-lucide="clock-3"></i><div class="label">الإحالة على التقاعد</div><div id="retireCount" class="value">٠</div></div>
+        <div class="stat"><i class="ico" data-lucide="list"></i><div class="label">حركات أخرى</div><div id="otherCount" class="value">٠</div></div>
       </section>
       <section class="card filters no-print">
         <div class="filter-grid">
@@ -91,7 +91,7 @@ main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-st
       <section class="card">
         <div class="table-head"><strong>تفاصيل الحركات</strong><span id="resultCount">0 حركة</span></div>
         <div class="table-wrap">
-          <table class="table"><thead><tr><th>#</th><th>الموظف</th><th>الرقم الوظيفي</th><th>الرتبة</th><th>نوع الحركة</th><th>تاريخ الحركة</th><th>المؤسسة / الجهة</th><th>المصدر</th><th class="no-print">إجراءات</th></tr></thead><tbody id="tableBody"></tbody></table>
+          <table class="table"><thead><tr><th>#</th><th>الموظف</th><th>الرقم الوظيفي</th><th>الرتبة</th><th>الوضعية</th><th>تاريخها</th><th>المؤسسة / الجهة</th><th class="no-print">إجراءات</th></tr></thead><tbody id="tableBody"></tbody></table>
         </div>
       </section>
     </main>
@@ -104,14 +104,14 @@ main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-st
     <div class="modal-body">
       <div id="modalError" class="login-error hidden"></div>
       <div class="modal-grid">
-        <div class="field full"><label>الموظف *</label><select id="employeeInput"><option value="">اختر الموظف</option></select></div>
-        <div class="field"><label>نوع الحركة *</label><select id="movementTypeInput"></select></div>
-        <div class="field"><label>تاريخ الحركة *</label><input id="movementDateInput" type="date"></div>
-        <div class="field"><label>الرتبة</label><input id="gradeInput" type="text" placeholder="تُملأ تلقائيًا ويمكن تعديلها"></div>
+        <div class="field full"><label>الاسم واللقب *</label><select id="employeeInput"><option value="">اختر الموظف</option></select></div>
+        <div class="field"><label>الرتبة</label><input id="gradeInput" type="text" readonly placeholder="تظهر تلقائيًا حسب الموظف"></div>
+        <div class="field"><label>الوضعية *</label><select id="movementTypeInput"></select></div>
+        <div class="field"><label>تاريخ الوضعية *</label><input id="movementDateInput" type="date"></div>
         <div class="field"><label>المؤسسة / الجهة</label><input id="institutionInput" type="text" placeholder="اختياري"></div>
         <div class="field full"><label>ملاحظات</label><textarea id="notesInput" rows="3" placeholder="ملاحظات إضافية"></textarea></div>
       </div>
-      <div style="margin-top:10px;font-size:11px;color:#6d7884;background:#f7fafc;border-radius:10px;padding:10px">ملاحظة: الانتداب والوضع تحت التصرف يُستخرجان تلقائيًا من جدول <b>assignments</b> ولا تتم إضافتهما يدويًا من هذه الصفحة.</div>
+      <div style="margin-top:10px;font-size:11px;color:#6d7884;background:#f7fafc;border-radius:10px;padding:10px">تُسجّل هنا الحركات الفعلية فقط. وجود الموظف في المنصة أو وجوده في وضعية انتداب أو تحت التصرف لا يُنشئ حركة تلقائيًا.</div>
     </div>
     <div class="modal-foot"><button id="saveBtn" class="btn btn-primary"><i data-lucide="save"></i> حفظ</button><button id="cancelBtn" class="btn btn-light">إلغاء</button></div>
   </div>
@@ -125,26 +125,26 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser=null;
 let employees=[];
-let assignments=[];
 let extraMovements=[];
 let allMovements=[];
 let filteredMovements=[];
 let editingId=null;
 
-const MANUAL_TYPES=["توظيف","ترقية","إحالة على التقاعد","استقالة","إنهاء مهام","تحويل","إلحاق","إعادة إدماج","وفاة","أخرى"];
-const AUTO_TYPES=["انتداب","تحت التصرف"];
+const MANUAL_TYPES=["توظيف","استقالة","إحالة على التقاعد","ترقية","إنهاء مهام","تحويل","إلحاق","إعادة إدماج","انتداب","تحت التصرف","وفاة","أخرى"];
 
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replace(/[&<>'"]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[s]));}
 function showToast(msg,type=""){const t=$("toast");t.textContent=msg;t.className="toast "+type;t.classList.remove("hidden");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.add("hidden"),3500)}
-function formatDate(v){if(!v)return "—";const d=new Date(v+((String(v).length===10)?"T00:00:00":""));if(Number.isNaN(d.getTime()))return v;return d.toLocaleDateString("ar-DZ",{year:"numeric",month:"2-digit",day:"2-digit"});}
+function arabicDigits(v){return String(v??"").replace(/[0-9]/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);}
+function formatNumber(v){return arabicDigits(Number(v||0).toLocaleString("en-US"));}
+function formatDate(v){if(!v)return "—";const d=new Date(v+((String(v).length===10)?"T00:00:00":""));if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("ar-DZ",{day:"2-digit",month:"long",year:"numeric"}).format(d);}
+function formatDateTime(v){if(!v)return "—";const d=new Date(v);if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("ar-DZ",{dateStyle:"medium",timeStyle:"short"}).format(d);}
+function formatYear(v){return arabicDigits(v);}
 function yearOf(v){if(!v)return null;const y=Number(String(v).slice(0,4));return Number.isFinite(y)?y:null;}
 function norm(v){return String(v??"").trim().toLowerCase();}
 function employeeName(e){return [e?.first_name,e?.last_name].filter(Boolean).join(" ").trim()||"بدون اسم";}
 function employeeMap(){const m=new Map();employees.forEach(e=>m.set(String(e.id),e));return m;}
 function typeBadge(type){if(type==="توظيف")return "b-green";if(type==="انتداب")return "b-blue";if(type==="تحت التصرف")return "b-purple";if(type==="ترقية")return "b-gold";if(["استقالة","وفاة","إنهاء مهام"].includes(type))return "b-red";return "b-gray";}
-function sourceBadge(m){return m.readOnly?'<span class="source-dot"><span class="dot dot-auto"></span>تلقائي من الوضعيات</span>':'<span class="source-dot"><span class="dot dot-manual"></span>حركة مسجلة</span>';}
-function isApproved(a){return String(a.approval_status||"").toLowerCase()==="approved" || !a.approval_status;}
 
 async function checkAdmin(){
   const {data,error}=await db.from("user_roles").select("role").eq("user_id",currentUser.id).eq("role","admin").maybeSingle();
@@ -180,33 +180,27 @@ function openApp(){$("loginView").classList.add("hidden");$("appView").classList
 
 async function loadAll(){
   try{
-    const [er,ar,mr]=await Promise.all([
+    const [er,mr]=await Promise.all([
       db.from("employees").select("*").order("last_name",{ascending:true}).order("first_name",{ascending:true}),
-      db.from("assignments").select("*").order("created_at",{ascending:false}),
       db.from("employee_movements").select("*").order("movement_date",{ascending:false})
     ]);
-    if(er.error)throw er.error;if(ar.error)throw ar.error;if(mr.error)throw mr.error;
-    employees=er.data||[];assignments=ar.data||[];extraMovements=mr.data||[];
+    if(er.error)throw er.error;if(mr.error)throw mr.error;
+    employees=er.data||[];extraMovements=mr.data||[];
     buildMovements();populateFilters();applyFilters();
   }catch(e){showToast("تعذر تحميل البيانات: "+(e.message||e),"error");console.error(e)}
 }
 
 function buildMovements(){
   const em=employeeMap();
-  const manual=extraMovements.map(x=>{
+  allMovements=extraMovements.map(x=>{
     const e=em.get(String(x.employee_id));
-    return {id:"manual-"+x.id,dbId:x.id,employee_id:x.employee_id,employee:e,movement_type:x.movement_type||x.type||"أخرى",movement_date:x.movement_date||x.date||null,grade:x.grade||e?.grade||"",institution:x.institution||x.receiving_institution||"",notes:x.notes||"",readOnly:false};
-  });
-  const automatic=assignments.filter(a=>isApproved(a)&&a.start_date).map(a=>{
-    const e=em.get(String(a.employee_id));
-    return {id:"assignment-"+a.id,dbId:a.id,employee_id:a.employee_id,employee:e,movement_type:a.assignment_type||"انتداب",movement_date:a.start_date,grade:e?.grade||"",institution:a.receiving_institution||a.original_institution||"",notes:a.notes||"",readOnly:true,assignment:a};
-  });
-  allMovements=[...manual,...automatic].filter(m=>m.employee_id!=null).sort((a,b)=>String(b.movement_date||"").localeCompare(String(a.movement_date||"")));
+    return {id:"manual-"+x.id,dbId:x.id,employee_id:x.employee_id,employee:e,movement_type:x.movement_type||x.type||"أخرى",movement_date:x.movement_date||x.date||null,grade:x.grade||e?.grade||"",institution:x.institution||"",notes:x.notes||"",readOnly:false};
+  }).filter(m=>m.employee_id!=null).sort((a,b)=>String(b.movement_date||"").localeCompare(String(a.movement_date||"")));
 }
 
 function populateFilters(){
   const years=new Set();const now=new Date().getFullYear();years.add(now);allMovements.forEach(m=>{const y=yearOf(m.movement_date);if(y)years.add(y)});
-  const ys=[...years].sort((a,b)=>b-a);const ysel=$("yearFilter");const old=ysel.value;ysel.innerHTML='<option value="all">كل السنوات</option>'+ys.map(y=>`<option value="${y}">${y}</option>`).join("");ysel.value=ys.includes(Number(old))?old:String(now);
+  const ys=[...years].sort((a,b)=>b-a);const ysel=$("yearFilter");const old=ysel.value;ysel.innerHTML='<option value="all">كل السنوات</option>'+ys.map(y=>`<option value="${y}">${formatYear(y)}</option>`).join("");ysel.value=ys.includes(Number(old))?old:String(now);
   const types=[...new Set(allMovements.map(m=>m.movement_type).filter(Boolean))];$("typeFilter").innerHTML='<option value="all">كل الحركات</option>'+types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join("");
   const grades=[...new Set(allMovements.map(m=>m.grade).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),"ar"));$("gradeFilter").innerHTML='<option value="all">كل الرتب</option>'+grades.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join("");
   const es=[...employees].sort((a,b)=>employeeName(a).localeCompare(employeeName(b),"ar"));$("employeeInput").innerHTML='<option value="">اختر الموظف</option>'+es.map(e=>`<option value="${esc(e.id)}">${esc(employeeName(e))} — ${esc(e.employee_number||"بدون رقم")}</option>`).join("");
@@ -225,13 +219,18 @@ function applyFilters(){
 }
 function renderStats(){
   const c=t=>filteredMovements.filter(m=>m.movement_type===t).length;
-  $("totalCount").textContent=filteredMovements.length;$("hireCount").textContent=c("توظيف");$("assignCount").textContent=c("انتداب");$("disposalCount").textContent=c("تحت التصرف");$("otherCount").textContent=filteredMovements.filter(m=>!["توظيف","انتداب","تحت التصرف"].includes(m.movement_type)).length;
-  $("resultCount").textContent=filteredMovements.length+" حركة";
-  const y=$("yearFilter").value;$("printSummary").innerHTML=`الفترة: <b>${y==="all"?"كل السنوات":y}</b> &nbsp; | &nbsp; عدد الحركات: <b>${filteredMovements.length}</b> &nbsp; | &nbsp; تاريخ الاستخراج: <b>${formatDate(new Date().toISOString().slice(0,10))}</b>`;
+  $("totalCount").textContent=formatNumber(filteredMovements.length);
+  $("hireCount").textContent=formatNumber(c("توظيف"));
+  $("resignCount").textContent=formatNumber(c("استقالة"));
+  $("retireCount").textContent=formatNumber(c("إحالة على التقاعد"));
+  $("otherCount").textContent=formatNumber(filteredMovements.filter(m=>!["توظيف","استقالة","إحالة على التقاعد"].includes(m.movement_type)).length);
+  $("resultCount").textContent=formatNumber(filteredMovements.length)+" حركة";
+  const y=$("yearFilter").value;$("printSummary").innerHTML=`الفترة: <b>${y==="all"?"كل السنوات":formatYear(y)}</b> &nbsp; | &nbsp; عدد الحركات: <b>${formatNumber(filteredMovements.length)}</b> &nbsp; | &nbsp; تاريخ الاستخراج: <b>${formatDate(new Date().toISOString().slice(0,10))}</b> &nbsp; | &nbsp; الساعة: <b>${new Intl.DateTimeFormat("ar-DZ",{hour:"2-digit",minute:"2-digit"}).format(new Date())}</b>`;
 }
+
 function renderTable(){
-  const body=$("tableBody");if(!filteredMovements.length){body.innerHTML='<tr><td colspan="9"><div class="empty"><i data-lucide="inbox"></i><div>لا توجد حركات مطابقة للمعايير المحددة.</div></div></td></tr>';lucide.createIcons();return}
-  body.innerHTML=filteredMovements.map((m,i)=>`<tr><td>${i+1}</td><td><b>${esc(employeeName(m.employee))}</b></td><td>${esc(m.employee?.employee_number||"—")}</td><td>${esc(m.grade||m.employee?.grade||"—")}</td><td><span class="badge ${typeBadge(m.movement_type)}">${esc(m.movement_type)}</span></td><td>${formatDate(m.movement_date)}</td><td>${esc(m.institution||"—")}</td><td>${sourceBadge(m)}</td><td class="no-print">${m.readOnly?'<span style="font-size:10px;color:#8a96a2">من assignments</span>':`<div class="actions"><button class="mini edit-btn" data-id="${esc(m.dbId)}" title="تعديل"><i data-lucide="pencil"></i></button><button class="mini delete-btn" data-id="${esc(m.dbId)}" title="حذف"><i data-lucide="trash-2"></i></button></div>`}</td></tr>`).join("");
+  const body=$("tableBody");if(!filteredMovements.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><i data-lucide="inbox"></i><div>لا توجد حركات مطابقة للمعايير المحددة.</div></div></td></tr>';lucide.createIcons();return}
+  body.innerHTML=filteredMovements.map((m,i)=>`<tr><td>${formatNumber(i+1)}</td><td><b>${esc(employeeName(m.employee))}</b></td><td>${esc(arabicDigits(m.employee?.employee_number||"—"))}</td><td>${esc(m.grade||m.employee?.grade||"—")}</td><td><span class="badge ${typeBadge(m.movement_type)}">${esc(m.movement_type)}</span></td><td>${formatDate(m.movement_date)}</td><td>${esc(m.institution||"—")}</td><td class="no-print"><div class="actions"><button class="mini edit-btn" data-id="${esc(m.dbId)}" title="تعديل"><i data-lucide="pencil"></i></button><button class="mini delete-btn" data-id="${esc(m.dbId)}" title="حذف"><i data-lucide="trash-2"></i></button></div></td></tr>`).join("");
   lucide.createIcons();
   body.querySelectorAll(".edit-btn").forEach(b=>b.onclick=()=>openEdit(b.dataset.id));body.querySelectorAll(".delete-btn").forEach(b=>b.onclick=()=>deleteMovement(b.dataset.id));
 }
@@ -239,13 +238,12 @@ function renderTable(){
 function openModal(){$("modalBack").classList.remove("hidden");lucide.createIcons()}
 function closeModal(){$("modalBack").classList.add("hidden");editingId=null;$("modalError").classList.add("hidden")}
 function fillTypeOptions(selected=""){$("movementTypeInput").innerHTML='<option value="">اختر نوع الحركة</option>'+MANUAL_TYPES.map(t=>`<option value="${esc(t)}" ${t===selected?"selected":""}>${esc(t)}</option>`).join("")}
-function openAdd(){editingId=null;$("modalTitle").textContent="إضافة حركة موظف";fillTypeOptions();$("employeeInput").value="";$("movementDateInput").value=new Date().toISOString().slice(0,10);$("gradeInput").value="";$("institutionInput").value="";$("notesInput").value="";openModal()}
+function openAdd(){editingId=null;$("modalTitle").textContent="إضافة حركة موظف";fillTypeOptions();$("employeeInput").value="";$("movementDateInput").value=new Date().toISOString().slice(0,10);$("gradeInput").value="";$("institutionInput").value="";$("notesInput").value="";$("modalError").classList.add("hidden");openModal()}
 function openEdit(id){const m=extraMovements.find(x=>String(x.id)===String(id));if(!m)return;editingId=id;$("modalTitle").textContent="تعديل حركة موظف";fillTypeOptions(m.movement_type||m.type||"");$("employeeInput").value=m.employee_id||"";$("movementDateInput").value=(m.movement_date||m.date||"").slice(0,10);const e=employees.find(x=>String(x.id)===String(m.employee_id));$("gradeInput").value=m.grade||e?.grade||"";$("institutionInput").value=m.institution||"";$("notesInput").value=m.notes||"";openModal()}
-function syncGrade(){const e=employees.find(x=>String(x.id)===String($("employeeInput").value));if(e&&!$("gradeInput").value)$("gradeInput").value=e.grade||""}
+function syncGrade(){const e=employees.find(x=>String(x.id)===String($("employeeInput").value));$("gradeInput").value=e?.grade||""}
 async function saveMovement(){
   const employee_id=$("employeeInput").value,movement_type=$("movementTypeInput").value,movement_date=$("movementDateInput").value;
   if(!employee_id||!movement_type||!movement_date){$("modalError").textContent="يرجى استكمال الموظف ونوع الحركة وتاريخ الحركة.";$("modalError").classList.remove("hidden");return}
-  if(AUTO_TYPES.includes(movement_type)){showToast("الانتداب والوضع تحت التصرف يُستخرجان تلقائيًا من سجل assignments.","error");return}
   const payload={employee_id,movement_type,movement_date,grade:$("gradeInput").value.trim(),institution:$("institutionInput").value.trim(),notes:$("notesInput").value.trim(),created_by:currentUser.id};
   $("saveBtn").disabled=true;
   try{let result;if(editingId){delete payload.created_by;result=await db.from("employee_movements").update(payload).eq("id",editingId)}else{result=await db.from("employee_movements").insert(payload)}if(result.error)throw result.error;closeModal();showToast(editingId?"تم تعديل الحركة بنجاح":"تمت إضافة الحركة بنجاح","success");await loadAll()}
@@ -256,7 +254,7 @@ async function deleteMovement(id){if(!confirm("هل تريد حذف هذه ال�
 
 function exportExcel(){
   if(!filteredMovements.length){showToast("لا توجد بيانات لتصديرها","error");return}
-  const rows=filteredMovements.map((m,i)=>({"الرقم":i+1,"اسم الموظف":employeeName(m.employee),"الرقم الوظيفي":m.employee?.employee_number||"","الرتبة":m.grade||m.employee?.grade||"","نوع الحركة":m.movement_type,"تاريخ الحركة":m.movement_date||"","المؤسسة / الجهة":m.institution||"","المصدر":m.readOnly?"الانتداب والوضع تحت التصرف":"حركة مسجلة","ملاحظات":m.notes||""}));
+  const rows=filteredMovements.map((m,i)=>({"الرقم":arabicDigits(i+1),"اسم الموظف":employeeName(m.employee),"الرقم الوظيفي":arabicDigits(m.employee?.employee_number||""),"الرتبة":m.grade||m.employee?.grade||"","نوع الحركة":m.movement_type,"تاريخ الحركة":formatDate(m.movement_date),"المؤسسة / الجهة":m.institution||"","المصدر":"حركة مسجلة","ملاحظات":m.notes||""}));
   const ws=XLSX.utils.json_to_sheet(rows);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"حصيلة الحركة");const y=$("yearFilter").value;XLSX.writeFile(wb,`حصيلة-حركة-الموظفين-${y}.xlsx`)
 }
 function printReport(){window.print()}

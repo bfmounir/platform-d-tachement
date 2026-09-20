@@ -4,263 +4,4566 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#20a9c7">
+<meta name="description" content="حصيلة حركة الموظفين - منصة متابعة الانتداب والوضع تحت التصرف">
 <title>حصيلة حركة الموظفين | منصة متابعة الانتداب والوضع تحت التصرف</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
+
 <style>
-*{box-sizing:border-box}
-:root{--primary:#20a9c7;--primary-dark:#14869e;--secondary:#7567d8;--gold:#f0a84b;--success:#18a66a;--danger:#dc4c64;--warning:#e9a227;--ink:#17212b;--muted:#6d7884;--bg:#f4f8fb;--card:#fff;--line:#e4ebf1;--shadow:0 10px 28px rgba(35,58,78,.08)}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"Cairo","Tahoma",Arial,sans-serif;font-variant-numeric:normal} input,select,textarea{font-variant-numeric:normal}
-body{min-height:100vh}.hidden{display:none!important}.app{min-height:100vh}
-button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:30;box-shadow:0 3px 14px rgba(25,50,70,.05)}
-.brand{display:flex;align-items:center;gap:12px}.brand-logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#20a9c7,#7567d8);color:#fff;display:grid;place-items:center}.brand h1{font-size:17px;margin:0;font-weight:800}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.top-actions{display:flex;align-items:center;gap:8px}.icon-btn,.menu-btn{width:42px;height:42px;border-radius:11px;background:#f3f7fa;color:#30404c;display:grid;place-items:center}.menu-btn{display:none}
-.layout{display:flex;min-height:calc(100vh - 68px)}.sidebar{width:255px;background:#fff;border-left:1px solid var(--line);padding:18px 14px;position:sticky;top:68px;height:calc(100vh - 68px);overflow:auto}.side-title{font-size:11px;color:#8a96a2;padding:4px 10px 9px}.nav-item{display:flex;align-items:center;gap:11px;padding:12px 12px;border-radius:12px;color:#46535f;text-decoration:none;margin-bottom:5px;font-size:13px;font-weight:700}.nav-item:hover{background:#f3f8fb;color:var(--primary-dark)}.nav-item.active{background:linear-gradient(90deg,#e9f9fc,#f1efff);color:var(--primary-dark)}.nav-item i{width:19px}.side-footer{margin-top:25px;border-top:1px solid var(--line);padding:15px 10px;color:var(--muted);font-size:11px;line-height:1.8}
-main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.page-head h2{margin:0 0 5px;font-size:24px}.page-head p{margin:0;color:var(--muted);font-size:12px}.head-actions{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 14px;border-radius:10px;font-weight:800;font-size:12px;transition:.15s}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--primary);color:#fff}.btn-secondary{background:var(--secondary);color:#fff}.btn-light{background:#fff;color:#44515d;border:1px solid var(--line)}.btn-danger{background:#fff0f2;color:#bd3049}.btn-success{background:#eafaf3;color:#138257}
-.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:16px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:var(--shadow);position:relative;overflow:hidden}.stat:after{content:"";position:absolute;width:70px;height:70px;border-radius:50%;left:-24px;bottom:-30px;background:rgba(32,169,199,.08)}.stat .label{color:var(--muted);font-size:11px;font-weight:700}.stat .value{font-size:25px;font-weight:900;margin-top:4px}.stat .ico{position:absolute;left:13px;top:13px;color:var(--primary)}
-.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);margin-bottom:16px}.filters{padding:16px}.filter-grid{display:grid;grid-template-columns:1.05fr 1.6fr 1fr 1fr auto;gap:10px;align-items:end}.field label{display:block;font-size:11px;font-weight:800;color:#596672;margin:0 0 6px}.field input,.field select,.field textarea{width:100%;border:1px solid #dce5eb;border-radius:10px;background:#fff;padding:10px 11px;outline:none;color:#1e2a34}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(32,169,199,.1)}
-.table-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}.table-head strong{font-size:14px}.table-head span{font-size:11px;color:var(--muted)}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:980px}.table th{background:#f8fafc;color:#66737f;font-size:11px;text-align:right;padding:11px 12px;border-bottom:1px solid var(--line);white-space:nowrap}.table td{padding:11px 12px;border-bottom:1px solid #edf1f4;font-size:12px;vertical-align:middle}.table tr:hover td{background:#fbfdfe}.badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800;white-space:nowrap}.b-blue{background:#e9f8fc;color:#137e95}.b-purple{background:#f0edff;color:#6657bf}.b-green{background:#e8f8f0;color:#157c55}.b-gold{background:#fff4df;color:#a66c0b}.b-red{background:#ffedf0;color:#bb3a50}.b-gray{background:#eef2f5;color:#66737f}.source-dot{display:inline-flex;align-items:center;gap:5px}.dot{width:7px;height:7px;border-radius:50%;display:inline-block}.dot-auto{background:var(--primary)}.dot-manual{background:var(--secondary)}.actions{display:flex;gap:5px}.mini{width:32px;height:32px;border-radius:8px;background:#f3f6f8;color:#53616d;display:grid;place-items:center}.mini:hover{background:#eaf2f6}.empty{text-align:center;padding:45px 20px;color:var(--muted)}.empty i{margin-bottom:10px;color:#aab7c1}
-.modal-back{position:fixed;inset:0;background:rgba(16,30,40,.46);z-index:100;display:grid;place-items:center;padding:15px}.modal{width:min(680px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 25px 70px rgba(0,0,0,.2)}.modal-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.modal-head h3{margin:0;font-size:16px}.modal-body{padding:18px}.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}.modal-foot{padding:14px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-start;gap:8px}.close{background:#f3f5f7;width:35px;height:35px;border-radius:9px;display:grid;place-items:center;color:#52606c}
-.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#eafaff,#f2efff 60%,#fff6e8)}.login-card{width:min(420px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 22px 60px rgba(30,60,80,.12)}.login-brand{text-align:center;margin-bottom:20px}.login-brand .brand-logo{margin:0 auto 10px;width:58px;height:58px}.login-brand h2{font-size:19px;margin:0 0 4px}.login-brand p{font-size:11px;color:var(--muted);margin:0}.login .field{margin-bottom:12px}.login-error{background:#fff0f2;color:#b72f48;border-radius:10px;padding:9px 11px;font-size:11px;margin-bottom:10px}
-.toast{position:fixed;bottom:20px;right:20px;z-index:200;background:#17212b;color:#fff;padding:11px 15px;border-radius:10px;font-size:12px;box-shadow:0 10px 30px rgba(0,0,0,.2);max-width:360px}.toast.success{background:#137b55}.toast.error{background:#bd3049}
-.print-only{display:none}.summary-line{display:flex;gap:14px;flex-wrap:wrap;color:#66737f;font-size:11px}.summary-line b{color:#24323d}
-@media(max-width:1050px){.stats{grid-template-columns:repeat(3,1fr)}.filter-grid{grid-template-columns:1fr 1fr 1fr}.filter-grid .filter-action{grid-column:1/-1}.sidebar{width:225px}}
-@media(max-width:760px){.topbar{height:62px;padding:0 12px}.menu-btn{display:grid}.brand h1{font-size:14px}.brand small{display:none}.layout{min-height:calc(100vh - 62px)}.sidebar{position:fixed;right:-270px;top:62px;height:calc(100vh - 62px);z-index:80;width:260px;transition:.25s;box-shadow:-10px 0 30px rgba(20,40,60,.1)}.sidebar.open{right:0}.sidebar-overlay{position:fixed;inset:62px 0 0;background:rgba(0,0,0,.25);z-index:70}.sidebar-overlay.hidden{display:none}.topbar .logout-label{display:none}main{padding:14px}.page-head{flex-direction:column}.page-head h2{font-size:20px}.head-actions{width:100%}.head-actions .btn{flex:1}.stats{grid-template-columns:1fr 1fr}.stat{padding:12px}.stat .value{font-size:21px}.filter-grid{grid-template-columns:1fr 1fr}.filter-grid .field:nth-child(2){grid-column:1/-1}.modal-grid{grid-template-columns:1fr}.full{grid-column:auto}.modal{border-radius:15px}.table-head{align-items:flex-start;flex-direction:column}}
-@media(max-width:460px){.stats{grid-template-columns:1fr 1fr}.filter-grid{grid-template-columns:1fr}.filter-grid .field:nth-child(2){grid-column:auto}.head-actions{flex-direction:column}.head-actions .btn{width:100%}}
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --primary:#20a9c7;
+  --primary-dark:#14869e;
+  --primary-soft:#e9f9fc;
+
+  --secondary:#7567d8;
+  --secondary-dark:#5d50bd;
+  --secondary-soft:#f1efff;
+
+  --success:#18a66a;
+  --success-soft:#e9f8f1;
+
+  --danger:#dc4c64;
+  --danger-soft:#fff0f3;
+
+  --warning:#e9a227;
+  --warning-soft:#fff5df;
+
+  --blue:#3686d7;
+  --blue-soft:#edf6ff;
+
+  --ink:#17212b;
+  --ink-soft:#33424e;
+  --muted:#6d7884;
+  --muted-light:#8b97a2;
+
+  --bg:#f4f8fb;
+  --card:#ffffff;
+  --line:#e4ebf1;
+  --line-dark:#d7e1e8;
+
+  --shadow:0 10px 28px rgba(35,58,78,.07);
+  --shadow-hover:0 18px 38px rgba(35,58,78,.11);
+
+  --radius:17px;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Cairo","Tahoma","Arial",sans-serif;
+  font-variant-numeric:normal;
+}
+
+body{
+  min-height:100vh;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.app{
+  min-height:100vh;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+  border:0;
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+  transform:none!important;
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar{
+  height:70px;
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 22px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  box-shadow:0 4px 18px rgba(25,50,70,.055);
+  backdrop-filter:blur(12px);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
+.brand-logo{
+  width:44px;
+  height:44px;
+  flex:none;
+  border-radius:13px;
+  background:linear-gradient(135deg,#20a9c7,#7567d8);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  box-shadow:0 8px 18px rgba(32,169,199,.22);
+}
+
+.brand-logo svg{
+  width:22px;
+  height:22px;
+}
+
+.brand h1{
+  font-size:16px;
+  margin:0;
+  font-weight:900;
+  color:#182630;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.brand small{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:2px;
+  font-weight:600;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.icon-btn,
+.menu-btn{
+  width:42px;
+  height:42px;
+  border-radius:11px;
+  background:#f3f7fa;
+  color:#30404c;
+  display:grid;
+  place-items:center;
+  transition:.18s;
+}
+
+.icon-btn:hover,
+.menu-btn:hover{
+  background:#eaf3f7;
+  color:var(--primary-dark);
+}
+
+.menu-btn{
+  display:none;
+}
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.layout{
+  display:flex;
+  min-height:calc(100vh - 70px);
+}
+
+.sidebar{
+  width:260px;
+  flex:none;
+  background:#fff;
+  border-left:1px solid var(--line);
+  padding:19px 14px;
+  position:sticky;
+  top:70px;
+  height:calc(100vh - 70px);
+  overflow:auto;
+}
+
+.side-title{
+  font-size:10px;
+  color:#919da8;
+  padding:4px 10px 10px;
+  font-weight:800;
+  letter-spacing:.2px;
+}
+
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:12px 12px;
+  border-radius:12px;
+  color:#46535f;
+  text-decoration:none;
+  margin-bottom:5px;
+  font-size:13px;
+  font-weight:800;
+  transition:.18s;
+}
+
+.nav-item svg{
+  width:19px;
+  height:19px;
+  flex:none;
+}
+
+.nav-item:hover{
+  background:#f3f8fb;
+  color:var(--primary-dark);
+  transform:translateX(-2px);
+}
+
+.nav-item.active{
+  background:linear-gradient(90deg,#e9f9fc,#f1efff);
+  color:var(--primary-dark);
+  box-shadow:inset 3px 0 0 var(--primary);
+}
+
+.side-footer{
+  margin-top:25px;
+  border-top:1px solid var(--line);
+  padding:15px 10px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.9;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main{
+  flex:1;
+  min-width:0;
+  padding:25px;
+}
+
+.page-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:18px;
+  background:linear-gradient(135deg,#fff 0%,#f9fdfe 58%,#f7f5ff 100%);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:20px 21px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.page-head:before{
+  content:"";
+  position:absolute;
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  left:-75px;
+  top:-85px;
+  background:rgba(32,169,199,.055);
+}
+
+.page-head:after{
+  content:"";
+  position:absolute;
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  right:-70px;
+  bottom:-75px;
+  background:rgba(117,103,216,.05);
+}
+
+.page-title-wrap{
+  position:relative;
+  z-index:1;
+  min-width:0;
+}
+
+.page-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:var(--primary-dark);
+  font-size:10px;
+  font-weight:900;
+  background:var(--primary-soft);
+  padding:5px 9px;
+  border-radius:999px;
+  margin-bottom:7px;
+}
+
+.page-head h2{
+  margin:0 0 5px;
+  font-size:24px;
+  line-height:1.35;
+  font-weight:900;
+  letter-spacing:-.3px;
+}
+
+.page-head p{
+  margin:0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.8;
+}
+
+.head-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  position:relative;
+  z-index:1;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:42px;
+  padding:10px 14px;
+  border-radius:11px;
+  font-weight:900;
+  font-size:11px;
+  transition:.17s;
+  white-space:nowrap;
+}
+
+.btn svg{
+  width:17px;
+  height:17px;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn-primary{
+  background:linear-gradient(135deg,#20a9c7,#148eaa);
+  color:#fff;
+  box-shadow:0 8px 18px rgba(32,169,199,.20);
+}
+
+.btn-primary:hover{
+  box-shadow:0 11px 23px rgba(32,169,199,.25);
+}
+
+.btn-secondary{
+  background:linear-gradient(135deg,#7567d8,#6355c5);
+  color:#fff;
+  box-shadow:0 8px 18px rgba(117,103,216,.17);
+}
+
+.btn-success{
+  background:linear-gradient(135deg,#18a66a,#12875a);
+  color:#fff;
+  box-shadow:0 8px 18px rgba(24,166,106,.17);
+}
+
+.btn-light{
+  background:#fff;
+  color:#44515d;
+  border:1px solid var(--line-dark);
+}
+
+.btn-light:hover{
+  background:#f8fafb;
+  border-color:#cbd8e0;
+}
+
+.btn-danger{
+  background:var(--danger-soft);
+  color:#bd3049;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:17px;
+}
+
+.stat{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:16px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+  min-height:105px;
+  transition:.18s;
+}
+
+.stat:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-hover);
+}
+
+.stat:before{
+  content:"";
+  position:absolute;
+  right:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  background:var(--primary);
+}
+
+.stat:nth-child(2):before{
+  background:var(--success);
+}
+
+.stat:nth-child(3):before{
+  background:var(--danger);
+}
+
+.stat:nth-child(4):before{
+  background:var(--warning);
+}
+
+.stat:nth-child(5):before{
+  background:var(--secondary);
+}
+
+.stat:after{
+  content:"";
+  position:absolute;
+  left:-28px;
+  bottom:-38px;
+  width:95px;
+  height:95px;
+  border-radius:50%;
+  background:rgba(32,169,199,.055);
+}
+
+.stat .label{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+  position:relative;
+  z-index:1;
+  padding-left:28px;
+}
+
+.stat .value{
+  font-size:26px;
+  font-weight:900;
+  margin-top:7px;
+  color:#182630;
+  position:relative;
+  z-index:1;
+  line-height:1;
+}
+
+.stat .ico{
+  position:absolute;
+  left:14px;
+  top:14px;
+  color:var(--primary);
+  width:19px;
+  height:19px;
+}
+
+.stat:nth-child(2) .ico{
+  color:var(--success);
+}
+
+.stat:nth-child(3) .ico{
+  color:var(--danger);
+}
+
+.stat:nth-child(4) .ico{
+  color:var(--warning);
+}
+
+.stat:nth-child(5) .ico{
+  color:var(--secondary);
+}
+
+/* =========================================================
+   CARD / FILTERS
+========================================================= */
+
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  box-shadow:var(--shadow);
+  margin-bottom:17px;
+  overflow:hidden;
+}
+
+.filters{
+  padding:16px;
+  background:linear-gradient(180deg,#fff,#fbfdfe);
+}
+
+.filter-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:13px;
+}
+
+.filter-title-main{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:13px;
+  font-weight:900;
+}
+
+.filter-title-icon{
+  width:32px;
+  height:32px;
+  border-radius:9px;
+  background:var(--primary-soft);
+  color:var(--primary-dark);
+  display:grid;
+  place-items:center;
+}
+
+.filter-title-icon svg{
+  width:16px;
+}
+
+.filter-year{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:6px 10px;
+  background:var(--secondary-soft);
+  color:var(--secondary-dark);
+  border-radius:999px;
+  font-size:10px;
+  font-weight:900;
+}
+
+.filter-grid{
+  display:grid;
+  grid-template-columns:1.05fr 1.7fr 1fr 1fr auto;
+  gap:10px;
+  align-items:end;
+}
+
+.field label{
+  display:block;
+  font-size:10px;
+  font-weight:900;
+  color:#596672;
+  margin:0 0 6px;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  border:1px solid #dce5eb;
+  border-radius:10px;
+  background:#fff;
+  padding:10px 11px;
+  outline:none;
+  color:#1e2a34;
+  transition:.16s;
+}
+
+.field input,
+.field select{
+  min-height:42px;
+}
+
+.field textarea{
+  resize:vertical;
+  min-height:90px;
+}
+
+.field input::placeholder,
+.field textarea::placeholder{
+  color:#a1adb6;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(32,169,199,.10);
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-head{
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  background:linear-gradient(90deg,#fff,#f8fcfd);
+}
+
+.table-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.table-title-icon{
+  width:34px;
+  height:34px;
+  border-radius:9px;
+  background:linear-gradient(135deg,#e9f9fc,#f1efff);
+  color:var(--primary-dark);
+  display:grid;
+  place-items:center;
+}
+
+.table-title-icon svg{
+  width:17px;
+}
+
+.table-head strong{
+  font-size:13px;
+  font-weight:900;
+}
+
+.table-head span{
+  font-size:10px;
+  color:var(--muted);
+  background:#f2f6f8;
+  padding:6px 9px;
+  border-radius:999px;
+  font-weight:800;
+}
+
+.table-wrap{
+  overflow:auto;
+}
+
+.table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1050px;
+}
+
+.table th{
+  background:#f8fafc;
+  color:#66737f;
+  font-size:10px;
+  text-align:right;
+  padding:12px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+  font-weight:900;
+}
+
+.table td{
+  padding:12px;
+  border-bottom:1px solid #edf1f4;
+  font-size:11px;
+  vertical-align:middle;
+}
+
+.table tbody tr{
+  transition:.12s;
+}
+
+.table tbody tr:hover td{
+  background:#fbfdfe;
+}
+
+.table tbody tr:last-child td{
+  border-bottom:0;
+}
+
+.employee-cell{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:170px;
+}
+
+.employee-avatar{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#e9f9fc,#f1efff);
+  color:var(--primary-dark);
+  display:grid;
+  place-items:center;
+  flex:none;
+  font-weight:900;
+  font-size:11px;
+}
+
+.employee-info strong{
+  display:block;
+  font-size:11px;
+  color:#25343f;
+  margin-bottom:2px;
+}
+
+.employee-info small{
+  color:var(--muted);
+  font-size:9px;
+}
+
+.number-cell{
+  font-weight:800;
+  color:#43515d;
+}
+
+.date-cell{
+  white-space:nowrap;
+  font-weight:700;
+}
+
+.institution-cell{
+  max-width:210px;
+  line-height:1.7;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.badge-source{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:9px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.source-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+.dot-auto{
+  background:var(--primary);
+}
+
+.dot-manual{
+  background:var(--secondary);
+}
+
+.b-blue{
+  background:#e9f8fc;
+  color:#137e95;
+}
+
+.b-purple{
+  background:#f0edff;
+  color:#6657bf;
+}
+
+.b-green{
+  background:#e8f8f0;
+  color:#157c55;
+}
+
+.b-gold{
+  background:#fff4df;
+  color:#a66c0b;
+}
+
+.b-red{
+  background:#ffedf0;
+  color:#bb3a50;
+}
+
+.b-gray{
+  background:#eef2f5;
+  color:#66737f;
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+}
+
+.mini{
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  background:#f3f6f8;
+  color:#53616d;
+  display:grid;
+  place-items:center;
+  transition:.15s;
+}
+
+.mini svg{
+  width:15px;
+}
+
+.mini:hover{
+  background:#eaf2f6;
+  color:var(--primary-dark);
+}
+
+.mini.delete:hover{
+  background:var(--danger-soft);
+  color:var(--danger);
+}
+
+.readonly-label{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:6px 9px;
+  border-radius:8px;
+  background:#f5f7f8;
+  color:#7b8790;
+  font-size:9px;
+  font-weight:800;
+}
+
+.empty{
+  text-align:center;
+  padding:55px 20px;
+  color:var(--muted);
+}
+
+.empty-icon{
+  width:50px;
+  height:50px;
+  margin:0 auto 12px;
+  border-radius:14px;
+  background:#f2f6f8;
+  display:grid;
+  place-items:center;
+  color:#9eabb5;
+}
+
+.empty-icon svg{
+  width:24px;
+}
+
+.empty strong{
+  display:block;
+  color:#596772;
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.empty span{
+  font-size:10px;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-back{
+  position:fixed;
+  inset:0;
+  background:rgba(16,30,40,.50);
+  z-index:100;
+  display:grid;
+  place-items:center;
+  padding:15px;
+  backdrop-filter:blur(3px);
+}
+
+.modal{
+  width:min(700px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:#fff;
+  border:1px solid rgba(228,235,241,.95);
+  border-radius:19px;
+  box-shadow:0 25px 70px rgba(0,0,0,.22);
+}
+
+.modal-head{
+  padding:17px 19px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:linear-gradient(90deg,#fff,#f8fcfd);
+}
+
+.modal-title-wrap{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.modal-title-icon{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#e9f9fc,#f1efff);
+  color:var(--primary-dark);
+  display:grid;
+  place-items:center;
+}
+
+.modal-title-icon svg{
+  width:18px;
+}
+
+.modal-head h3{
+  margin:0;
+  font-size:15px;
+  font-weight:900;
+}
+
+.modal-head small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-top:2px;
+}
+
+.modal-body{
+  padding:19px;
+  background:#fff;
+}
+
+.modal-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+.modal-note{
+  margin-top:13px;
+  font-size:10px;
+  color:#687680;
+  background:#f7fafc;
+  border:1px solid #edf2f5;
+  border-radius:11px;
+  padding:11px 12px;
+  line-height:1.8;
+}
+
+.modal-foot{
+  padding:14px 19px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:flex-start;
+  gap:8px;
+  background:#fbfcfd;
+}
+
+.close{
+  background:#f3f5f7;
+  width:35px;
+  height:35px;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  color:#52606c;
+}
+
+.close:hover{
+  background:#eaf0f3;
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(32,169,199,.10),transparent 28%),
+    radial-gradient(circle at 85% 85%,rgba(117,103,216,.10),transparent 30%),
+    linear-gradient(135deg,#eafaff,#f3f0ff 60%,#fff8ec);
+}
+
+.login-card{
+  width:min(420px,100%);
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:23px;
+  padding:29px;
+  box-shadow:0 22px 60px rgba(30,60,80,.13);
+}
+
+.login-brand{
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.login-brand .brand-logo{
+  margin:0 auto 11px;
+  width:60px;
+  height:60px;
+  border-radius:17px;
+}
+
+.login-brand h2{
+  font-size:19px;
+  margin:0 0 4px;
+  font-weight:900;
+}
+
+.login-brand p{
+  font-size:10px;
+  color:var(--muted);
+  margin:0;
+}
+
+.login .field{
+  margin-bottom:13px;
+}
+
+.login-error{
+  background:#fff0f2;
+  border:1px solid #ffdce2;
+  color:#b72f48;
+  border-radius:10px;
+  padding:9px 11px;
+  font-size:10px;
+  margin-bottom:11px;
+  line-height:1.7;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  z-index:200;
+  background:#17212b;
+  color:#fff;
+  padding:12px 16px;
+  border-radius:11px;
+  font-size:11px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  max-width:380px;
+  line-height:1.7;
+}
+
+.toast.success{
+  background:#137b55;
+}
+
+.toast.error{
+  background:#bd3049;
+}
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+.print-only{
+  display:none;
+}
+
+.summary-line{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  color:#66737f;
+  font-size:10px;
+  margin-bottom:7px;
+}
+
+.summary-line b{
+  color:#24323d;
+}
+
+@media(max-width:1100px){
+
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .filter-grid{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+
+  .filter-action{
+    grid-column:1/-1;
+  }
+
+  .sidebar{
+    width:235px;
+  }
+
+}
+
+@media(max-width:760px){
+
+  .topbar{
+    height:62px;
+    padding:0 12px;
+  }
+
+  .menu-btn{
+    display:grid;
+  }
+
+  .brand{
+    min-width:0;
+  }
+
+  .brand h1{
+    font-size:13px;
+  }
+
+  .brand small{
+    display:none;
+  }
+
+  .brand-logo{
+    width:40px;
+    height:40px;
+    border-radius:11px;
+  }
+
+  .layout{
+    min-height:calc(100vh - 62px);
+  }
+
+  .sidebar{
+    position:fixed;
+    right:-280px;
+    top:62px;
+    height:calc(100vh - 62px);
+    z-index:80;
+    width:270px;
+    transition:.25s;
+    box-shadow:-10px 0 30px rgba(20,40,60,.13);
+  }
+
+  .sidebar.open{
+    right:0;
+  }
+
+  .sidebar-overlay{
+    position:fixed;
+    inset:62px 0 0;
+    background:rgba(0,0,0,.25);
+    z-index:70;
+  }
+
+  .sidebar-overlay.hidden{
+    display:none;
+  }
+
+  .topbar .logout-label{
+    display:none;
+  }
+
+  main{
+    padding:13px;
+  }
+
+  .page-head{
+    flex-direction:column;
+    align-items:stretch;
+    padding:16px;
+    gap:14px;
+  }
+
+  .page-head h2{
+    font-size:20px;
+  }
+
+  .head-actions{
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .head-actions .btn:first-child{
+    grid-column:1/-1;
+  }
+
+  .head-actions .btn{
+    width:100%;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+  }
+
+  .stat{
+    min-height:96px;
+    padding:13px;
+  }
+
+  .stat .value{
+    font-size:22px;
+  }
+
+  .filter-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .filter-grid .field:nth-child(2){
+    grid-column:1/-1;
+  }
+
+  .filter-action{
+    grid-column:1/-1;
+  }
+
+  .modal{
+    max-height:94vh;
+    border-radius:16px;
+  }
+
+  .modal-grid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+}
+
+@media(max-width:480px){
+
+  .top-actions{
+    gap:5px;
+  }
+
+  .icon-btn,
+  .menu-btn{
+    width:38px;
+    height:38px;
+  }
+
+  .brand-logo{
+    width:38px;
+    height:38px;
+  }
+
+  .brand h1{
+    max-width:150px;
+  }
+
+  .head-actions{
+    grid-template-columns:1fr;
+  }
+
+  .head-actions .btn:first-child{
+    grid-column:auto;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat .label{
+    font-size:9px;
+  }
+
+  .stat .value{
+    font-size:20px;
+  }
+
+  .filter-grid{
+    grid-template-columns:1fr;
+  }
+
+  .filter-grid .field:nth-child(2){
+    grid-column:auto;
+  }
+
+  .filter-action{
+    grid-column:auto;
+  }
+
+  .filter-title{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .table-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .login-card{
+    padding:22px;
+  }
+
+}
+
+/* =========================================================
+   PRINT
+========================================================= */
+
 @media print{
-  @page{size:A4 landscape;margin:10mm}body{background:#fff!important;color:#000}.no-print,.topbar,.sidebar,.sidebar-overlay,.filters,.head-actions,.actions,.toast,.modal-back{display:none!important}.layout{display:block;min-height:0}.print-only{display:block}.print-header{text-align:center;margin-bottom:12px}.print-header h1{font-size:18px;margin:0 0 4px}.print-header p{font-size:10px;margin:2px}.card{box-shadow:none;border:1px solid #ddd;border-radius:0;margin:0}.stats{grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:8px}.stat{box-shadow:none;border:1px solid #ddd;border-radius:0;padding:7px}.stat .value{font-size:16px}.stat .label{font-size:8px}.table{min-width:0}.table th,.table td{font-size:8px;padding:5px;border-color:#ddd}.table th{background:#f2f2f2!important}.badge{font-size:7px;padding:2px 5px}.table-head{padding:7px;border-bottom:1px solid #ddd}.table-head strong{font-size:10px}.summary-line{font-size:8px;margin-bottom:6px}}
-\n/* تحسينات واجهة حصيلة الحركة */\n.page-head{background:linear-gradient(135deg,#ffffff,#f8fcfd);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}\n.page-head h2{letter-spacing:-.2px}.head-actions .btn{min-height:42px}.stat{transition:.18s}.stat:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(35,58,78,.11)}\n.filters{background:linear-gradient(180deg,#fff,#fbfdfe)}.filter-grid .field input,.filter-grid .field select{min-height:42px}.table-head{background:linear-gradient(90deg,#fff,#f8fcfd)}\n.modal{border:1px solid rgba(228,235,241,.9)}.modal-body{background:#fff}.modal-foot{background:#fbfcfd}.field input,.field select,.field textarea{min-height:42px}\n@media(max-width:760px){.page-head{padding:15px}.page-head .head-actions{gap:7px}.stat .label{font-size:10px}.table-head{padding:13px}.modal-body{padding:14px}}\n</style>
+
+  @page{
+    size:A4 landscape;
+    margin:10mm;
+  }
+
+  body{
+    background:#fff!important;
+    color:#000;
+  }
+
+  .no-print,
+  .topbar,
+  .sidebar,
+  .sidebar-overlay,
+  .filters,
+  .head-actions,
+  .actions,
+  .toast,
+  .modal-back{
+    display:none!important;
+  }
+
+  .layout{
+    display:block;
+    min-height:0;
+  }
+
+  main{
+    padding:0;
+  }
+
+  .print-only{
+    display:block;
+  }
+
+  .print-header{
+    text-align:center;
+    margin-bottom:10px;
+  }
+
+  .print-header h1{
+    font-size:18px;
+    margin:0 0 3px;
+  }
+
+  .print-header p{
+    font-size:9px;
+    margin:2px;
+  }
+
+  .stats{
+    grid-template-columns:repeat(5,1fr);
+    gap:5px;
+    margin-bottom:8px;
+  }
+
+  .stat{
+    box-shadow:none;
+    border:1px solid #ddd;
+    border-radius:0;
+    padding:7px;
+    min-height:auto;
+  }
+
+  .stat:before{
+    display:none;
+  }
+
+  .stat .value{
+    font-size:16px;
+  }
+
+  .stat .label{
+    font-size:8px;
+  }
+
+  .stat .ico{
+    display:none;
+  }
+
+  .card{
+    box-shadow:none;
+    border:1px solid #ddd;
+    border-radius:0;
+    margin:0;
+  }
+
+  .table{
+    min-width:0;
+  }
+
+  .table th,
+  .table td{
+    font-size:8px;
+    padding:5px;
+    border-color:#ddd;
+  }
+
+  .table th{
+    background:#f2f2f2!important;
+  }
+
+  .badge{
+    font-size:7px;
+    padding:2px 5px;
+  }
+
+  .employee-avatar{
+    display:none;
+  }
+
+  .employee-info small{
+    display:none;
+  }
+
+  .table-head{
+    padding:7px;
+    border-bottom:1px solid #ddd;
+  }
+
+  .table-head strong{
+    font-size:10px;
+  }
+
+  .summary-line{
+    font-size:8px;
+    margin-bottom:6px;
+  }
+
+}
+</style>
 </head>
+
 <body>
+
+<!-- =======================================================
+     LOGIN
+======================================================= -->
+
 <div id="loginView" class="login hidden">
+
   <div class="login-card">
+
     <div class="login-brand">
-      <div class="brand-logo"><i data-lucide="bar-chart-3"></i></div>
+
+      <div class="brand-logo">
+        <i data-lucide="bar-chart-3"></i>
+      </div>
+
       <h2>حصيلة حركة الموظفين</h2>
-      <p>منصة متابعة الانتداب والوضع تحت التصرف</p>
+
+      <p>
+        منصة متابعة الانتداب والوضع تحت التصرف
+      </p>
+
     </div>
+
     <div id="loginError" class="login-error hidden"></div>
-    <div class="field"><label>البريد الإلكتروني</label><input id="loginEmail" type="email" autocomplete="username" placeholder="البريد الإلكتروني"></div>
-    <div class="field"><label>كلمة المرور</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="كلمة المرور"></div>
-    <button id="loginBtn" class="btn btn-primary" style="width:100%"><i data-lucide="log-in"></i> تسجيل الدخول</button>
+
+    <div class="field">
+      <label>البريد الإلكتروني</label>
+      <input
+        id="loginEmail"
+        type="email"
+        autocomplete="username"
+        placeholder="أدخل البريد الإلكتروني"
+      >
+    </div>
+
+    <div class="field">
+      <label>كلمة المرور</label>
+      <input
+        id="loginPassword"
+        type="password"
+        autocomplete="current-password"
+        placeholder="أدخل كلمة المرور"
+      >
+    </div>
+
+    <button
+      id="loginBtn"
+      class="btn btn-primary"
+      style="width:100%"
+    >
+      <i data-lucide="log-in"></i>
+      تسجيل الدخول
+    </button>
+
   </div>
+
 </div>
+
+
+<!-- =======================================================
+     APPLICATION
+======================================================= -->
 
 <div id="appView" class="app hidden">
+
+  <!-- TOPBAR -->
+
   <header class="topbar no-print">
-    <div class="brand"><button id="menuBtn" class="menu-btn"><i data-lucide="menu"></i></button><div class="brand-logo"><i data-lucide="bar-chart-3"></i></div><div><h1>منصة متابعة الانتداب والوضع تحت التصرف</h1><small>حصيلة حركة الموظفين</small></div></div>
-    <div class="top-actions"><button id="refreshBtn" class="icon-btn" title="تحديث"><i data-lucide="refresh-cw"></i></button><button id="logoutBtn" class="btn btn-light"><i data-lucide="log-out"></i><span class="logout-label">خروج</span></button></div>
-  </header>
-  <div id="sideOverlay" class="sidebar-overlay hidden no-print"></div>
-  <div class="layout">
-    <aside id="sidebar" class="sidebar no-print">
-      <div class="side-title">القائمة الرئيسية</div>
-      <a class="nav-item" href="index.html"><i data-lucide="layout-dashboard"></i><span>الرئيسية</span></a>
-      <a class="nav-item" href="index.html#employees"><i data-lucide="users"></i><span>الموظفون</span></a>
-      <a class="nav-item" href="index.html#assignments"><i data-lucide="arrow-left-right"></i><span>الانتداب والوضع تحت التصرف</span></a>
-      <a class="nav-item active" href="movements.html"><i data-lucide="bar-chart-3"></i><span>حصيلة حركة الموظفين</span></a>
-      <div class="side-footer">هذه الصفحة تعتمد على الحركات الفعلية المسجلة فقط. وجود الموظف في جدول الموظفين لا يُنشئ أي حركة تلقائيًا.</div>
-    </aside>
-    <main>
-      <div class="print-only print-header">
-        <h1>المؤسسة العمومية الاستشفائية بأولف</h1>
-        <p>مصلحة الموارد البشرية</p>
-        <p>حصيلة حركة الموظفين</p>
+
+    <div class="brand">
+
+      <button id="menuBtn" class="menu-btn" title="القائمة">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <div class="brand-logo">
+        <i data-lucide="bar-chart-3"></i>
       </div>
+
+      <div>
+        <h1>منصة متابعة الانتداب والوضع تحت التصرف</h1>
+        <small>حصيلة حركة الموظفين</small>
+      </div>
+
+    </div>
+
+    <div class="top-actions">
+
+      <button
+        id="refreshBtn"
+        class="icon-btn"
+        title="تحديث البيانات"
+      >
+        <i data-lucide="refresh-cw"></i>
+      </button>
+
+      <button
+        id="logoutBtn"
+        class="btn btn-light"
+      >
+        <i data-lucide="log-out"></i>
+        <span class="logout-label">خروج</span>
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <div id="sideOverlay" class="sidebar-overlay hidden no-print"></div>
+
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside id="sidebar" class="sidebar no-print">
+
+      <div class="side-title">
+        القائمة الرئيسية
+      </div>
+
+      <a
+        class="nav-item"
+        href="index.html"
+      >
+        <i data-lucide="layout-dashboard"></i>
+        <span>الرئيسية</span>
+      </a>
+
+      <a
+        class="nav-item"
+        href="index.html#employees"
+      >
+        <i data-lucide="users"></i>
+        <span>الموظفون</span>
+      </a>
+
+      <a
+        class="nav-item"
+        href="index.html#assignments"
+      >
+        <i data-lucide="arrow-left-right"></i>
+        <span>الانتداب والوضع تحت التصرف</span>
+      </a>
+
+      <a
+        class="nav-item active"
+        href="movements.html"
+      >
+        <i data-lucide="bar-chart-3"></i>
+        <span>حصيلة حركة الموظفين</span>
+      </a>
+
+      <div class="side-footer">
+
+        <strong style="color:#4f5e69;">
+          ملاحظة إدارية
+        </strong>
+
+        <br>
+
+        هذه الصفحة تعتمد على الحركات الفعلية
+        المسجلة فقط.
+
+        <br>
+
+        وجود الموظف في جدول الموظفين
+        لا يُنشئ حركة توظيف تلقائيًا.
+
+        <br>
+
+        كما يتم عرض الانتداب والوضع تحت التصرف
+        تلقائيًا من سجل الوضعيات.
+
+      </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main>
+
+      <!-- PRINT HEADER -->
+
+      <div class="print-only print-header">
+
+        <h1>
+          المؤسسة العمومية الاستشفائية بأولف
+        </h1>
+
+        <p>
+          مصلحة الموارد البشرية
+        </p>
+
+        <p>
+          حصيلة حركة الموظفين
+        </p>
+
+      </div>
+
+
+      <!-- PAGE HEADER -->
+
       <section class="page-head no-print">
-        <div><h2>حصيلة حركة الموظفين</h2><p>تسجيل الحركات الفعلية للموظفين خلال كل سنة واستخراج الإحصائيات حسب الوضعية المهنية.</p></div>
-        <div class="head-actions"><button id="addBtn" class="btn btn-primary"><i data-lucide="plus"></i> إضافة موظف</button><button id="printBtn" class="btn btn-secondary"><i data-lucide="printer"></i> طباعة / PDF</button><button id="excelBtn" class="btn btn-success"><i data-lucide="file-spreadsheet"></i> Excel</button></div>
+
+        <div class="page-title-wrap">
+
+          <div class="page-kicker">
+            <i data-lucide="bar-chart-3" style="width:13px"></i>
+            المتابعة الإحصائية السنوية
+          </div>
+
+          <h2>
+            حصيلة حركة الموظفين
+          </h2>
+
+          <p>
+            تسجيل ومتابعة الحركات الفعلية للموظفين
+            واستخراج الحصيلة السنوية حسب الوضعية المهنية.
+          </p>
+
+        </div>
+
+        <div class="head-actions">
+
+          <button
+            id="addBtn"
+            class="btn btn-primary"
+          >
+            <i data-lucide="plus-circle"></i>
+            إضافة حركة
+          </button>
+
+          <button
+            id="printBtn"
+            class="btn btn-secondary"
+          >
+            <i data-lucide="printer"></i>
+            طباعة / PDF
+          </button>
+
+          <button
+            id="excelBtn"
+            class="btn btn-success"
+          >
+            <i data-lucide="file-spreadsheet"></i>
+            Excel
+          </button>
+
+        </div>
+
       </section>
-      <div id="printSummary" class="print-only summary-line"></div>
+
+
+      <!-- PRINT SUMMARY -->
+
+      <div
+        id="printSummary"
+        class="print-only summary-line"
+      ></div>
+
+
+      <!-- STATISTICS -->
+
       <section class="stats">
-        <div class="stat"><i class="ico" data-lucide="activity"></i><div class="label">إجمالي الحركات</div><div id="totalCount" class="value">0</div></div>
-        <div class="stat"><i class="ico" data-lucide="user-plus"></i><div class="label">التوظيف</div><div id="hireCount" class="value">0</div></div>
-        <div class="stat"><i class="ico" data-lucide="log-out"></i><div class="label">الاستقالة</div><div id="resignCount" class="value">0</div></div>
-        <div class="stat"><i class="ico" data-lucide="clock-3"></i><div class="label">الإحالة على التقاعد</div><div id="retireCount" class="value">0</div></div>
-        <div class="stat"><i class="ico" data-lucide="list"></i><div class="label">حركات أخرى</div><div id="otherCount" class="value">0</div></div>
+
+        <div class="stat">
+
+          <i
+            class="ico"
+            data-lucide="activity"
+          ></i>
+
+          <div class="label">
+            إجمالي الحركات
+          </div>
+
+          <div
+            id="totalCount"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <i
+            class="ico"
+            data-lucide="user-plus"
+          ></i>
+
+          <div class="label">
+            التوظيف
+          </div>
+
+          <div
+            id="hireCount"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <i
+            class="ico"
+            data-lucide="log-out"
+          ></i>
+
+          <div class="label">
+            الاستقالة
+          </div>
+
+          <div
+            id="resignCount"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <i
+            class="ico"
+            data-lucide="clock-3"
+          ></i>
+
+          <div class="label">
+            الإحالة على التقاعد
+          </div>
+
+          <div
+            id="retireCount"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <i
+            class="ico"
+            data-lucide="list"
+          ></i>
+
+          <div class="label">
+            حركات أخرى
+          </div>
+
+          <div
+            id="otherCount"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
       </section>
+
+
+      <!-- FILTERS -->
+
       <section class="card filters no-print">
+
+        <div class="filter-title">
+
+          <div class="filter-title-main">
+
+            <div class="filter-title-icon">
+              <i data-lucide="sliders-horizontal"></i>
+            </div>
+
+            <span>
+              البحث والتصفية
+            </span>
+
+          </div>
+
+          <div
+            id="selectedYearBadge"
+            class="filter-year"
+          >
+            <i data-lucide="calendar-days"></i>
+            السنة الحالية
+          </div>
+
+        </div>
+
+
         <div class="filter-grid">
-          <div class="field"><label>السنة</label><select id="yearFilter"></select></div>
-          <div class="field"><label>البحث باسم الموظف أو الرقم الوظيفي</label><input id="searchFilter" type="search" placeholder="اكتب الاسم أو اللقب أو الرقم الوظيفي"></div>
-          <div class="field"><label>نوع الحركة</label><select id="typeFilter"><option value="all">كل الحركات</option></select></div>
-          <div class="field"><label>الرتبة</label><select id="gradeFilter"><option value="all">كل الرتب</option></select></div>
-          <div class="filter-action"><button id="clearFilters" class="btn btn-light"><i data-lucide="rotate-ccw"></i> إعادة ضبط</button></div>
+
+          <div class="field">
+
+            <label>
+              السنة
+            </label>
+
+            <select id="yearFilter"></select>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              البحث باسم الموظف أو الرقم الوظيفي
+            </label>
+
+            <input
+              id="searchFilter"
+              type="search"
+              placeholder="اكتب الاسم أو اللقب أو الرقم الوظيفي"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              نوع الحركة
+            </label>
+
+            <select id="typeFilter">
+
+              <option value="all">
+                كل الحركات
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              الرتبة
+            </label>
+
+            <select id="gradeFilter">
+
+              <option value="all">
+                كل الرتب
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="filter-action">
+
+            <button
+              id="clearFilters"
+              class="btn btn-light"
+            >
+              <i data-lucide="rotate-ccw"></i>
+              إعادة ضبط
+            </button>
+
+          </div>
+
         </div>
+
       </section>
+
+
+      <!-- TABLE -->
+
       <section class="card">
-        <div class="table-head"><strong>تفاصيل الحركات</strong><span id="resultCount">0 حركة</span></div>
-        <div class="table-wrap">
-          <table class="table"><thead><tr><th>#</th><th>الموظف</th><th>الرقم الوظيفي</th><th>الرتبة</th><th>الوضعية</th><th>تاريخها</th><th>المؤسسة / الجهة</th><th class="no-print">إجراءات</th></tr></thead><tbody id="tableBody"></tbody></table>
+
+        <div class="table-head">
+
+          <div class="table-title">
+
+            <div class="table-title-icon">
+              <i data-lucide="list-checks"></i>
+            </div>
+
+            <strong>
+              تفاصيل الحركات
+            </strong>
+
+          </div>
+
+          <span id="resultCount">
+            0 حركة
+          </span>
+
         </div>
+
+
+        <div class="table-wrap">
+
+          <table class="table">
+
+            <thead>
+
+              <tr>
+
+                <th>#</th>
+
+                <th>
+                  الموظف
+                </th>
+
+                <th>
+                  الرقم الوظيفي
+                </th>
+
+                <th>
+                  الرتبة
+                </th>
+
+                <th>
+                  نوع الحركة
+                </th>
+
+                <th>
+                  تاريخها
+                </th>
+
+                <th>
+                  المؤسسة / الجهة
+                </th>
+
+                <th class="no-print">
+                  إجراءات
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="tableBody"></tbody>
+
+          </table>
+
+        </div>
+
       </section>
+
     </main>
+
   </div>
+
 </div>
 
-<div id="modalBack" class="modal-back hidden no-print">
+
+<!-- =======================================================
+     MODAL
+======================================================= -->
+
+<div
+  id="modalBack"
+  class="modal-back hidden no-print"
+>
+
   <div class="modal">
-    <div class="modal-head"><h3 id="modalTitle">إضافة حركة موظف</h3><button id="closeModal" class="close"><i data-lucide="x"></i></button></div>
-    <div class="modal-body">
-      <div id="modalError" class="login-error hidden"></div>
-      <div class="modal-grid">
-        <div class="field"><label>الاسم *</label><input id="firstNameInput" type="text" placeholder="اسم الموظف"></div>
-        <div class="field"><label>اللقب *</label><input id="lastNameInput" type="text" placeholder="لقب الموظف"></div>
-        <div class="field"><label>الرتبة *</label><input id="gradeInput" type="text" placeholder="رتبة الموظف"></div>
-        <div class="field"><label>الوضعية *</label><select id="movementTypeInput"></select></div>
-        <div class="field"><label>تاريخ الوضعية *</label><input id="movementDateInput" type="date"></div>
-        <div class="field"><label>المؤسسة / الجهة</label><input id="institutionInput" type="text" placeholder="اختياري"></div>
-        <div class="field full"><label>ملاحظات</label><textarea id="notesInput" rows="3" placeholder="ملاحظات إضافية"></textarea></div>
+
+    <div class="modal-head">
+
+      <div class="modal-title-wrap">
+
+        <div class="modal-title-icon">
+          <i data-lucide="plus-circle"></i>
+        </div>
+
+        <div>
+
+          <h3 id="modalTitle">
+            إضافة حركة موظف
+          </h3>
+
+          <small>
+            تسجيل حركة فعلية في الحصيلة السنوية
+          </small>
+
+        </div>
+
       </div>
-      <div style="margin-top:10px;font-size:11px;color:#6d7884;background:#f7fafc;border-radius:10px;padding:10px">تُسجّل هنا الحركات الفعلية فقط. وجود الموظف في المنصة أو وجوده في وضعية انتداب أو تحت التصرف لا يُنشئ حركة تلقائيًا.</div>
+
+      <button
+        id="closeModal"
+        class="close"
+      >
+        <i data-lucide="x"></i>
+      </button>
+
     </div>
-    <div class="modal-foot"><button id="saveBtn" class="btn btn-primary"><i data-lucide="save"></i> حفظ</button><button id="cancelBtn" class="btn btn-light">إلغاء</button></div>
+
+
+    <div class="modal-body">
+
+      <div
+        id="modalError"
+        class="login-error hidden"
+      ></div>
+
+
+      <div class="modal-grid">
+
+        <div class="field">
+
+          <label>
+            الاسم *
+          </label>
+
+          <input
+            id="firstNameInput"
+            type="text"
+            placeholder="اسم الموظف"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            اللقب *
+          </label>
+
+          <input
+            id="lastNameInput"
+            type="text"
+            placeholder="لقب الموظف"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            الرتبة *
+          </label>
+
+          <input
+            id="gradeInput"
+            type="text"
+            placeholder="رتبة الموظف"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            نوع الحركة *
+          </label>
+
+          <select id="movementTypeInput"></select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            تاريخ الحركة *
+          </label>
+
+          <input
+            id="movementDateInput"
+            type="date"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            المؤسسة / الجهة
+          </label>
+
+          <input
+            id="institutionInput"
+            type="text"
+            placeholder="اختياري"
+          >
+
+        </div>
+
+
+        <div class="field full">
+
+          <label>
+            ملاحظات
+          </label>
+
+          <textarea
+            id="notesInput"
+            rows="3"
+            placeholder="ملاحظات إضافية"
+          ></textarea>
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-note">
+
+        <strong>
+          تنبيه:
+        </strong>
+
+        تُسجّل هنا الحركات الفعلية فقط.
+        وجود الموظف في المنصة لا يُنشئ حركة توظيف تلقائيًا،
+        كما أن الانتداب والوضع تحت التصرف يُستخرجان تلقائيًا
+        من سجل الوضعيات ولا يحتاجان إلى إعادة إدخال.
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-foot">
+
+      <button
+        id="saveBtn"
+        class="btn btn-primary"
+      >
+        <i data-lucide="save"></i>
+        حفظ الحركة
+      </button>
+
+      <button
+        id="cancelBtn"
+        class="btn btn-light"
+      >
+        إلغاء
+      </button>
+
+    </div>
+
   </div>
+
 </div>
-<div id="toast" class="toast hidden"></div>
+
+
+<!-- TOAST -->
+
+<div
+  id="toast"
+  class="toast hidden"
+></div>
+
 
 <script>
-const SUPABASE_URL = "https://etqbcnskmzlumfguryjk.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_lTuyKeXZOPZO5AzVzRuGUA_6wZwjz1m";
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-let currentUser=null;
-let employees=[];
-let extraMovements=[];
-let allMovements=[];
-let filteredMovements=[];
-let editingId=null;
+/* =========================================================
+   SUPABASE
+========================================================= */
 
-const MANUAL_TYPES=["توظيف","استقالة","إحالة على التقاعد","ترقية","الترقية في الدرجة","الترقية في الرتبة","تحويل","نقل","إنهاء المهام","الإحالة على الاستيداع","إعادة الإدماج","الإلحاق","الوضع في الخدمة الوطنية","العودة من الخدمة الوطنية","الوفاة","العزل","التسريح","الإنهاء النهائي لعلاقة العمل","التثبيت","التربص","العودة إلى العمل","التمديد","التكليف","تغيير الرتبة","تغيير الوضعية القانونية","أخرى"];
+const SUPABASE_URL =
+  "https://etqbcnskmzlumfguryjk.supabase.co";
 
-const $=id=>document.getElementById(id);
-function esc(v){return String(v??"").replace(/[&<>'"]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[s]));}
-function showToast(msg,type=""){const t=$("toast");t.textContent=msg;t.className="toast "+type;t.classList.remove("hidden");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.add("hidden"),3500)}
-function formatNumber(v){return Number(v||0).toLocaleString("en-US");}
-function formatDate(v){if(!v)return "—";const d=new Date(v+((String(v).length===10)?"T00:00:00":""));if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("ar-DZ-u-nu-latn",{day:"2-digit",month:"long",year:"numeric"}).format(d);}
-function formatDateTime(v){if(!v)return "—";const d=new Date(v);if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("ar-DZ-u-nu-latn",{dateStyle:"medium",timeStyle:"short"}).format(d);}
-function formatYear(v){return String(v??"").replace(/[^0-9]/g,"");}
-function yearOf(v){if(!v)return null;const y=Number(String(v).slice(0,4));return Number.isFinite(y)?y:null;}
-function norm(v){return String(v??"").trim().toLowerCase();}
-function employeeName(e){return [e?.first_name,e?.last_name].filter(Boolean).join(" ").trim()||"بدون اسم";}
-function employeeMap(){const m=new Map();employees.forEach(e=>m.set(String(e.id),e));return m;}
-function typeBadge(type){if(type==="توظيف")return "b-green";if(["ترقية","الترقية في الدرجة","الترقية في الرتبة","تغيير الرتبة"].includes(type))return "b-gold";if(["تحويل","نقل","الإلحاق","إعادة الإدماج","العودة إلى العمل"].includes(type))return "b-blue";if(["استقالة","الوفاة","إنهاء المهام","العزل","التسريح","الإنهاء النهائي لعلاقة العمل"].includes(type))return "b-red";if(["الإحالة على الاستيداع","الوضع في الخدمة الوطنية"].includes(type))return "b-purple";return "b-gray";}
+const SUPABASE_ANON_KEY =
+  "sb_publishable_lTuyKeXZOPZO5AzVzRuGUA_6wZwjz1m";
+
+const db =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentUser = null;
+
+let employees = [];
+
+let extraMovements = [];
+
+let assignmentMovements = [];
+
+let allMovements = [];
+
+let filteredMovements = [];
+
+let editingId = null;
+
+
+/* =========================================================
+   MANUAL MOVEMENT TYPES
+========================================================= */
+
+const MANUAL_TYPES = [
+
+  "توظيف",
+  "استقالة",
+  "إحالة على التقاعد",
+  "ترقية",
+  "الترقية في الدرجة",
+  "الترقية في الرتبة",
+  "تحويل",
+  "نقل",
+  "إنهاء المهام",
+  "الإحالة على الاستيداع",
+  "إعادة الإدماج",
+  "الإلحاق",
+  "الوضع في الخدمة الوطنية",
+  "العودة من الخدمة الوطنية",
+  "الوفاة",
+  "العزل",
+  "التسريح",
+  "الإنهاء النهائي لعلاقة العمل",
+  "التثبيت",
+  "التربص",
+  "العودة إلى العمل",
+  "التمديد",
+  "التكليف",
+  "تغيير الرتبة",
+  "تغيير الوضعية القانونية",
+  "أخرى"
+
+];
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+
+function esc(v){
+
+  return String(v ?? "")
+    .replace(
+      /[&<>'"]/g,
+      s => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        "'":"&#39;",
+        '"':"&quot;"
+      }[s])
+    );
+
+}
+
+
+function showToast(
+  msg,
+  type=""
+){
+
+  const t = $("toast");
+
+  t.textContent = msg;
+
+  t.className =
+    "toast " + type;
+
+  t.classList.remove("hidden");
+
+  clearTimeout(
+    window.__toast
+  );
+
+  window.__toast =
+    setTimeout(
+      () => t.classList.add("hidden"),
+      3500
+    );
+
+}
+
+
+function formatNumber(v){
+
+  return Number(v || 0)
+    .toLocaleString("en-US");
+
+}
+
+
+function formatDate(v){
+
+  if(!v)
+    return "—";
+
+  const d =
+    new Date(
+      v +
+      (
+        String(v).length === 10
+          ? "T00:00:00"
+          : ""
+      )
+    );
+
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  )
+    return v;
+
+  return new Intl.DateTimeFormat(
+    "ar-DZ-u-nu-latn",
+    {
+      day:"2-digit",
+      month:"long",
+      year:"numeric"
+    }
+  ).format(d);
+
+}
+
+
+function yearOf(v){
+
+  if(!v)
+    return null;
+
+  const y =
+    Number(
+      String(v).slice(0,4)
+    );
+
+  return Number.isFinite(y)
+    ? y
+    : null;
+
+}
+
+
+function norm(v){
+
+  return String(v ?? "")
+    .trim()
+    .toLowerCase();
+
+}
+
+
+function employeeName(e){
+
+  return [
+    e?.first_name,
+    e?.last_name
+  ]
+  .filter(Boolean)
+  .join(" ")
+  .trim()
+  ||
+  "بدون اسم";
+
+}
+
+
+function employeeInitials(e){
+
+  const first =
+    String(e?.first_name || "")
+      .trim()
+      .charAt(0);
+
+  const last =
+    String(e?.last_name || "")
+      .trim()
+      .charAt(0);
+
+  return (
+    first + last
+  ) || "م";
+
+}
+
+
+function employeeMap(){
+
+  const m =
+    new Map();
+
+  employees.forEach(
+    e =>
+      m.set(
+        String(e.id),
+        e
+      )
+  );
+
+  return m;
+
+}
+
+
+function typeBadge(type){
+
+  if(type === "توظيف")
+    return "b-green";
+
+  if(
+    [
+      "ترقية",
+      "الترقية في الدرجة",
+      "الترقية في الرتبة",
+      "تغيير الرتبة"
+    ].includes(type)
+  )
+    return "b-gold";
+
+  if(
+    [
+      "تحويل",
+      "نقل",
+      "الإلحاق",
+      "إعادة الإدماج",
+      "العودة إلى العمل",
+      "انتداب"
+    ].includes(type)
+  )
+    return "b-blue";
+
+  if(
+    [
+      "استقالة",
+      "الوفاة",
+      "إنهاء المهام",
+      "العزل",
+      "التسريح",
+      "الإنهاء النهائي لعلاقة العمل"
+    ].includes(type)
+  )
+    return "b-red";
+
+  if(
+    [
+      "الإحالة على الاستيداع",
+      "الوضع في الخدمة الوطنية",
+      "تحت التصرف"
+    ].includes(type)
+  )
+    return "b-purple";
+
+  return "b-gray";
+
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
 
 async function checkAdmin(){
-  const {data,error}=await db.from("user_roles").select("role").eq("user_id",currentUser.id).eq("role","admin").maybeSingle();
-  if(error)throw error;
-  if(!data)throw new Error("هذا الحساب لا يملك صلاحيات المسؤول.");
+
+  const {
+    data,
+    error
+  } =
+    await db
+      .from("user_roles")
+      .select("role")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .eq(
+        "role",
+        "admin"
+      )
+      .maybeSingle();
+
+  if(error)
+    throw error;
+
+  if(!data)
+    throw new Error(
+      "هذا الحساب لا يملك صلاحيات المسؤول."
+    );
+
 }
+
+
 async function login(){
-  const email=$("loginEmail").value.trim(),password=$("loginPassword").value;
-  $("loginError").classList.add("hidden");$("loginBtn").disabled=true;
-  try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;currentUser=data.user;await checkAdmin();openApp();await loadAll();}
-  catch(e){$("loginError").textContent=e.message||"تعذر تسجيل الدخول";$("loginError").classList.remove("hidden");await db.auth.signOut();}
-  finally{$("loginBtn").disabled=false}
-}
-async function init(){
-  lucide.createIcons();
+
+  const email =
+    $("loginEmail")
+      .value
+      .trim();
+
+  const password =
+    $("loginPassword")
+      .value;
+
+  $("loginError")
+    .classList
+    .add("hidden");
+
+  $("loginBtn")
+    .disabled = true;
+
   try{
-    const {data,error}=await db.auth.getSession();
-    if(error) throw error;
-    if(!data?.session){
-      window.location.href="index.html";
-      return;
-    }
-    currentUser=data.session.user;
+
+    const {
+      data,
+      error
+    } =
+      await db.auth
+        .signInWithPassword({
+          email,
+          password
+        });
+
+    if(error)
+      throw error;
+
+    currentUser =
+      data.user;
+
     await checkAdmin();
+
     openApp();
+
     await loadAll();
-  }catch(e){
-    console.error("خطأ صفحة الحركات:",e);
-    document.body.innerHTML=`<div style="min-height:100vh;display:grid;place-items:center;background:#f5f8fb;padding:20px;font-family:Cairo,Tahoma,Arial,sans-serif"><div style="max-width:620px;background:#fff;border:1px solid #e4ebf1;border-radius:18px;padding:28px;box-shadow:0 15px 45px rgba(30,50,70,.10);text-align:center"><div style="font-size:42px;margin-bottom:10px">⚠️</div><h2 style="margin:0 0 10px;color:#24323d">تعذر فتح حصيلة حركة الموظفين</h2><p style="color:#66737f;line-height:1.9;margin:0 0 18px">${esc(e?.message||e||"خطأ غير معروف")}</p><button onclick="location.href='index.html'" style="border:0;background:#20a9c7;color:#fff;padding:11px 20px;border-radius:10px;font-weight:800;cursor:pointer">العودة إلى المنصة الرئيسية</button></div></div>`;
+
   }
+
+  catch(e){
+
+    $("loginError")
+      .textContent =
+      e.message ||
+      "تعذر تسجيل الدخول";
+
+    $("loginError")
+      .classList
+      .remove("hidden");
+
+    await db.auth.signOut();
+
+  }
+
+  finally{
+
+    $("loginBtn")
+      .disabled = false;
+
+  }
+
 }
-function openApp(){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");lucide.createIcons()}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+async function init(){
+
+  lucide.createIcons();
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await db.auth
+        .getSession();
+
+    if(error)
+      throw error;
+
+    if(
+      !data?.session
+    ){
+
+      window.location.href =
+        "index.html";
+
+      return;
+
+    }
+
+    currentUser =
+      data.session.user;
+
+    await checkAdmin();
+
+    openApp();
+
+    await loadAll();
+
+  }
+
+  catch(e){
+
+    console.error(
+      "خطأ صفحة الحركات:",
+      e
+    );
+
+    document.body.innerHTML = `
+
+      <div style="
+        min-height:100vh;
+        display:grid;
+        place-items:center;
+        background:#f5f8fb;
+        padding:20px;
+        font-family:Cairo,Tahoma,Arial,sans-serif;
+      ">
+
+        <div style="
+          max-width:620px;
+          background:#fff;
+          border:1px solid #e4ebf1;
+          border-radius:18px;
+          padding:28px;
+          box-shadow:0 15px 45px rgba(30,50,70,.10);
+          text-align:center;
+        ">
+
+          <div style="
+            font-size:42px;
+            margin-bottom:10px;
+          ">
+            ⚠️
+          </div>
+
+          <h2 style="
+            margin:0 0 10px;
+            color:#24323d;
+          ">
+            تعذر فتح حصيلة حركة الموظفين
+          </h2>
+
+          <p style="
+            color:#66737f;
+            line-height:1.9;
+            margin:0 0 18px;
+          ">
+            ${esc(
+              e?.message ||
+              e ||
+              "خطأ غير معروف"
+            )}
+          </p>
+
+          <button
+            onclick="location.href='index.html'"
+            style="
+              border:0;
+              background:#20a9c7;
+              color:#fff;
+              padding:11px 20px;
+              border-radius:10px;
+              font-weight:800;
+              cursor:pointer;
+            "
+          >
+            العودة إلى المنصة الرئيسية
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+function openApp(){
+
+  $("loginView")
+    .classList
+    .add("hidden");
+
+  $("appView")
+    .classList
+    .remove("hidden");
+
+  lucide.createIcons();
+
+}
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
 
 async function loadAll(){
+
   try{
-    const [er,mr]=await Promise.all([
-      db.from("employees").select("*").order("last_name",{ascending:true}).order("first_name",{ascending:true}),
-      db.from("employee_movements").select("*").order("movement_date",{ascending:false})
-    ]);
-    if(er.error)throw er.error;if(mr.error)throw mr.error;
-    employees=er.data||[];extraMovements=mr.data||[];
-    buildMovements();populateFilters();applyFilters();
-  }catch(e){showToast("تعذر تحميل البيانات: "+(e.message||e),"error");console.error(e)}
+
+    const [
+      employeesResult,
+      movementsResult,
+      assignmentsResult
+    ] =
+      await Promise.all([
+
+        db
+          .from("employees")
+          .select("*")
+          .order(
+            "last_name",
+            {
+              ascending:true
+            }
+          )
+          .order(
+            "first_name",
+            {
+              ascending:true
+            }
+          ),
+
+        db
+          .from("employee_movements")
+          .select("*")
+          .order(
+            "movement_date",
+            {
+              ascending:false
+            }
+          ),
+
+        db
+          .from("assignments")
+          .select("*")
+          .order(
+            "start_date",
+            {
+              ascending:false
+            }
+          )
+
+      ]);
+
+
+    if(
+      employeesResult.error
+    )
+      throw employeesResult.error;
+
+
+    if(
+      movementsResult.error
+    )
+      throw movementsResult.error;
+
+
+    if(
+      assignmentsResult.error
+    )
+      throw assignmentsResult.error;
+
+
+    employees =
+      employeesResult.data || [];
+
+    extraMovements =
+      movementsResult.data || [];
+
+
+    buildManualMovements(
+      employees
+    );
+
+
+    buildAssignmentMovements(
+      employees,
+      assignmentsResult.data || []
+    );
+
+
+    combineMovements();
+
+    populateFilters();
+
+    applyFilters();
+
+    updateSelectedYearBadge();
+
+    lucide.createIcons();
+
+  }
+
+  catch(e){
+
+    showToast(
+      "تعذر تحميل البيانات: " +
+      (e.message || e),
+      "error"
+    );
+
+    console.error(e);
+
+  }
+
 }
 
-function buildMovements(){
-  const em=employeeMap();
-  allMovements=extraMovements.map(x=>{
-    const e=em.get(String(x.employee_id));
-    const employee=e||{first_name:x.first_name||"",last_name:x.last_name||"",grade:x.grade||"",employee_number:x.employee_number||""};
-    return {id:"manual-"+x.id,dbId:x.id,employee_id:x.employee_id||null,employee,movement_type:x.movement_type||x.type||"أخرى",movement_date:x.movement_date||x.date||null,grade:x.grade||e?.grade||"",institution:x.institution||"",notes:x.notes||"",readOnly:false,first_name:x.first_name||e?.first_name||"",last_name:x.last_name||e?.last_name||""};
-  }).sort((a,b)=>String(b.movement_date||"").localeCompare(String(a.movement_date||"")));
+
+/* =========================================================
+   MANUAL MOVEMENTS
+========================================================= */
+
+function buildManualMovements(
+  employeeList
+){
+
+  const em =
+    new Map();
+
+  employeeList.forEach(
+    e =>
+      em.set(
+        String(e.id),
+        e
+      )
+  );
+
+
+  extraMovements =
+    extraMovements.map(
+      x => {
+
+        const e =
+          em.get(
+            String(
+              x.employee_id
+            )
+          );
+
+
+        const employee =
+          e ||
+          {
+            first_name:
+              x.first_name || "",
+
+            last_name:
+              x.last_name || "",
+
+            grade:
+              x.grade || "",
+
+            employee_number:
+              x.employee_number || ""
+          };
+
+
+        return {
+
+          id:
+            "manual-" +
+            x.id,
+
+          dbId:
+            x.id,
+
+          employee_id:
+            x.employee_id ||
+            null,
+
+          employee,
+
+          movement_type:
+            x.movement_type ||
+            x.type ||
+            "أخرى",
+
+          movement_date:
+            x.movement_date ||
+            x.date ||
+            null,
+
+          grade:
+            x.grade ||
+            e?.grade ||
+            "",
+
+          institution:
+            x.institution ||
+            "",
+
+          notes:
+            x.notes ||
+            "",
+
+          readOnly:false,
+
+          source:"manual",
+
+          first_name:
+            x.first_name ||
+            e?.first_name ||
+            "",
+
+          last_name:
+            x.last_name ||
+            e?.last_name ||
+            ""
+
+        };
+
+      }
+    );
+
 }
+
+
+/* =========================================================
+   ASSIGNMENTS -> AUTOMATIC MOVEMENTS
+========================================================= */
+
+function buildAssignmentMovements(
+  employeeList,
+  assignments
+){
+
+  const em =
+    new Map();
+
+  employeeList.forEach(
+    e =>
+      em.set(
+        String(e.id),
+        e
+      )
+  );
+
+
+  assignmentMovements =
+    assignments
+      .map(
+        a => {
+
+          const e =
+            em.get(
+              String(
+                a.employee_id
+              )
+            );
+
+
+          if(!e)
+            return null;
+
+
+          const assignmentType =
+            String(
+              a.assignment_type ||
+              ""
+            ).trim();
+
+
+          let movementType = "";
+
+
+          if(
+            assignmentType ===
+            "انتداب"
+          ){
+
+            movementType =
+              "انتداب";
+
+          }
+
+          else if(
+            assignmentType ===
+            "تحت التصرف"
+          ){
+
+            movementType =
+              "تحت التصرف";
+
+          }
+
+          else{
+
+            return null;
+
+          }
+
+
+          const institution =
+            a.receiving_institution ||
+            a.institution ||
+            "";
+
+
+          const movementDate =
+            a.start_date ||
+            null;
+
+
+          if(!movementDate)
+            return null;
+
+
+          return {
+
+            id:
+              "assignment-" +
+              a.id,
+
+            dbId:
+              a.id,
+
+            employee_id:
+              a.employee_id,
+
+            employee:e,
+
+            movement_type:
+              movementType,
+
+            movement_date:
+              movementDate,
+
+            grade:
+              e.grade ||
+              "",
+
+            institution,
+
+            notes:
+              a.notes ||
+              "",
+
+            readOnly:true,
+
+            source:"assignment",
+
+            assignment_direction:
+              a.assignment_direction ||
+              "",
+
+            assignment_id:
+              a.id
+
+          };
+
+        }
+      )
+      .filter(Boolean);
+
+}
+
+
+/* =========================================================
+   COMBINE
+========================================================= */
+
+function combineMovements(){
+
+  allMovements = [
+
+    ...extraMovements,
+
+    ...assignmentMovements
+
+  ];
+
+
+  allMovements.sort(
+    (a,b) =>
+      String(
+        b.movement_date || ""
+      )
+      .localeCompare(
+        String(
+          a.movement_date || ""
+        )
+      )
+  );
+
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
 function populateFilters(){
-  const years=new Set();const now=new Date().getFullYear();years.add(now);allMovements.forEach(m=>{const y=yearOf(m.movement_date);if(y)years.add(y)});
-  const ys=[...years].sort((a,b)=>b-a);const ysel=$("yearFilter");const old=ysel.value;ysel.innerHTML='<option value="all">كل السنوات</option>'+ys.map(y=>`<option value="${y}">${formatYear(y)}</option>`).join("");ysel.value=ys.includes(Number(old))?old:String(now);
-  const types=[...new Set(allMovements.map(m=>m.movement_type).filter(Boolean))];$("typeFilter").innerHTML='<option value="all">كل الحركات</option>'+types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join("");
-  const grades=[...new Set(allMovements.map(m=>m.grade).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),"ar"));$("gradeFilter").innerHTML='<option value="all">كل الرتب</option>'+grades.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join("");
+
+  const years =
+    new Set();
+
+  const now =
+    new Date()
+      .getFullYear();
+
+  years.add(now);
+
+
+  allMovements.forEach(
+    m => {
+
+      const y =
+        yearOf(
+          m.movement_date
+        );
+
+      if(y)
+        years.add(y);
+
+    }
+  );
+
+
+  const ys =
+    [...years]
+      .sort(
+        (a,b) =>
+          b-a
+      );
+
+
+  const ysel =
+    $("yearFilter");
+
+  const old =
+    ysel.value;
+
+
+  ysel.innerHTML =
+
+    '<option value="all">كل السنوات</option>' +
+
+    ys
+      .map(
+        y =>
+          `<option value="${y}">
+            ${formatYear(y)}
+          </option>`
+      )
+      .join("");
+
+
+  if(
+    old === "all"
+  ){
+
+    ysel.value =
+      String(now);
+
+  }
+
+  else if(
+    ys.includes(
+      Number(old)
+    )
+  ){
+
+    ysel.value =
+      old;
+
+  }
+
+  else{
+
+    ysel.value =
+      String(now);
+
+  }
+
+
+  const types =
+    [
+      ...new Set(
+        allMovements
+          .map(
+            m =>
+              m.movement_type
+          )
+          .filter(Boolean)
+      )
+    ];
+
+
+  $("typeFilter").innerHTML =
+
+    '<option value="all">كل الحركات</option>' +
+
+    types
+      .map(
+        t =>
+          `<option value="${esc(t)}">
+            ${esc(t)}
+          </option>`
+      )
+      .join("");
+
+
+  const grades =
+    [
+      ...new Set(
+        allMovements
+          .map(
+            m =>
+              m.grade
+          )
+          .filter(Boolean)
+      )
+    ]
+    .sort(
+      (a,b) =>
+        String(a)
+          .localeCompare(
+            String(b),
+            "ar"
+          )
+    );
+
+
+  $("gradeFilter").innerHTML =
+
+    '<option value="all">كل الرتب</option>' +
+
+    grades
+      .map(
+        g =>
+          `<option value="${esc(g)}">
+            ${esc(g)}
+          </option>`
+      )
+      .join("");
+
 }
+
+
+function updateSelectedYearBadge(){
+
+  const value =
+    $("yearFilter")
+      .value;
+
+  $("selectedYearBadge")
+    .innerHTML = `
+
+      <i data-lucide="calendar-days"></i>
+
+      ${
+        value === "all"
+          ? "كل السنوات"
+          : "السنة " + esc(value)
+      }
+
+    `;
+
+  lucide.createIcons();
+
+}
+
 
 function applyFilters(){
-  const year=$("yearFilter").value,search=norm($("searchFilter").value),type=$("typeFilter").value,grade=$("gradeFilter").value;
-  filteredMovements=allMovements.filter(m=>{
-    if(year!=="all"&&yearOf(m.movement_date)!==Number(year))return false;
-    if(type!=="all"&&m.movement_type!==type)return false;
-    if(grade!=="all"&&m.grade!==grade)return false;
-    if(search){const hay=norm(employeeName(m.employee))+" "+norm(m.employee?.employee_number)+" "+norm(m.grade);if(!hay.includes(search))return false}
-    return true;
-  });
-  renderStats();renderTable();
+
+  const year =
+    $("yearFilter")
+      .value;
+
+  const search =
+    norm(
+      $("searchFilter")
+        .value
+    );
+
+  const type =
+    $("typeFilter")
+      .value;
+
+  const grade =
+    $("gradeFilter")
+      .value;
+
+
+  filteredMovements =
+    allMovements.filter(
+      m => {
+
+        if(
+          year !== "all" &&
+          yearOf(
+            m.movement_date
+          ) !== Number(year)
+        )
+          return false;
+
+
+        if(
+          type !== "all" &&
+          m.movement_type !== type
+        )
+          return false;
+
+
+        if(
+          grade !== "all" &&
+          m.grade !== grade
+        )
+          return false;
+
+
+        if(search){
+
+          const hay =
+            norm(
+              employeeName(
+                m.employee
+              )
+            ) +
+            " " +
+            norm(
+              m.employee
+                ?.employee_number
+            ) +
+            " " +
+            norm(
+              m.grade
+            );
+
+
+          if(
+            !hay.includes(
+              search
+            )
+          )
+            return false;
+
+        }
+
+
+        return true;
+
+      }
+    );
+
+
+  renderStats();
+
+  renderTable();
+
+  updateSelectedYearBadge();
+
 }
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
 function renderStats(){
-  const c=t=>filteredMovements.filter(m=>m.movement_type===t).length;
-  $("totalCount").textContent=formatNumber(filteredMovements.length);
-  $("hireCount").textContent=formatNumber(c("توظيف"));
-  $("resignCount").textContent=formatNumber(c("استقالة"));
-  $("retireCount").textContent=formatNumber(c("إحالة على التقاعد"));
-  $("otherCount").textContent=formatNumber(filteredMovements.filter(m=>!["توظيف","استقالة","إحالة على التقاعد"].includes(m.movement_type)).length);
-  $("resultCount").textContent=formatNumber(filteredMovements.length)+" حركة";
-  const y=$("yearFilter").value;$("printSummary").innerHTML=`الفترة: <b>${y==="all"?"كل السنوات":formatYear(y)}</b> &nbsp; | &nbsp; عدد الحركات: <b>${formatNumber(filteredMovements.length)}</b> &nbsp; | &nbsp; تاريخ الاستخراج: <b>${formatDate(new Date().toISOString().slice(0,10))}</b> &nbsp; | &nbsp; الساعة: <b>${new Intl.DateTimeFormat("ar-DZ-u-nu-latn",{hour:"2-digit",minute:"2-digit"}).format(new Date())}</b>`;
+
+  const countType =
+    type =>
+      filteredMovements
+        .filter(
+          m =>
+            m.movement_type ===
+            type
+        )
+        .length;
+
+
+  $("totalCount")
+    .textContent =
+    formatNumber(
+      filteredMovements.length
+    );
+
+
+  $("hireCount")
+    .textContent =
+    formatNumber(
+      countType("توظيف")
+    );
+
+
+  $("resignCount")
+    .textContent =
+    formatNumber(
+      countType("استقالة")
+    );
+
+
+  $("retireCount")
+    .textContent =
+    formatNumber(
+      countType(
+        "إحالة على التقاعد"
+      )
+    );
+
+
+  $("otherCount")
+    .textContent =
+    formatNumber(
+      filteredMovements
+        .filter(
+          m =>
+            ![
+              "توظيف",
+              "استقالة",
+              "إحالة على التقاعد"
+            ]
+            .includes(
+              m.movement_type
+            )
+        )
+        .length
+    );
+
+
+  $("resultCount")
+    .textContent =
+    formatNumber(
+      filteredMovements.length
+    ) +
+    " حركة";
+
+
+  const y =
+    $("yearFilter")
+      .value;
+
+
+  $("printSummary")
+    .innerHTML = `
+
+      الفترة:
+      <b>
+        ${
+          y === "all"
+            ? "كل السنوات"
+            : esc(y)
+        }
+      </b>
+
+      &nbsp; | &nbsp;
+
+      عدد الحركات:
+      <b>
+        ${formatNumber(
+          filteredMovements.length
+        )}
+      </b>
+
+      &nbsp; | &nbsp;
+
+      تاريخ الاستخراج:
+      <b>
+        ${formatDate(
+          new Date()
+            .toISOString()
+            .slice(0,10)
+        )}
+      </b>
+
+    `;
+
 }
+
+
+/* =========================================================
+   TABLE
+========================================================= */
 
 function renderTable(){
-  const body=$("tableBody");if(!filteredMovements.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><i data-lucide="inbox"></i><div>لا توجد حركات مطابقة للمعايير المحددة.</div></div></td></tr>';lucide.createIcons();return}
-  body.innerHTML=filteredMovements.map((m,i)=>`<tr><td>${formatNumber(i+1)}</td><td><b>${esc(employeeName(m.employee))}</b></td><td>${esc(m.employee?.employee_number||"—")}</td><td>${esc(m.grade||m.employee?.grade||"—")}</td><td><span class="badge ${typeBadge(m.movement_type)}">${esc(m.movement_type)}</span></td><td>${formatDate(m.movement_date)}</td><td>${esc(m.institution||"—")}</td><td class="no-print"><div class="actions"><button class="mini edit-btn" data-id="${esc(m.dbId)}" title="تعديل"><i data-lucide="pencil"></i></button><button class="mini delete-btn" data-id="${esc(m.dbId)}" title="حذف"><i data-lucide="trash-2"></i></button></div></td></tr>`).join("");
+
+  const body =
+    $("tableBody");
+
+
+  if(
+    !filteredMovements.length
+  ){
+
+    body.innerHTML = `
+
+      <tr>
+
+        <td colspan="8">
+
+          <div class="empty">
+
+            <div class="empty-icon">
+              <i data-lucide="inbox"></i>
+            </div>
+
+            <strong>
+              لا توجد حركات مطابقة
+            </strong>
+
+            <span>
+              لم يتم العثور على حركات
+              وفق معايير البحث المحددة.
+            </span>
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    lucide.createIcons();
+
+    return;
+
+  }
+
+
+  body.innerHTML =
+    filteredMovements
+      .map(
+        (m,i) => {
+
+          const isAuto =
+            m.source ===
+            "assignment";
+
+
+          const employee =
+            m.employee ||
+            {};
+
+
+          const institution =
+            m.institution ||
+            "—";
+
+
+          const sourceHtml =
+            isAuto
+
+              ? `
+                <div class="badge-source">
+                  <span class="source-dot dot-auto"></span>
+                  حركة آلية من سجل الوضعيات
+                </div>
+              `
+
+              : `
+                <div class="badge-source">
+                  <span class="source-dot dot-manual"></span>
+                  حركة مسجلة يدويًا
+                </div>
+              `;
+
+
+          const actionsHtml =
+            isAuto
+
+              ? `
+                <span class="readonly-label">
+                  <i data-lucide="lock"></i>
+                  تلقائية
+                </span>
+              `
+
+              : `
+                <div class="actions">
+
+                  <button
+                    class="mini edit-btn"
+                    data-id="${esc(m.dbId)}"
+                    title="تعديل"
+                  >
+                    <i data-lucide="pencil"></i>
+                  </button>
+
+                  <button
+                    class="mini delete delete-btn"
+                    data-id="${esc(m.dbId)}"
+                    title="حذف"
+                  >
+                    <i data-lucide="trash-2"></i>
+                  </button>
+
+                </div>
+              `;
+
+
+          return `
+
+            <tr>
+
+              <td>
+                ${formatNumber(i+1)}
+              </td>
+
+
+              <td>
+
+                <div class="employee-cell">
+
+                  <div class="employee-avatar">
+                    ${esc(
+                      employeeInitials(
+                        employee
+                      )
+                    )}
+                  </div>
+
+                  <div class="employee-info">
+
+                    <strong>
+                      ${esc(
+                        employeeName(
+                          employee
+                        )
+                      )}
+                    </strong>
+
+                    <small>
+                      ${
+                        isAuto
+                          ? "حركة مرتبطة بالوضعية"
+                          : "حركة فعلية مسجلة"
+                      }
+                    </small>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <td class="number-cell">
+                ${esc(
+                  employee.employee_number ||
+                  "—"
+                )}
+              </td>
+
+
+              <td>
+                ${esc(
+                  m.grade ||
+                  employee.grade ||
+                  "—"
+                )}
+              </td>
+
+
+              <td>
+
+                <span class="badge ${
+                  typeBadge(
+                    m.movement_type
+                  )
+                }">
+
+                  ${esc(
+                    m.movement_type
+                  )}
+
+                </span>
+
+                ${sourceHtml}
+
+              </td>
+
+
+              <td class="date-cell">
+                ${formatDate(
+                  m.movement_date
+                )}
+              </td>
+
+
+              <td class="institution-cell">
+                ${esc(
+                  institution
+                )}
+              </td>
+
+
+              <td class="no-print">
+                ${actionsHtml}
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      )
+      .join("");
+
+
   lucide.createIcons();
-  body.querySelectorAll(".edit-btn").forEach(b=>b.onclick=()=>openEdit(b.dataset.id));body.querySelectorAll(".delete-btn").forEach(b=>b.onclick=()=>deleteMovement(b.dataset.id));
+
+
+  body
+    .querySelectorAll(
+      ".edit-btn"
+    )
+    .forEach(
+      b =>
+        b.onclick =
+          () =>
+            openEdit(
+              b.dataset.id
+            )
+    );
+
+
+  body
+    .querySelectorAll(
+      ".delete-btn"
+    )
+    .forEach(
+      b =>
+        b.onclick =
+          () =>
+            deleteMovement(
+              b.dataset.id
+            )
+    );
+
 }
 
-function openModal(){$("modalBack").classList.remove("hidden");lucide.createIcons()}
-function closeModal(){$("modalBack").classList.add("hidden");editingId=null;$("modalError").classList.add("hidden")}
-function fillTypeOptions(selected=""){$("movementTypeInput").innerHTML='<option value="">اختر نوع الحركة</option>'+MANUAL_TYPES.map(t=>`<option value="${esc(t)}" ${t===selected?"selected":""}>${esc(t)}</option>`).join("")}
-function openAdd(){editingId=null;$("modalTitle").textContent="إضافة حركة موظف";fillTypeOptions();$("firstNameInput").value="";$("lastNameInput").value="";$("movementDateInput").value=new Date().toISOString().slice(0,10);$("gradeInput").value="";$("institutionInput").value="";$("notesInput").value="";$("modalError").classList.add("hidden");openModal()}
-function openEdit(id){const m=extraMovements.find(x=>String(x.id)===String(id));if(!m)return;editingId=id;$("modalTitle").textContent="تعديل حركة موظف";fillTypeOptions(m.movement_type||m.type||"");const e=employees.find(x=>String(x.id)===String(m.employee_id));$("firstNameInput").value=m.first_name||e?.first_name||"";$("lastNameInput").value=m.last_name||e?.last_name||"";$("movementDateInput").value=(m.movement_date||m.date||"").slice(0,10);$("gradeInput").value=m.grade||e?.grade||"";$("institutionInput").value=m.institution||"";$("notesInput").value=m.notes||"";openModal()}
-async function saveMovement(){
-  const first_name=$("firstNameInput").value.trim(),last_name=$("lastNameInput").value.trim(),grade=$("gradeInput").value.trim(),movement_type=$("movementTypeInput").value,movement_date=$("movementDateInput").value;
-  if(!first_name||!last_name||!grade||!movement_type||!movement_date){$("modalError").textContent="يرجى استكمال الاسم واللقب والرتبة ونوع الحركة وتاريخها.";$("modalError").classList.remove("hidden");return}
-  const payload={employee_id:null,first_name,last_name,grade,movement_type,movement_date,institution:$("institutionInput").value.trim(),notes:$("notesInput").value.trim(),created_by:currentUser.id};
-  $("saveBtn").disabled=true;
-  try{let result;if(editingId){delete payload.created_by;result=await db.from("employee_movements").update(payload).eq("id",editingId)}else{result=await db.from("employee_movements").insert(payload)}if(result.error)throw result.error;closeModal();showToast(editingId?"تم تعديل الحركة بنجاح":"تمت إضافة الحركة بنجاح","success");await loadAll()}
-  catch(e){$("modalError").textContent="تعذر حفظ الحركة: "+(e.message||e);$("modalError").classList.remove("hidden")}
-  finally{$("saveBtn").disabled=false}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModal(){
+
+  $("modalBack")
+    .classList
+    .remove("hidden");
+
+  lucide.createIcons();
+
 }
-async function deleteMovement(id){if(!confirm("هل تريد حذف هذه الحركة نهائيًا؟"))return;try{const {error}=await db.from("employee_movements").delete().eq("id",id);if(error)throw error;showToast("تم حذف الحركة نهائيًا","success");await loadAll()}catch(e){showToast("تعذر حذف الحركة: "+(e.message||e),"error")}}
+
+
+function closeModal(){
+
+  $("modalBack")
+    .classList
+    .add("hidden");
+
+  editingId = null;
+
+  $("modalError")
+    .classList
+    .add("hidden");
+
+}
+
+
+function fillTypeOptions(
+  selected=""
+){
+
+  $("movementTypeInput")
+    .innerHTML =
+
+      '<option value="">اختر نوع الحركة</option>' +
+
+      MANUAL_TYPES
+        .map(
+          t =>
+            `
+            <option
+              value="${esc(t)}"
+              ${
+                t === selected
+                  ? "selected"
+                  : ""
+              }
+            >
+              ${esc(t)}
+            </option>
+            `
+        )
+        .join("");
+
+}
+
+
+function openAdd(){
+
+  editingId = null;
+
+  $("modalTitle")
+    .textContent =
+    "إضافة حركة موظف";
+
+
+  fillTypeOptions();
+
+
+  $("firstNameInput")
+    .value = "";
+
+  $("lastNameInput")
+    .value = "";
+
+  $("movementDateInput")
+    .value =
+    new Date()
+      .toISOString()
+      .slice(0,10);
+
+  $("gradeInput")
+    .value = "";
+
+  $("institutionInput")
+    .value = "";
+
+  $("notesInput")
+    .value = "";
+
+
+  $("modalError")
+    .classList
+    .add("hidden");
+
+
+  openModal();
+
+}
+
+
+function openEdit(id){
+
+  const m =
+    extraMovements.find(
+      x =>
+        String(x.id) ===
+        String(id)
+    );
+
+
+  if(!m)
+    return;
+
+
+  editingId =
+    id;
+
+
+  $("modalTitle")
+    .textContent =
+    "تعديل حركة موظف";
+
+
+  fillTypeOptions(
+    m.movement_type ||
+    m.type ||
+    ""
+  );
+
+
+  const e =
+    employees.find(
+      x =>
+        String(x.id) ===
+        String(
+          m.employee_id
+        )
+    );
+
+
+  $("firstNameInput")
+    .value =
+    m.first_name ||
+    e?.first_name ||
+    "";
+
+
+  $("lastNameInput")
+    .value =
+    m.last_name ||
+    e?.last_name ||
+    "";
+
+
+  $("movementDateInput")
+    .value =
+    (
+      m.movement_date ||
+      m.date ||
+      ""
+    )
+    .slice(0,10);
+
+
+  $("gradeInput")
+    .value =
+    m.grade ||
+    e?.grade ||
+    "";
+
+
+  $("institutionInput")
+    .value =
+    m.institution ||
+    "";
+
+
+  $("notesInput")
+    .value =
+    m.notes ||
+    "";
+
+
+  $("modalError")
+    .classList
+    .add("hidden");
+
+
+  openModal();
+
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+async function saveMovement(){
+
+  const first_name =
+    $("firstNameInput")
+      .value
+      .trim();
+
+  const last_name =
+    $("lastNameInput")
+      .value
+      .trim();
+
+  const grade =
+    $("gradeInput")
+      .value
+      .trim();
+
+  const movement_type =
+    $("movementTypeInput")
+      .value;
+
+  const movement_date =
+    $("movementDateInput")
+      .value;
+
+
+  if(
+    !first_name ||
+    !last_name ||
+    !grade ||
+    !movement_type ||
+    !movement_date
+  ){
+
+    $("modalError")
+      .textContent =
+      "يرجى استكمال الاسم واللقب والرتبة ونوع الحركة وتاريخها.";
+
+    $("modalError")
+      .classList
+      .remove("hidden");
+
+    return;
+
+  }
+
+
+  const payload = {
+
+    employee_id:null,
+
+    first_name,
+
+    last_name,
+
+    grade,
+
+    movement_type,
+
+    movement_date,
+
+    institution:
+      $("institutionInput")
+        .value
+        .trim(),
+
+    notes:
+      $("notesInput")
+        .value
+        .trim(),
+
+    created_by:
+      currentUser.id
+
+  };
+
+
+  $("saveBtn")
+    .disabled = true;
+
+
+  try{
+
+    let result;
+
+
+    if(editingId){
+
+      delete payload.created_by;
+
+
+      result =
+        await db
+          .from(
+            "employee_movements"
+          )
+          .update(
+            payload
+          )
+          .eq(
+            "id",
+            editingId
+          );
+
+    }
+
+    else{
+
+      result =
+        await db
+          .from(
+            "employee_movements"
+          )
+          .insert(
+            payload
+          );
+
+    }
+
+
+    if(result.error)
+      throw result.error;
+
+
+    const wasEditing =
+      !!editingId;
+
+
+    closeModal();
+
+
+    showToast(
+      wasEditing
+        ? "تم تعديل الحركة بنجاح"
+        : "تمت إضافة الحركة بنجاح",
+      "success"
+    );
+
+
+    await loadAll();
+
+  }
+
+  catch(e){
+
+    $("modalError")
+      .textContent =
+      "تعذر حفظ الحركة: " +
+      (e.message || e);
+
+
+    $("modalError")
+      .classList
+      .remove("hidden");
+
+  }
+
+  finally{
+
+    $("saveBtn")
+      .disabled = false;
+
+  }
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function deleteMovement(
+  id
+){
+
+  if(
+    !confirm(
+      "هل تريد حذف هذه الحركة نهائيًا؟"
+    )
+  )
+    return;
+
+
+  try{
+
+    const {
+      error
+    } =
+      await db
+        .from(
+          "employee_movements"
+        )
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+
+    if(error)
+      throw error;
+
+
+    showToast(
+      "تم حذف الحركة نهائيًا",
+      "success"
+    );
+
+
+    await loadAll();
+
+  }
+
+  catch(e){
+
+    showToast(
+      "تعذر حذف الحركة: " +
+      (e.message || e),
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   EXCEL
+========================================================= */
 
 function exportExcel(){
-  if(!filteredMovements.length){showToast("لا توجد بيانات لتصديرها","error");return}
-  const rows=filteredMovements.map((m,i)=>({"الرقم":i+1,"اسم الموظف":employeeName(m.employee),"الرقم الوظيفي":m.employee?.employee_number||"","الرتبة":m.grade||m.employee?.grade||"","نوع الحركة":m.movement_type,"تاريخ الحركة":formatDate(m.movement_date),"المؤسسة / الجهة":m.institution||"","المصدر":"حركة مسجلة","ملاحظات":m.notes||""}));
-  const ws=XLSX.utils.json_to_sheet(rows);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"حصيلة الحركة");const y=$("yearFilter").value;XLSX.writeFile(wb,`حصيلة-حركة-الموظفين-${y}.xlsx`)
-}
-function printReport(){window.print()}
 
-$("loginBtn").onclick=login;$("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login()});$("logoutBtn").onclick=async()=>{await db.auth.signOut();location.reload()};$("refreshBtn").onclick=loadAll;$("addBtn").onclick=openAdd;$("closeModal").onclick=closeModal;$("cancelBtn").onclick=closeModal;$("saveBtn").onclick=saveMovement;$("printBtn").onclick=printReport;$("excelBtn").onclick=exportExcel;$("yearFilter").onchange=applyFilters;$("typeFilter").onchange=applyFilters;$("gradeFilter").onchange=applyFilters;$("searchFilter").oninput=applyFilters;$("clearFilters").onclick=()=>{$("yearFilter").value=String(new Date().getFullYear());$("searchFilter").value="";$("typeFilter").value="all";$("gradeFilter").value="all";applyFilters()};
-$("menuBtn").onclick=()=>{$("sidebar").classList.toggle("open");$("sideOverlay").classList.toggle("hidden")};$("sideOverlay").onclick=()=>{$("sidebar").classList.remove("open");$("sideOverlay").classList.add("hidden")};
-window.addEventListener("afterprint",()=>{});
+  if(
+    !filteredMovements.length
+  ){
+
+    showToast(
+      "لا توجد بيانات لتصديرها",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const rows =
+    filteredMovements.map(
+      (m,i) => ({
+
+        "الرقم":
+          i+1,
+
+        "اسم الموظف":
+          employeeName(
+            m.employee
+          ),
+
+        "الرقم الوظيفي":
+          m.employee
+            ?.employee_number ||
+          "",
+
+        "الرتبة":
+          m.grade ||
+          m.employee?.grade ||
+          "",
+
+        "نوع الحركة":
+          m.movement_type,
+
+        "تاريخ الحركة":
+          formatDate(
+            m.movement_date
+          ),
+
+        "المؤسسة / الجهة":
+          m.institution ||
+          "",
+
+        "مصدر الحركة":
+          m.source ===
+          "assignment"
+            ? "آلية من سجل الوضعيات"
+            : "حركة مسجلة يدويًا",
+
+        "ملاحظات":
+          m.notes ||
+          ""
+
+      })
+    );
+
+
+  const ws =
+    XLSX.utils
+      .json_to_sheet(
+        rows
+      );
+
+
+  const wb =
+    XLSX.utils
+      .book_new();
+
+
+  XLSX.utils
+    .book_append_sheet(
+      wb,
+      ws,
+      "حصيلة الحركة"
+    );
+
+
+  const y =
+    $("yearFilter")
+      .value;
+
+
+  XLSX.writeFile(
+    wb,
+    `حصيلة-حركة-الموظفين-${y}.xlsx`
+  );
+
+}
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+function printReport(){
+
+  window.print();
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+$("loginBtn")
+  .onclick =
+  login;
+
+
+$("loginPassword")
+  .addEventListener(
+    "keydown",
+    e => {
+
+      if(
+        e.key === "Enter"
+      )
+        login();
+
+    }
+  );
+
+
+$("logoutBtn")
+  .onclick =
+  async () => {
+
+    await db.auth
+      .signOut();
+
+    location.reload();
+
+  };
+
+
+$("refreshBtn")
+  .onclick =
+  loadAll;
+
+
+$("addBtn")
+  .onclick =
+  openAdd;
+
+
+$("closeModal")
+  .onclick =
+  closeModal;
+
+
+$("cancelBtn")
+  .onclick =
+  closeModal;
+
+
+$("saveBtn")
+  .onclick =
+  saveMovement;
+
+
+$("printBtn")
+  .onclick =
+  printReport;
+
+
+$("excelBtn")
+  .onclick =
+  exportExcel;
+
+
+$("yearFilter")
+  .onchange =
+  applyFilters;
+
+
+$("typeFilter")
+  .onchange =
+  applyFilters;
+
+
+$("gradeFilter")
+  .onchange =
+  applyFilters;
+
+
+$("searchFilter")
+  .oninput =
+  applyFilters;
+
+
+$("clearFilters")
+  .onclick =
+  () => {
+
+    $("yearFilter")
+      .value =
+      String(
+        new Date()
+          .getFullYear()
+      );
+
+    $("searchFilter")
+      .value = "";
+
+    $("typeFilter")
+      .value = "all";
+
+    $("gradeFilter")
+      .value = "all";
+
+    applyFilters();
+
+  };
+
+
+$("menuBtn")
+  .onclick =
+  () => {
+
+    $("sidebar")
+      .classList
+      .toggle("open");
+
+    $("sideOverlay")
+      .classList
+      .toggle("hidden");
+
+  };
+
+
+$("sideOverlay")
+  .onclick =
+  () => {
+
+    $("sidebar")
+      .classList
+      .remove("open");
+
+    $("sideOverlay")
+      .classList
+      .add("hidden");
+
+  };
+
+
+$("modalBack")
+  .addEventListener(
+    "click",
+    e => {
+
+      if(
+        e.target ===
+        $("modalBack")
+      )
+        closeModal();
+
+    }
+  );
+
+
+window.addEventListener(
+  "keydown",
+  e => {
+
+    if(
+      e.key === "Escape" &&
+      !$("modalBack")
+        .classList
+        .contains("hidden")
+    ){
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
 init();
+
 </script>
+
 </body>
 </html>

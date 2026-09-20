@@ -104,8 +104,9 @@ main{flex:1;padding:24px;min-width:0}.page-head{display:flex;align-items:flex-st
     <div class="modal-body">
       <div id="modalError" class="login-error hidden"></div>
       <div class="modal-grid">
-        <div class="field full"><label>الاسم واللقب *</label><select id="employeeInput"><option value="">اختر الموظف</option></select></div>
-        <div class="field"><label>الرتبة</label><input id="gradeInput" type="text" readonly placeholder="تظهر تلقائيًا حسب الموظف"></div>
+        <div class="field"><label>الاسم *</label><input id="firstNameInput" type="text" placeholder="اسم الموظف"></div>
+        <div class="field"><label>اللقب *</label><input id="lastNameInput" type="text" placeholder="لقب الموظف"></div>
+        <div class="field"><label>الرتبة *</label><input id="gradeInput" type="text" placeholder="رتبة الموظف"></div>
         <div class="field"><label>الوضعية *</label><select id="movementTypeInput"></select></div>
         <div class="field"><label>تاريخ الوضعية *</label><input id="movementDateInput" type="date"></div>
         <div class="field"><label>المؤسسة / الجهة</label><input id="institutionInput" type="text" placeholder="اختياري"></div>
@@ -135,11 +136,11 @@ const MANUAL_TYPES=["توظيف","استقالة","إحالة على التقا�
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replace(/[&<>'"]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[s]));}
 function showToast(msg,type=""){const t=$("toast");t.textContent=msg;t.className="toast "+type;t.classList.remove("hidden");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.add("hidden"),3500)}
-function arabicDigits(v){return String(v??"").replace(/[0-9]/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);}
-function formatNumber(v){return arabicDigits(Number(v||0).toLocaleString("en-US"));}
-function formatDate(v){if(!v)return "—";const d=new Date(v+((String(v).length===10)?"T00:00:00":""));if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("ar-DZ",{day:"2-digit",month:"long",year:"numeric"}).format(d);}
-function formatDateTime(v){if(!v)return "—";const d=new Date(v);if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("ar-DZ",{dateStyle:"medium",timeStyle:"short"}).format(d);}
-function formatYear(v){return arabicDigits(v);}
+function arabicDigits(v){return String(v??"").replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d));}
+function formatNumber(v){return Number(v||0).toLocaleString("en-US");}
+function formatDate(v){if(!v)return "—";const d=new Date(v+((String(v).length===10)?"T00:00:00":""));if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("ar-DZ-u-nu-latn",{day:"2-digit",month:"long",year:"numeric"}).format(d);}
+function formatDateTime(v){if(!v)return "—";const d=new Date(v);if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("ar-DZ-u-nu-latn",{dateStyle:"medium",timeStyle:"short"}).format(d);}
+function formatYear(v){return String(v??"").replace(/[^0-9]/g,"");}
 function yearOf(v){if(!v)return null;const y=Number(String(v).slice(0,4));return Number.isFinite(y)?y:null;}
 function norm(v){return String(v??"").trim().toLowerCase();}
 function employeeName(e){return [e?.first_name,e?.last_name].filter(Boolean).join(" ").trim()||"بدون اسم";}
@@ -194,16 +195,15 @@ function buildMovements(){
   const em=employeeMap();
   allMovements=extraMovements.map(x=>{
     const e=em.get(String(x.employee_id));
-    return {id:"manual-"+x.id,dbId:x.id,employee_id:x.employee_id,employee:e,movement_type:x.movement_type||x.type||"أخرى",movement_date:x.movement_date||x.date||null,grade:x.grade||e?.grade||"",institution:x.institution||"",notes:x.notes||"",readOnly:false};
-  }).filter(m=>m.employee_id!=null).sort((a,b)=>String(b.movement_date||"").localeCompare(String(a.movement_date||"")));
+    const employee=e||{first_name:x.first_name||"",last_name:x.last_name||"",grade:x.grade||"",employee_number:x.employee_number||""};
+    return {id:"manual-"+x.id,dbId:x.id,employee_id:x.employee_id||null,employee,movement_type:x.movement_type||x.type||"أخرى",movement_date:x.movement_date||x.date||null,grade:x.grade||e?.grade||"",institution:x.institution||"",notes:x.notes||"",readOnly:false,first_name:x.first_name||e?.first_name||"",last_name:x.last_name||e?.last_name||""};
+  }).sort((a,b)=>String(b.movement_date||"").localeCompare(String(a.movement_date||"")));
 }
-
 function populateFilters(){
   const years=new Set();const now=new Date().getFullYear();years.add(now);allMovements.forEach(m=>{const y=yearOf(m.movement_date);if(y)years.add(y)});
   const ys=[...years].sort((a,b)=>b-a);const ysel=$("yearFilter");const old=ysel.value;ysel.innerHTML='<option value="all">كل السنوات</option>'+ys.map(y=>`<option value="${y}">${formatYear(y)}</option>`).join("");ysel.value=ys.includes(Number(old))?old:String(now);
   const types=[...new Set(allMovements.map(m=>m.movement_type).filter(Boolean))];$("typeFilter").innerHTML='<option value="all">كل الحركات</option>'+types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join("");
   const grades=[...new Set(allMovements.map(m=>m.grade).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),"ar"));$("gradeFilter").innerHTML='<option value="all">كل الرتب</option>'+grades.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join("");
-  const es=[...employees].sort((a,b)=>employeeName(a).localeCompare(employeeName(b),"ar"));$("employeeInput").innerHTML='<option value="">اختر الموظف</option>'+es.map(e=>`<option value="${esc(e.id)}">${esc(employeeName(e))} — ${esc(e.employee_number||"بدون رقم")}</option>`).join("");
 }
 
 function applyFilters(){
@@ -225,12 +225,12 @@ function renderStats(){
   $("retireCount").textContent=formatNumber(c("إحالة على التقاعد"));
   $("otherCount").textContent=formatNumber(filteredMovements.filter(m=>!["توظيف","استقالة","إحالة على التقاعد"].includes(m.movement_type)).length);
   $("resultCount").textContent=formatNumber(filteredMovements.length)+" حركة";
-  const y=$("yearFilter").value;$("printSummary").innerHTML=`الفترة: <b>${y==="all"?"كل السنوات":formatYear(y)}</b> &nbsp; | &nbsp; عدد الحركات: <b>${formatNumber(filteredMovements.length)}</b> &nbsp; | &nbsp; تاريخ الاستخراج: <b>${formatDate(new Date().toISOString().slice(0,10))}</b> &nbsp; | &nbsp; الساعة: <b>${new Intl.DateTimeFormat("ar-DZ",{hour:"2-digit",minute:"2-digit"}).format(new Date())}</b>`;
+  const y=$("yearFilter").value;$("printSummary").innerHTML=`الفترة: <b>${y==="all"?"كل السنوات":formatYear(y)}</b> &nbsp; | &nbsp; عدد الحركات: <b>${formatNumber(filteredMovements.length)}</b> &nbsp; | &nbsp; تاريخ الاستخراج: <b>${formatDate(new Date().toISOString().slice(0,10))}</b> &nbsp; | &nbsp; الساعة: <b>${new Intl.DateTimeFormat("ar-DZ-u-nu-latn",{hour:"2-digit",minute:"2-digit"}).format(new Date())}</b>`;
 }
 
 function renderTable(){
   const body=$("tableBody");if(!filteredMovements.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><i data-lucide="inbox"></i><div>لا توجد حركات مطابقة للمعايير المحددة.</div></div></td></tr>';lucide.createIcons();return}
-  body.innerHTML=filteredMovements.map((m,i)=>`<tr><td>${formatNumber(i+1)}</td><td><b>${esc(employeeName(m.employee))}</b></td><td>${esc(arabicDigits(m.employee?.employee_number||"—"))}</td><td>${esc(m.grade||m.employee?.grade||"—")}</td><td><span class="badge ${typeBadge(m.movement_type)}">${esc(m.movement_type)}</span></td><td>${formatDate(m.movement_date)}</td><td>${esc(m.institution||"—")}</td><td class="no-print"><div class="actions"><button class="mini edit-btn" data-id="${esc(m.dbId)}" title="تعديل"><i data-lucide="pencil"></i></button><button class="mini delete-btn" data-id="${esc(m.dbId)}" title="حذف"><i data-lucide="trash-2"></i></button></div></td></tr>`).join("");
+  body.innerHTML=filteredMovements.map((m,i)=>`<tr><td>${formatNumber(i+1)}</td><td><b>${esc(employeeName(m.employee))}</b></td><td>${esc(m.employee?.employee_number||"—")}</td><td>${esc(m.grade||m.employee?.grade||"—")}</td><td><span class="badge ${typeBadge(m.movement_type)}">${esc(m.movement_type)}</span></td><td>${formatDate(m.movement_date)}</td><td>${esc(m.institution||"—")}</td><td class="no-print"><div class="actions"><button class="mini edit-btn" data-id="${esc(m.dbId)}" title="تعديل"><i data-lucide="pencil"></i></button><button class="mini delete-btn" data-id="${esc(m.dbId)}" title="حذف"><i data-lucide="trash-2"></i></button></div></td></tr>`).join("");
   lucide.createIcons();
   body.querySelectorAll(".edit-btn").forEach(b=>b.onclick=()=>openEdit(b.dataset.id));body.querySelectorAll(".delete-btn").forEach(b=>b.onclick=()=>deleteMovement(b.dataset.id));
 }
@@ -238,13 +238,12 @@ function renderTable(){
 function openModal(){$("modalBack").classList.remove("hidden");lucide.createIcons()}
 function closeModal(){$("modalBack").classList.add("hidden");editingId=null;$("modalError").classList.add("hidden")}
 function fillTypeOptions(selected=""){$("movementTypeInput").innerHTML='<option value="">اختر نوع الحركة</option>'+MANUAL_TYPES.map(t=>`<option value="${esc(t)}" ${t===selected?"selected":""}>${esc(t)}</option>`).join("")}
-function openAdd(){editingId=null;$("modalTitle").textContent="إضافة حركة موظف";fillTypeOptions();$("employeeInput").value="";$("movementDateInput").value=new Date().toISOString().slice(0,10);$("gradeInput").value="";$("institutionInput").value="";$("notesInput").value="";$("modalError").classList.add("hidden");openModal()}
-function openEdit(id){const m=extraMovements.find(x=>String(x.id)===String(id));if(!m)return;editingId=id;$("modalTitle").textContent="تعديل حركة موظف";fillTypeOptions(m.movement_type||m.type||"");$("employeeInput").value=m.employee_id||"";$("movementDateInput").value=(m.movement_date||m.date||"").slice(0,10);const e=employees.find(x=>String(x.id)===String(m.employee_id));$("gradeInput").value=m.grade||e?.grade||"";$("institutionInput").value=m.institution||"";$("notesInput").value=m.notes||"";openModal()}
-function syncGrade(){const e=employees.find(x=>String(x.id)===String($("employeeInput").value));$("gradeInput").value=e?.grade||""}
+function openAdd(){editingId=null;$("modalTitle").textContent="إضافة حركة موظف";fillTypeOptions();$("firstNameInput").value="";$("lastNameInput").value="";$("movementDateInput").value=new Date().toISOString().slice(0,10);$("gradeInput").value="";$("institutionInput").value="";$("notesInput").value="";$("modalError").classList.add("hidden");openModal()}
+function openEdit(id){const m=extraMovements.find(x=>String(x.id)===String(id));if(!m)return;editingId=id;$("modalTitle").textContent="تعديل حركة موظف";fillTypeOptions(m.movement_type||m.type||"");const e=employees.find(x=>String(x.id)===String(m.employee_id));$("firstNameInput").value=m.first_name||e?.first_name||"";$("lastNameInput").value=m.last_name||e?.last_name||"";$("movementDateInput").value=(m.movement_date||m.date||"").slice(0,10);$("gradeInput").value=m.grade||e?.grade||"";$("institutionInput").value=m.institution||"";$("notesInput").value=m.notes||"";openModal()}
 async function saveMovement(){
-  const employee_id=$("employeeInput").value,movement_type=$("movementTypeInput").value,movement_date=$("movementDateInput").value;
-  if(!employee_id||!movement_type||!movement_date){$("modalError").textContent="يرجى استكمال الموظف ونوع الحركة وتاريخ الحركة.";$("modalError").classList.remove("hidden");return}
-  const payload={employee_id,movement_type,movement_date,grade:$("gradeInput").value.trim(),institution:$("institutionInput").value.trim(),notes:$("notesInput").value.trim(),created_by:currentUser.id};
+  const first_name=$("firstNameInput").value.trim(),last_name=$("lastNameInput").value.trim(),grade=$("gradeInput").value.trim(),movement_type=$("movementTypeInput").value,movement_date=$("movementDateInput").value;
+  if(!first_name||!last_name||!grade||!movement_type||!movement_date){$("modalError").textContent="يرجى استكمال الاسم واللقب والرتبة ونوع الحركة وتاريخها.";$("modalError").classList.remove("hidden");return}
+  const payload={employee_id:null,first_name,last_name,grade,movement_type,movement_date,institution:$("institutionInput").value.trim(),notes:$("notesInput").value.trim(),created_by:currentUser.id};
   $("saveBtn").disabled=true;
   try{let result;if(editingId){delete payload.created_by;result=await db.from("employee_movements").update(payload).eq("id",editingId)}else{result=await db.from("employee_movements").insert(payload)}if(result.error)throw result.error;closeModal();showToast(editingId?"تم تعديل الحركة بنجاح":"تمت إضافة الحركة بنجاح","success");await loadAll()}
   catch(e){$("modalError").textContent="تعذر حفظ الحركة: "+(e.message||e);$("modalError").classList.remove("hidden")}
@@ -254,12 +253,12 @@ async function deleteMovement(id){if(!confirm("هل تريد حذف هذه ال�
 
 function exportExcel(){
   if(!filteredMovements.length){showToast("لا توجد بيانات لتصديرها","error");return}
-  const rows=filteredMovements.map((m,i)=>({"الرقم":arabicDigits(i+1),"اسم الموظف":employeeName(m.employee),"الرقم الوظيفي":arabicDigits(m.employee?.employee_number||""),"الرتبة":m.grade||m.employee?.grade||"","نوع الحركة":m.movement_type,"تاريخ الحركة":formatDate(m.movement_date),"المؤسسة / الجهة":m.institution||"","المصدر":"حركة مسجلة","ملاحظات":m.notes||""}));
+  const rows=filteredMovements.map((m,i)=>({"الرقم":i+1,"اسم الموظف":employeeName(m.employee),"الرقم الوظيفي":m.employee?.employee_number||"","الرتبة":m.grade||m.employee?.grade||"","نوع الحركة":m.movement_type,"تاريخ الحركة":formatDate(m.movement_date),"المؤسسة / الجهة":m.institution||"","المصدر":"حركة مسجلة","ملاحظات":m.notes||""}));
   const ws=XLSX.utils.json_to_sheet(rows);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"حصيلة الحركة");const y=$("yearFilter").value;XLSX.writeFile(wb,`حصيلة-حركة-الموظفين-${y}.xlsx`)
 }
 function printReport(){window.print()}
 
-$("loginBtn").onclick=login;$("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login()});$("logoutBtn").onclick=async()=>{await db.auth.signOut();location.reload()};$("refreshBtn").onclick=loadAll;$("addBtn").onclick=openAdd;$("closeModal").onclick=closeModal;$("cancelBtn").onclick=closeModal;$("saveBtn").onclick=saveMovement;$("printBtn").onclick=printReport;$("excelBtn").onclick=exportExcel;$("employeeInput").onchange=syncGrade;$("yearFilter").onchange=applyFilters;$("typeFilter").onchange=applyFilters;$("gradeFilter").onchange=applyFilters;$("searchFilter").oninput=applyFilters;$("clearFilters").onclick=()=>{$("yearFilter").value=String(new Date().getFullYear());$("searchFilter").value="";$("typeFilter").value="all";$("gradeFilter").value="all";applyFilters()};
+$("loginBtn").onclick=login;$("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login()});$("logoutBtn").onclick=async()=>{await db.auth.signOut();location.reload()};$("refreshBtn").onclick=loadAll;$("addBtn").onclick=openAdd;$("closeModal").onclick=closeModal;$("cancelBtn").onclick=closeModal;$("saveBtn").onclick=saveMovement;$("printBtn").onclick=printReport;$("excelBtn").onclick=exportExcel;$("yearFilter").onchange=applyFilters;$("typeFilter").onchange=applyFilters;$("gradeFilter").onchange=applyFilters;$("searchFilter").oninput=applyFilters;$("clearFilters").onclick=()=>{$("yearFilter").value=String(new Date().getFullYear());$("searchFilter").value="";$("typeFilter").value="all";$("gradeFilter").value="all";applyFilters()};
 $("menuBtn").onclick=()=>{$("sidebar").classList.toggle("open");$("sideOverlay").classList.toggle("hidden")};$("sideOverlay").onclick=()=>{$("sidebar").classList.remove("open");$("sideOverlay").classList.add("hidden")};
 window.addEventListener("afterprint",()=>{});
 init();

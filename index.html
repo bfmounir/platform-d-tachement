@@ -166,6 +166,22 @@ button{
     line-height:1.7;
 }
 
+.login-diagnostic{
+    display:none;
+    margin-top:14px;
+    border-radius:14px;
+    padding:13px 14px;
+    font-size:12px;
+    line-height:1.8;
+    border:1px solid #dfe6ec;
+    background:#f8fafc;
+}
+.login-diagnostic.show{display:block;}
+.login-diagnostic.success{background:#edf9f4;border-color:#cfeede;color:#1f7655;}
+.login-diagnostic.error{background:#fff0f1;border-color:#f4cdd2;color:#9f3f4b;}
+.login-diagnostic.warning{background:#fff7e9;border-color:#f3dfb7;color:#8b611c;}
+.login-diagnostic.info{background:#eef8fb;border-color:#d2ebf1;color:#246d7c;}
+
 .login-note{
     background:#f4fbfd;
     border:1px solid #d8f0f5;
@@ -1685,6 +1701,8 @@ tbody tr:hover td{
 
         </form>
 
+        <div id="loginDiagnostic" class="login-diagnostic"></div>
+
         <div class="login-note">
             <i data-lucide="info" size="15"></i>
             هذه المنصة مخصصة للإدارة والمسؤول عن متابعة
@@ -2987,285 +3005,187 @@ function showToast(message,type="success"){
    تسجيل الدخول
 ========================================================= */
 
+function showLoginDiagnostic(message,type="info",details=""){
+    const box=document.getElementById("loginDiagnostic");
+    if(!box)return;
+    box.className=`login-diagnostic show ${type}`;
+    box.innerHTML=`<strong>${esc(message)}</strong>${details?`<div style="margin-top:5px">${esc(details)}</div>`:""}`;
+    if(window.lucide)lucide.createIcons();
+}
+
+function clearLoginDiagnostic(){
+    const box=document.getElementById("loginDiagnostic");
+    if(!box)return;
+    box.className="login-diagnostic";
+    box.textContent="";
+}
+
+function isRlsError(error){
+    const text=String(error?.message||error||"").toLowerCase();
+    return error?.code==="42501" || text.includes("row-level security") || text.includes("permission denied") || text.includes("rls") || text.includes("not authorized");
+}
+
+function isConfigError(error){
+    const text=String(error?.message||error||"").toLowerCase();
+    return text.includes("invalid api key") || text.includes("apikey") || text.includes("supabase") && (text.includes("url") || text.includes("key") || text.includes("initialize"));
+}
+
+function isInvalidCredentials(error){
+    const text=String(error?.message||error||"").toLowerCase();
+    return text.includes("invalid login credentials") || text.includes("invalid credentials");
+}
+
 async function checkSession(){
-
     try{
-
-        const {
-            data,
-            error
-        } =
-            await db.auth.getSession();
-
-        if(error){
-            throw error;
-        }
-
+        const {data,error}=await db.auth.getSession();
+        if(error)throw error;
         if(data.session){
-
-            currentUser =
-                data.session.user;
-
-            const admin =
-                await checkAdmin();
-
+            currentUser=data.session.user;
+            const admin=await checkAdmin();
             if(admin){
-
                 showApp();
-
                 await loadAll();
-
             }else{
-
                 await db.auth.signOut();
-
                 showLogin();
-
-                showToast(
-                    "هذا الحساب غير مخول للدخول إلى لوحة المسؤول.",
-                    "error"
-                );
-
+                showLoginDiagnostic("الحساب مسجل في Supabase لكنه ليس حساب Admin.","warning","تم تسجيل الدخول بنجاح، لكن لا يوجد دور admin لهذا المستخدم في جدول user_roles.");
             }
-
         }else{
-
             showLogin();
-
         }
-
     }catch(error){
-
-        console.error(error);
-
+        console.error("فحص الجلسة:",error);
         showLogin();
-
-        handleSupabaseError(error);
-
+        showLoginDiagnostic(classifySupabaseError(error).title,"error",classifySupabaseError(error).details);
     }finally{
-
-        document
-            .getElementById("loadingScreen")
-            .classList.add("hidden");
-
+        document.getElementById("loadingScreen").classList.add("hidden");
     }
 }
 
 async function checkAdmin(){
-
-    if(!currentUser){
-        return false;
-    }
-
-    const {
-        data,
-        error
-    } =
-        await db
-            .from("user_roles")
-            .select("role")
-            .eq("user_id",currentUser.id)
-            .eq("role","admin")
-            .maybeSingle();
-
+    if(!currentUser)return false;
+    const {data,error}=await db.from("user_roles").select("role").eq("user_id",currentUser.id).eq("role","admin").maybeSingle();
     if(error){
-
-        console.error(error);
-
-        if(
-            String(error.message || "")
-                .toLowerCase()
-                .includes("api key")
-        ){
-            throw error;
+        console.error("فحص صلاحية Admin:",error);
+        if(isRlsError(error)){
+            throw new Error("RLS_ADMIN_CHECK: "+(error.message||"رفض Row Level Security قراءة user_roles"));
         }
-
-        return false;
+        throw error;
     }
-
     return !!data;
 }
 
 function showLogin(){
-
-    document
-        .getElementById("loginScreen")
-        .classList.remove("hidden");
-
-    document
-        .getElementById("app")
-        .classList.add("hidden");
-
-    document
-        .getElementById("adminEmail")
-        .textContent = "—";
-
+    document.getElementById("loginScreen").classList.remove("hidden");
+    document.getElementById("app").classList.add("hidden");
+    document.getElementById("adminEmail").textContent="—";
+    clearLoginDiagnostic();
     lucide.createIcons();
 }
 
 function showApp(){
-
-    document
-        .getElementById("loginScreen")
-        .classList.add("hidden");
-
-    document
-        .getElementById("app")
-        .classList.remove("hidden");
-
-    document
-        .getElementById("adminEmail")
-        .textContent =
-        currentUser?.email || "المسؤول";
-
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+    document.getElementById("adminEmail").textContent=currentUser?.email||"المسؤول";
+    clearLoginDiagnostic();
     lucide.createIcons();
 }
 
-document
-    .getElementById("loginForm")
-    .addEventListener(
-        "submit",
-        async function(e){
-
-            e.preventDefault();
-
-            const email =
-                document
-                    .getElementById("loginEmail")
-                    .value
-                    .trim();
-
-            const password =
-                document
-                    .getElementById("loginPassword")
-                    .value;
-
-            try{
-
-                const {
-                    data,
-                    error
-                } =
-                    await db.auth.signInWithPassword({
-                        email,
-                        password
-                    });
-
-                if(error){
-                    throw error;
-                }
-
-                currentUser =
-                    data.user;
-
-                const admin =
-                    await checkAdmin();
-
-                if(!admin){
-
-                    await db.auth.signOut();
-
-                    throw new Error(
-                        "هذا الحساب ليس حساب مسؤول."
-                    );
-
-                }
-
-                showApp();
-
-                await loadAll();
-
-                showToast(
-                    "تم تسجيل الدخول بنجاح."
-                );
-
-            }catch(error){
-
-                console.error(error);
-
-                showToast(
-                    friendlyError(error),
-                    "error"
-                );
-
-            }
-
+document.getElementById("loginForm").addEventListener("submit",async function(e){
+    e.preventDefault();
+    clearLoginDiagnostic();
+    const email=document.getElementById("loginEmail").value.trim();
+    const password=document.getElementById("loginPassword").value;
+    const button=this.querySelector('button[type="submit"]');
+    button.disabled=true;
+    button.innerHTML='<i data-lucide="loader-circle" size="17"></i> جارٍ التحقق...';
+    if(window.lucide)lucide.createIcons();
+    try{
+        if(!email||!password){
+            showLoginDiagnostic("أدخل البريد الإلكتروني وكلمة المرور أولًا.","warning");
+            return;
         }
-    );
+        const {data,error}=await db.auth.signInWithPassword({email,password});
+        if(error){
+            if(isConfigError(error))throw new Error("CONFIG: "+error.message);
+            if(isInvalidCredentials(error)){
+                showLoginDiagnostic("Supabase رفض بيانات تسجيل الدخول.","error","هذه الحالة لا تسمح للمتصفح بالتمييز بأمان بين حساب غير موجود وكلمة مرور غير صحيحة؛ Supabase يعيد رسالة موحدة للحالتين. إذا كان الحساب موجودًا في Auth فالمشكلة في بيانات الدخول، وإذا كان غير موجود في Auth فلن يمكن تأكيد ذلك من الواجهة.");
+                return;
+            }
+            if(String(error.message||"").toLowerCase().includes("email not confirmed")){
+                showLoginDiagnostic("الحساب موجود، لكن البريد الإلكتروني غير مؤكد.","warning","تحقق من حالة Confirmed في Supabase Authentication.");
+                return;
+            }
+            throw error;
+        }
+        if(!data?.user)throw new Error("AUTH_NO_USER: لم يعُد Supabase مستخدمًا بعد نجاح تسجيل الدخول.");
+        currentUser=data.user;
+        try{
+            const admin=await checkAdmin();
+            if(!admin){
+                await db.auth.signOut();
+                currentUser=null;
+                showLoginDiagnostic("الحساب موجود وصحيح، لكنه ليس Admin.","warning","تم التحقق من البريد وكلمة المرور بنجاح، لكن الحساب لا يملك الدور admin في جدول user_roles.");
+                return;
+            }
+        }catch(error){
+            await db.auth.signOut();
+            currentUser=null;
+            if(String(error.message||"").startsWith("RLS_ADMIN_CHECK:")){
+                showLoginDiagnostic("تم تسجيل الدخول، لكن فحص صلاحية Admin فشل بسبب RLS.","error",error.message.replace("RLS_ADMIN_CHECK: ","")||"تحقق من سياسات Row Level Security لجدول user_roles.");
+                return;
+            }
+            throw error;
+        }
+        showApp();
+        const loaded=await loadAll();
+        if(loaded===false){
+            const {data:sessionData}=await db.auth.getSession();
+            const lastError="تعذر تحميل بيانات المنصة بعد نجاح تسجيل الدخول. إذا ظهرت رسالة RLS فهذا يعني أن سياسات Row Level Security تمنع قراءة الجداول المطلوبة.";
+            if(sessionData?.session){
+                await db.auth.signOut();
+            }
+            currentUser=null;
+            showLogin();
+            showLoginDiagnostic("تم تسجيل الدخول، لكن تحميل بيانات المنصة فشل.","error",lastError);
+            return;
+        }
+        showToast("تم تسجيل الدخول بنجاح.");
+    }catch(error){
+        console.error("خطأ تسجيل الدخول:",error);
+        const info=classifySupabaseError(error);
+        showLoginDiagnostic(info.title,"error",info.details);
+    }finally{
+        button.disabled=false;
+        button.innerHTML='<i data-lucide="log-in" size="17"></i> دخول المسؤول';
+        if(window.lucide)lucide.createIcons();
+    }
+});
 
 async function logout(){
-
     await db.auth.signOut();
-
-    currentUser = null;
-
+    currentUser=null;
     showLogin();
-
 }
 
-/* =========================================================
-   معالجة الأخطاء
-========================================================= */
+function classifySupabaseError(error){
+    const raw=String(error?.message||error||"");
+    const lower=raw.toLowerCase();
+    if(lower.startsWith("config:")||isConfigError(error))return {title:"مشكلة في إعدادات Supabase.",details:"تعذر استخدام عنوان المشروع أو مفتاح الاتصال. راجع SUPABASE_URL و SUPABASE_KEY داخل هذا الملف."};
+    if(lower.includes("rls_admin_check:")||isRlsError(error))return {title:"مشكلة Supabase / RLS.",details:raw.replace(/^RLS_ADMIN_CHECK:\s*/i,"")||"رفض Row Level Security العملية. راجع سياسات جدول user_roles والجداول التي تُحمّل بعد الدخول."};
+    if(lower.includes("email not confirmed"))return {title:"الحساب موجود لكن البريد الإلكتروني غير مؤكد.",details:"يجب تأكيد البريد من Supabase Authentication قبل السماح بالدخول."};
+    if(isInvalidCredentials(error))return {title:"البريد الإلكتروني أو كلمة المرور غير صحيحة.",details:"Supabase يستخدم رسالة موحدة لهذه الحالة، لذلك لا يمكن للواجهة تأكيد أن الحساب غير موجود بدلًا من كون كلمة المرور خاطئة."};
+    if(lower.includes("too many requests"))return {title:"تم تجاوز عدد محاولات تسجيل الدخول.",details:"انتظر قليلًا ثم أعد المحاولة."};
+    return {title:"حدث خطأ أثناء الاتصال بـ Supabase.",details:raw||"خطأ غير معروف."};
+}
 
 function friendlyError(error){
-
-    const message =
-        String(
-            error?.message ||
-            error ||
-            ""
-        );
-
-    const lower =
-        message.toLowerCase();
-
-    if(
-        lower.includes("invalid api key") ||
-        lower.includes("apikey")
-    ){
-
-        return "مفتاح الاتصال بـ Supabase غير صالح. تأكد من نسخ Publishable Key الحالي من إعدادات المشروع.";
-
-    }
-
-    if(
-        lower.includes("invalid login credentials")
-    ){
-
-        return "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
-
-    }
-
-    if(
-        lower.includes("row-level security") ||
-        lower.includes("rls")
-    ){
-
-        return "لا توجد صلاحية كافية لتنفيذ هذه العملية.";
-
-    }
-
-    if(
-        lower.includes("duplicate")
-    ){
-
-        return "هذه البيانات موجودة مسبقًا.";
-
-    }
-
-    return message ||
-        "حدث خطأ غير متوقع.";
-
+    return classifySupabaseError(error).title;
 }
 
 function handleSupabaseError(error){
-
     console.error(error);
-
-    showToast(
-        friendlyError(error),
-        "error"
-    );
+    showToast(friendlyError(error),"error");
 }
 
 /* =========================================================
@@ -3384,6 +3304,7 @@ async function loadAll(){
             assignmentsResult.data || [];
 
         renderAll();
+        return true;
 
     }catch(error){
 
@@ -3393,6 +3314,8 @@ async function loadAll(){
             friendlyError(error),
             "error"
         );
+
+        return false;
 
     }
 }

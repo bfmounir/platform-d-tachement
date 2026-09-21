@@ -2288,6 +2288,8 @@ let extraMovements = [];
 
 let assignmentMovements = [];
 
+let excludedAssignmentEmployeeIds = new Set();
+
 let allMovements = [];
 
 let filteredMovements = [];
@@ -2536,8 +2538,7 @@ function typeBadge(type){
       "نقل",
       "الإلحاق",
       "إعادة الإدماج",
-      "العودة إلى العمل",
-      "انتداب"
+      "العودة إلى العمل"
     ].includes(type)
   )
     return "b-blue";
@@ -2557,8 +2558,7 @@ function typeBadge(type){
   if(
     [
       "الإحالة على الاستيداع",
-      "الوضع في الخدمة الوطنية",
-      "تحت التصرف"
+      "الوضع في الخدمة الوطنية"
     ].includes(type)
   )
     return "b-purple";
@@ -2887,15 +2887,19 @@ async function loadAll(){
       movementsResult.data || [];
 
 
+    buildActiveAssignmentExclusions(
+      assignmentsResult.data || []
+    );
+
+
     buildManualMovements(
       employees
     );
 
 
-    buildAssignmentMovements(
-      employees,
-      assignmentsResult.data || []
-    );
+    // الانتداب والوضع تحت التصرف لهما صفحة مستقلة،
+    // لذلك لا يتم عرضهما داخل حصيلة الحركات.
+    assignmentMovements = [];
 
 
     combineMovements();
@@ -2926,6 +2930,47 @@ async function loadAll(){
 
 
 /* =========================================================
+   EXCLUDE ACTIVE ASSIGNMENTS
+========================================================= */
+
+function buildActiveAssignmentExclusions(assignments){
+
+  excludedAssignmentEmployeeIds = new Set();
+
+  const today =
+    new Date()
+      .toISOString()
+      .slice(0,10);
+
+  (assignments || []).forEach(a => {
+
+    const type =
+      String(a.assignment_type || "").trim();
+
+    if(type !== "انتداب" && type !== "تحت التصرف")
+      return;
+
+    const start = a.start_date || "";
+    const end = a.end_date || "";
+    const indefinite = !!a.is_indefinite;
+
+    const active =
+      !!a.employee_id &&
+      start &&
+      start <= today &&
+      (indefinite || !end || end >= today);
+
+    if(active)
+      excludedAssignmentEmployeeIds.add(
+        String(a.employee_id)
+      );
+
+  });
+
+}
+
+
+/* =========================================================
    MANUAL MOVEMENTS
 ========================================================= */
 
@@ -2946,7 +2991,18 @@ function buildManualMovements(
 
 
   extraMovements =
-    extraMovements.map(
+    extraMovements
+      .filter(x => {
+
+        if(!x.employee_id)
+          return true;
+
+        return !excludedAssignmentEmployeeIds.has(
+          String(x.employee_id)
+        );
+
+      })
+      .map(
       x => {
 
         const e =
@@ -3182,9 +3238,7 @@ function combineMovements(){
 
   allMovements = [
 
-    ...extraMovements,
-
-    ...assignmentMovements
+    ...extraMovements
 
   ];
 
@@ -4076,6 +4130,23 @@ async function saveMovement(){
   const movement_date =
     $("movementDateInput")
       .value;
+
+
+  if(
+    movement_type === "انتداب" ||
+    movement_type === "تحت التصرف"
+  ){
+
+    $("modalError").textContent =
+      "الانتداب والوضع تحت التصرف لا يُسجلان من هذه الصفحة. يتم تسييرهما من صفحة الوضعيات المستقلة.";
+
+    $("modalError")
+      .classList
+      .remove("hidden");
+
+    return;
+
+  }
 
 
   if(

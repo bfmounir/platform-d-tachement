@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -788,10 +789,6 @@ main{
   display:inline-block;
 }
 
-.dot-auto{
-  background:var(--primary);
-}
-
 .dot-manual{
   background:var(--secondary);
 }
@@ -854,18 +851,6 @@ main{
 .mini.delete:hover{
   background:var(--danger-soft);
   color:var(--danger);
-}
-
-.readonly-label{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:6px 9px;
-  border-radius:8px;
-  background:#f5f7f8;
-  color:#7b8790;
-  font-size:9px;
-  font-weight:800;
 }
 
 .empty{
@@ -1554,8 +1539,6 @@ main{
 
 <div id="appView" class="app hidden">
 
-  <!-- TOPBAR -->
-
   <header class="topbar no-print">
 
     <div class="brand">
@@ -1603,42 +1586,28 @@ main{
 
   <div class="layout">
 
-    <!-- SIDEBAR -->
-
     <aside id="sidebar" class="sidebar no-print">
 
       <div class="side-title">
         القائمة الرئيسية
       </div>
 
-      <a
-        class="nav-item"
-        href="index.html"
-      >
+      <a class="nav-item" href="index.html">
         <i data-lucide="layout-dashboard"></i>
         <span>الرئيسية</span>
       </a>
 
-      <a
-        class="nav-item"
-        href="index.html#employees"
-      >
+      <a class="nav-item" href="index.html#employees">
         <i data-lucide="users"></i>
         <span>الموظفون</span>
       </a>
 
-      <a
-        class="nav-item"
-        href="index.html#assignments"
-      >
+      <a class="nav-item" href="index.html#assignments">
         <i data-lucide="arrow-left-right"></i>
         <span>الانتداب والوضع تحت التصرف</span>
       </a>
 
-      <a
-        class="nav-item active"
-        href="movements.html"
-      >
+      <a class="nav-item active" href="movements.html">
         <i data-lucide="bar-chart-3"></i>
         <span>حصيلة حركة الموظفين</span>
       </a>
@@ -1651,8 +1620,9 @@ main{
 
         <br>
 
-        هذه الصفحة تعتمد على الحركات الفعلية
-        المسجلة فقط.
+        هذه الصفحة تعتمد حصريًا على
+        الحركات الفعلية المسجلة في
+        جدول حركات الموظفين.
 
         <br>
 
@@ -1661,19 +1631,16 @@ main{
 
         <br>
 
-        كما يتم عرض الانتداب والوضع تحت التصرف
-        تلقائيًا من سجل الوضعيات.
+        الانتداب والوضع تحت التصرف
+        وإنهاؤهما لا تُسجل من هذه الصفحة،
+        وإنما تُسير من صفحة الوضعيات.
 
       </div>
 
     </aside>
 
 
-    <!-- MAIN -->
-
     <main>
-
-      <!-- PRINT HEADER -->
 
       <div class="print-only print-header">
 
@@ -1692,8 +1659,6 @@ main{
       </div>
 
 
-      <!-- PAGE HEADER -->
-
       <section class="page-head no-print">
 
         <div class="page-title-wrap">
@@ -1709,33 +1674,24 @@ main{
 
           <p>
             تسجيل ومتابعة الحركات الفعلية للموظفين
-            واستخراج الحصيلة السنوية حسب الوضعية المهنية.
+            واستخراج الحصيلة السنوية.
           </p>
 
         </div>
 
         <div class="head-actions">
 
-          <button
-            id="addBtn"
-            class="btn btn-primary"
-          >
+          <button id="addBtn" class="btn btn-primary">
             <i data-lucide="plus-circle"></i>
             إضافة حركة
           </button>
 
-          <button
-            id="printBtn"
-            class="btn btn-secondary"
-          >
+          <button id="printBtn" class="btn btn-secondary">
             <i data-lucide="printer"></i>
             طباعة / PDF
           </button>
 
-          <button
-            id="excelBtn"
-            class="btn btn-success"
-          >
+          <button id="excelBtn" class="btn btn-success">
             <i data-lucide="file-spreadsheet"></i>
             Excel
           </button>
@@ -1745,33 +1701,20 @@ main{
       </section>
 
 
-      <!-- PRINT SUMMARY -->
+      <div id="printSummary" class="print-only summary-line"></div>
 
-      <div
-        id="printSummary"
-        class="print-only summary-line"
-      ></div>
-
-
-      <!-- STATISTICS -->
 
       <section class="stats">
 
         <div class="stat">
 
-          <i
-            class="ico"
-            data-lucide="activity"
-          ></i>
+          <i class="ico" data-lucide="activity"></i>
 
           <div class="label">
             إجمالي الحركات
           </div>
 
-          <div
-            id="totalCount"
-            class="value"
-          >
+          <div id="totalCount" class="value">
             0
           </div>
 
@@ -1780,19 +1723,13 @@ main{
 
         <div class="stat">
 
-          <i
-            class="ico"
-            data-lucide="user-plus"
-          ></i>
+          <i class="ico" data-lucide="user-plus"></i>
 
           <div class="label">
             التوظيف
           </div>
 
-          <div
-            id="hireCount"
-            class="value"
-          >
+          <div id="hireCount" class="value">
             0
           </div>
 
@@ -1801,19 +1738,13 @@ main{
 
         <div class="stat">
 
-          <i
-            class="ico"
-            data-lucide="log-out"
-          ></i>
+          <i class="ico" data-lucide="log-out"></i>
 
           <div class="label">
             الاستقالة
           </div>
 
-          <div
-            id="resignCount"
-            class="value"
-          >
+          <div id="resignCount" class="value">
             0
           </div>
 
@@ -1822,19 +1753,13 @@ main{
 
         <div class="stat">
 
-          <i
-            class="ico"
-            data-lucide="clock-3"
-          ></i>
+          <i class="ico" data-lucide="clock-3"></i>
 
           <div class="label">
-            الإحالة على التقاعد
+            التقاعد
           </div>
 
-          <div
-            id="retireCount"
-            class="value"
-          >
+          <div id="retireCount" class="value">
             0
           </div>
 
@@ -1843,19 +1768,13 @@ main{
 
         <div class="stat">
 
-          <i
-            class="ico"
-            data-lucide="list"
-          ></i>
+          <i class="ico" data-lucide="list"></i>
 
           <div class="label">
             حركات أخرى
           </div>
 
-          <div
-            id="otherCount"
-            class="value"
-          >
+          <div id="otherCount" class="value">
             0
           </div>
 
@@ -1863,8 +1782,6 @@ main{
 
       </section>
 
-
-      <!-- FILTERS -->
 
       <section class="card filters no-print">
 
@@ -1882,10 +1799,7 @@ main{
 
           </div>
 
-          <div
-            id="selectedYearBadge"
-            class="filter-year"
-          >
+          <div id="selectedYearBadge" class="filter-year">
             <i data-lucide="calendar-days"></i>
             السنة الحالية
           </div>
@@ -1927,13 +1841,7 @@ main{
               نوع الحركة
             </label>
 
-            <select id="typeFilter">
-
-              <option value="all">
-                كل الحركات
-              </option>
-
-            </select>
+            <select id="typeFilter"></select>
 
           </div>
 
@@ -1944,23 +1852,14 @@ main{
               الرتبة
             </label>
 
-            <select id="gradeFilter">
-
-              <option value="all">
-                كل الرتب
-              </option>
-
-            </select>
+            <select id="gradeFilter"></select>
 
           </div>
 
 
           <div class="filter-action">
 
-            <button
-              id="clearFilters"
-              class="btn btn-light"
-            >
+            <button id="clearFilters" class="btn btn-light">
               <i data-lucide="rotate-ccw"></i>
               إعادة ضبط
             </button>
@@ -1971,8 +1870,6 @@ main{
 
       </section>
 
-
-      <!-- TABLE -->
 
       <section class="card">
 
@@ -2007,29 +1904,17 @@ main{
 
                 <th>#</th>
 
-                <th>
-                  الموظف
-                </th>
+                <th>الموظف</th>
 
-                <th>
-                  الرقم الوظيفي
-                </th>
+                <th>الرقم الوظيفي</th>
 
-                <th>
-                  الرتبة
-                </th>
+                <th>الرتبة</th>
 
-                <th>
-                  نوع الحركة
-                </th>
+                <th>نوع الحركة</th>
 
-                <th>
-                  تاريخها
-                </th>
+                <th>تاريخها</th>
 
-                <th>
-                  المؤسسة / الجهة
-                </th>
+                <th>المؤسسة / الجهة</th>
 
                 <th class="no-print">
                   إجراءات
@@ -2058,10 +1943,7 @@ main{
      MODAL
 ======================================================= -->
 
-<div
-  id="modalBack"
-  class="modal-back hidden no-print"
->
+<div id="modalBack" class="modal-back hidden no-print">
 
   <div class="modal">
 
@@ -2087,10 +1969,7 @@ main{
 
       </div>
 
-      <button
-        id="closeModal"
-        class="close"
-      >
+      <button id="closeModal" class="close">
         <i data-lucide="x"></i>
       </button>
 
@@ -2099,10 +1978,7 @@ main{
 
     <div class="modal-body">
 
-      <div
-        id="modalError"
-        class="login-error hidden"
-      ></div>
+      <div id="modalError" class="login-error hidden"></div>
 
 
       <div class="modal-grid">
@@ -2216,9 +2092,9 @@ main{
         </strong>
 
         تُسجّل هنا الحركات الفعلية فقط.
-        وجود الموظف في المنصة لا يُنشئ حركة توظيف تلقائيًا،
-        كما أن الانتداب والوضع تحت التصرف يُستخرجان تلقائيًا
-        من سجل الوضعيات ولا يحتاجان إلى إعادة إدخال.
+        وجود الموظف في جدول الموظفين لا يُنشئ حركة توظيف تلقائيًا.
+        كما أن الانتداب والوضع تحت التصرف وإنهاءهما
+        لا تُسجل من هذه الصفحة.
 
       </div>
 
@@ -2227,18 +2103,12 @@ main{
 
     <div class="modal-foot">
 
-      <button
-        id="saveBtn"
-        class="btn btn-primary"
-      >
+      <button id="saveBtn" class="btn btn-primary">
         <i data-lucide="save"></i>
         حفظ الحركة
       </button>
 
-      <button
-        id="cancelBtn"
-        class="btn btn-light"
-      >
+      <button id="cancelBtn" class="btn btn-light">
         إلغاء
       </button>
 
@@ -2249,12 +2119,7 @@ main{
 </div>
 
 
-<!-- TOAST -->
-
-<div
-  id="toast"
-  class="toast hidden"
-></div>
+<div id="toast" class="toast hidden"></div>
 
 
 <script>
@@ -2286,10 +2151,6 @@ let employees = [];
 
 let extraMovements = [];
 
-let assignmentMovements = [];
-
-let excludedAssignmentEmployeeIds = new Set();
-
 let allMovements = [];
 
 let filteredMovements = [];
@@ -2298,39 +2159,48 @@ let editingId = null;
 
 
 /* =========================================================
-   MANUAL MOVEMENT TYPES
+   DATABASE MOVEMENT TYPES
+   مطابق تمامًا لـ employee_movements_type_check
 ========================================================= */
 
-const MANUAL_TYPES = [
+const DATABASE_TYPES = [
 
-  "توظيف",
-  "استقالة",
-  "إحالة على التقاعد",
-  "ترقية",
-  "الترقية في الدرجة",
-  "الترقية في الرتبة",
-  "تحويل",
-  "نقل",
-  "إنهاء المهام",
+  "التوظيف",
+  "النقل",
+  "الاستقالة",
+  "الخدمة الوطنية",
   "الإحالة على الاستيداع",
-  "إعادة الإدماج",
-  "الإلحاق",
-  "الوضع في الخدمة الوطنية",
-  "العودة من الخدمة الوطنية",
-  "الوفاة",
-  "العزل",
-  "التسريح",
-  "الإنهاء النهائي لعلاقة العمل",
-  "التثبيت",
-  "التربص",
-  "العودة إلى العمل",
-  "التمديد",
-  "التكليف",
-  "تغيير الرتبة",
-  "تغيير الوضعية القانونية",
+  "الترسيم",
+  "فسخ العقد",
+  "اعتماد الأقدمية",
+  "الانتداب",
+  "الوضع تحت التصرف",
+  "إنهاء الانتداب",
+  "إنهاء الوضع تحت التصرف",
+  "التقاعد",
+  "العودة إلى المنصب",
   "أخرى"
 
 ];
+
+
+/* =========================================================
+   TYPES ALLOWED IN THIS PAGE
+========================================================= */
+
+const EXCLUDED_TYPES = new Set([
+
+  "الانتداب",
+  "الوضع تحت التصرف",
+  "إنهاء الانتداب",
+  "إنهاء الوضع تحت التصرف"
+
+]);
+
+
+const MOVEMENT_TYPES = DATABASE_TYPES.filter(
+  type => !EXCLUDED_TYPES.has(type)
+);
 
 
 /* =========================================================
@@ -2427,18 +2297,6 @@ function formatDate(v){
 }
 
 
-function formatYear(year){
-
-  const y = Number(year);
-
-  if(!Number.isFinite(y))
-    return "";
-
-  return String(y);
-
-}
-
-
 function yearOf(v){
 
   if(!v)
@@ -2499,58 +2357,32 @@ function employeeInitials(e){
 }
 
 
-function employeeMap(){
-
-  const m =
-    new Map();
-
-  employees.forEach(
-    e =>
-      m.set(
-        String(e.id),
-        e
-      )
-  );
-
-  return m;
-
-}
-
-
 function typeBadge(type){
 
-  if(type === "توظيف")
+  if(type === "التوظيف")
     return "b-green";
 
   if(
     [
-      "ترقية",
-      "الترقية في الدرجة",
-      "الترقية في الرتبة",
-      "تغيير الرتبة"
+      "الترسيم",
+      "اعتماد الأقدمية"
     ].includes(type)
   )
     return "b-gold";
 
   if(
     [
-      "تحويل",
-      "نقل",
-      "الإلحاق",
-      "إعادة الإدماج",
-      "العودة إلى العمل"
+      "النقل",
+      "العودة إلى المنصب"
     ].includes(type)
   )
     return "b-blue";
 
   if(
     [
-      "استقالة",
+      "الاستقالة",
       "الوفاة",
-      "إنهاء المهام",
-      "العزل",
-      "التسريح",
-      "الإنهاء النهائي لعلاقة العمل"
+      "فسخ العقد"
     ].includes(type)
   )
     return "b-red";
@@ -2558,7 +2390,7 @@ function typeBadge(type){
   if(
     [
       "الإحالة على الاستيداع",
-      "الوضع في الخدمة الوطنية"
+      "الخدمة الوطنية"
     ].includes(type)
   )
     return "b-purple";
@@ -2810,6 +2642,9 @@ function openApp(){
 
 /* =========================================================
    LOAD DATA
+   مهم:
+   هذه الصفحة تقرأ employee_movements فقط.
+   لا تقرأ assignments ولا تدمجها مع الحركات.
 ========================================================= */
 
 async function loadAll(){
@@ -2818,8 +2653,7 @@ async function loadAll(){
 
     const [
       employeesResult,
-      movementsResult,
-      assignmentsResult
+      movementsResult
     ] =
       await Promise.all([
 
@@ -2847,16 +2681,6 @@ async function loadAll(){
             {
               ascending:false
             }
-          ),
-
-        db
-          .from("assignments")
-          .select("*")
-          .order(
-            "start_date",
-            {
-              ascending:false
-            }
           )
 
       ]);
@@ -2874,12 +2698,6 @@ async function loadAll(){
       throw movementsResult.error;
 
 
-    if(
-      assignmentsResult.error
-    )
-      throw assignmentsResult.error;
-
-
     employees =
       employeesResult.data || [];
 
@@ -2887,28 +2705,13 @@ async function loadAll(){
       movementsResult.data || [];
 
 
-    buildActiveAssignmentExclusions(
-      assignmentsResult.data || []
-    );
-
-
-    buildManualMovements(
-      employees
-    );
-
-
-    // الانتداب والوضع تحت التصرف لهما صفحة مستقلة،
-    // لذلك لا يتم عرضهما داخل حصيلة الحركات.
-    assignmentMovements = [];
-
+    buildManualMovements();
 
     combineMovements();
 
     populateFilters();
 
     applyFilters();
-
-    updateSelectedYearBadge();
 
     lucide.createIcons();
 
@@ -2930,58 +2733,15 @@ async function loadAll(){
 
 
 /* =========================================================
-   EXCLUDE ACTIVE ASSIGNMENTS
+   BUILD MOVEMENTS
 ========================================================= */
 
-function buildActiveAssignmentExclusions(assignments){
-
-  excludedAssignmentEmployeeIds = new Set();
-
-  const today =
-    new Date()
-      .toISOString()
-      .slice(0,10);
-
-  (assignments || []).forEach(a => {
-
-    const type =
-      String(a.assignment_type || "").trim();
-
-    if(type !== "انتداب" && type !== "تحت التصرف")
-      return;
-
-    const start = a.start_date || "";
-    const end = a.end_date || "";
-    const indefinite = !!a.is_indefinite;
-
-    const active =
-      !!a.employee_id &&
-      start &&
-      start <= today &&
-      (indefinite || !end || end >= today);
-
-    if(active)
-      excludedAssignmentEmployeeIds.add(
-        String(a.employee_id)
-      );
-
-  });
-
-}
-
-
-/* =========================================================
-   MANUAL MOVEMENTS
-========================================================= */
-
-function buildManualMovements(
-  employeeList
-){
+function buildManualMovements(){
 
   const em =
     new Map();
 
-  employeeList.forEach(
+  employees.forEach(
     e =>
       em.set(
         String(e.id),
@@ -2992,240 +2752,122 @@ function buildManualMovements(
 
   extraMovements =
     extraMovements
-      .filter(x => {
-
-        if(!x.employee_id)
-          return true;
-
-        return !excludedAssignmentEmployeeIds.has(
-          String(x.employee_id)
-        );
-
-      })
-      .map(
-      x => {
-
-        const e =
-          em.get(
+      .filter(
+        x =>
+          MOVEMENT_TYPES.includes(
             String(
-              x.employee_id
-            )
-          );
-
-
-        const employee =
-          e ||
-          {
-            first_name:
-              x.first_name || "",
-
-            last_name:
-              x.last_name || "",
-
-            grade:
-              x.grade || "",
-
-            employee_number:
-              x.employee_number || ""
-          };
-
-
-        return {
-
-          id:
-            "manual-" +
-            x.id,
-
-          dbId:
-            x.id,
-
-          employee_id:
-            x.employee_id ||
-            null,
-
-          employee,
-
-          movement_type:
-            x.movement_type ||
-            x.type ||
-            "أخرى",
-
-          movement_date:
-            x.movement_date ||
-            x.date ||
-            null,
-
-          grade:
-            x.grade ||
-            e?.grade ||
-            "",
-
-          institution:
-            x.institution ||
-            "",
-
-          notes:
-            x.notes ||
-            "",
-
-          readOnly:false,
-
-          source:"manual",
-
-          first_name:
-            x.first_name ||
-            e?.first_name ||
-            "",
-
-          last_name:
-            x.last_name ||
-            e?.last_name ||
-            ""
-
-        };
-
-      }
-    );
-
-}
-
-
-/* =========================================================
-   ASSIGNMENTS -> AUTOMATIC MOVEMENTS
-========================================================= */
-
-function buildAssignmentMovements(
-  employeeList,
-  assignments
-){
-
-  const em =
-    new Map();
-
-  employeeList.forEach(
-    e =>
-      em.set(
-        String(e.id),
-        e
+              x.movement_type ||
+              x.type ||
+              ""
+            ).trim()
+          )
       )
-  );
-
-
-  assignmentMovements =
-    assignments
       .map(
-        a => {
+        x => {
 
           const e =
-            em.get(
-              String(
-                a.employee_id
-              )
-            );
+            x.employee_id
+              ? em.get(
+                  String(
+                    x.employee_id
+                  )
+                )
+              : null;
 
 
-          if(!e)
-            return null;
+          const employee = {
 
+            id:
+              e?.id ||
+              x.employee_id ||
+              null,
 
-          const assignmentType =
-            String(
-              a.assignment_type ||
+            first_name:
+              x.first_name ||
+              e?.first_name ||
+              "",
+
+            last_name:
+              x.last_name ||
+              e?.last_name ||
+              "",
+
+            grade:
+              x.grade ||
+              e?.grade ||
+              "",
+
+            employee_number:
+              x.employee_number ||
+              e?.employee_number ||
               ""
-            ).trim();
 
-
-          let movementType = "";
-
-
-          if(
-            assignmentType ===
-            "انتداب"
-          ){
-
-            movementType =
-              "انتداب";
-
-          }
-
-          else if(
-            assignmentType ===
-            "تحت التصرف"
-          ){
-
-            movementType =
-              "تحت التصرف";
-
-          }
-
-          else{
-
-            return null;
-
-          }
-
-
-          const institution =
-            a.receiving_institution ||
-            a.institution ||
-            "";
-
-
-          const movementDate =
-            a.start_date ||
-            null;
-
-
-          if(!movementDate)
-            return null;
+          };
 
 
           return {
 
             id:
-              "assignment-" +
-              a.id,
+              x.id,
 
             dbId:
-              a.id,
+              x.id,
 
             employee_id:
-              a.employee_id,
+              x.employee_id ||
+              null,
 
-            employee:e,
+            employee,
 
             movement_type:
-              movementType,
+              String(
+                x.movement_type ||
+                x.type ||
+                ""
+              ).trim(),
 
             movement_date:
-              movementDate,
+              x.movement_date ||
+              x.date ||
+              null,
 
             grade:
-              e.grade ||
+              x.grade ||
+              e?.grade ||
               "",
 
-            institution,
+            institution:
+              x.institution ||
+              "",
 
             notes:
-              a.notes ||
+              x.notes ||
               "",
 
-            readOnly:true,
+            source:
+              "manual",
 
-            source:"assignment",
+            readOnly:false,
 
-            assignment_direction:
-              a.assignment_direction ||
+            first_name:
+              x.first_name ||
+              e?.first_name ||
               "",
 
-            assignment_id:
-              a.id
+            last_name:
+              x.last_name ||
+              e?.last_name ||
+              "",
+
+            employee_number:
+              x.employee_number ||
+              e?.employee_number ||
+              ""
 
           };
 
         }
-      )
-      .filter(Boolean);
+      );
 
 }
 
@@ -3236,11 +2878,13 @@ function buildAssignmentMovements(
 
 function combineMovements(){
 
-  allMovements = [
+  /*
+    لا يوجد هنا أي دمج مع assignments.
+    كل حركة في الصفحة مصدرها employee_movements.
+  */
 
-    ...extraMovements
-
-  ];
+  allMovements =
+    [...extraMovements];
 
 
   allMovements.sort(
@@ -3312,24 +2956,19 @@ function populateFilters(){
       .map(
         y =>
           `<option value="${y}">
-            ${formatYear(y)}
+            ${y}
           </option>`
       )
       .join("");
 
 
   if(
-    old === "all"
-  ){
-
-    ysel.value =
-      String(now);
-
-  }
-
-  else if(
-    ys.includes(
-      Number(old)
+    old &&
+    (
+      old === "all" ||
+      ys.includes(
+        Number(old)
+      )
     )
   ){
 
@@ -3346,29 +2985,24 @@ function populateFilters(){
   }
 
 
-  const types =
-    [
-      ...new Set(
-        allMovements
-          .map(
-            m =>
-              m.movement_type
-          )
-          .filter(Boolean)
-      )
-    ];
-
+  /*
+    القائمة هنا ليست مبنية من بيانات عشوائية.
+    بل من نفس أنواع قاعدة البيانات المسموح بها
+    بعد استبعاد أنواع الانتداب والوضع تحت التصرف.
+  */
 
   $("typeFilter").innerHTML =
 
     '<option value="all">كل الحركات</option>' +
 
-    types
+    MOVEMENT_TYPES
       .map(
-        t =>
-          `<option value="${esc(t)}">
-            ${esc(t)}
-          </option>`
+        type =>
+          `
+          <option value="${esc(type)}">
+            ${esc(type)}
+          </option>
+          `
       )
       .join("");
 
@@ -3401,9 +3035,11 @@ function populateFilters(){
     grades
       .map(
         g =>
-          `<option value="${esc(g)}">
+          `
+          <option value="${esc(g)}">
             ${esc(g)}
-          </option>`
+          </option>
+          `
       )
       .join("");
 
@@ -3459,6 +3095,28 @@ function applyFilters(){
     allMovements.filter(
       m => {
 
+        /*
+          حماية إضافية:
+          حتى لو ظهرت قيمة مرتبطة بالانتداب في قاعدة البيانات،
+          لن تعرضها هذه الصفحة.
+        */
+
+        if(
+          EXCLUDED_TYPES.has(
+            m.movement_type
+          )
+        )
+          return false;
+
+
+        if(
+          !MOVEMENT_TYPES.includes(
+            m.movement_type
+          )
+        )
+          return false;
+
+
         if(
           year !== "all" &&
           yearOf(
@@ -3485,20 +3143,23 @@ function applyFilters(){
         if(search){
 
           const hay =
-            norm(
+            [
               employeeName(
                 m.employee
-              )
-            ) +
-            " " +
-            norm(
+              ),
+
               m.employee
-                ?.employee_number
-            ) +
-            " " +
-            norm(
-              m.grade
-            );
+                ?.employee_number,
+
+              m.grade,
+
+              m.movement_type,
+
+              m.institution
+
+            ]
+            .map(norm)
+            .join(" ");
 
 
           if(
@@ -3553,23 +3214,21 @@ function renderStats(){
   $("hireCount")
     .textContent =
     formatNumber(
-      countType("توظيف")
+      countType("التوظيف")
     );
 
 
   $("resignCount")
     .textContent =
     formatNumber(
-      countType("استقالة")
+      countType("الاستقالة")
     );
 
 
   $("retireCount")
     .textContent =
     formatNumber(
-      countType(
-        "إحالة على التقاعد"
-      )
+      countType("التقاعد")
     );
 
 
@@ -3580,9 +3239,9 @@ function renderStats(){
         .filter(
           m =>
             ![
-              "توظيف",
-              "استقالة",
-              "إحالة على التقاعد"
+              "التوظيف",
+              "الاستقالة",
+              "التقاعد"
             ]
             .includes(
               m.movement_type
@@ -3673,7 +3332,7 @@ function renderTable(){
             </strong>
 
             <span>
-              لم يتم العثور على حركات
+              لم يتم العثور على حركات فعلية
               وفق معايير البحث المحددة.
             </span>
 
@@ -3697,11 +3356,6 @@ function renderTable(){
       .map(
         (m,i) => {
 
-          const isAuto =
-            m.source ===
-            "assignment";
-
-
           const employee =
             m.employee ||
             {};
@@ -3712,55 +3366,29 @@ function renderTable(){
             "—";
 
 
-          const sourceHtml =
-            isAuto
+          const actionsHtml = `
 
-              ? `
-                <div class="badge-source">
-                  <span class="source-dot dot-auto"></span>
-                  حركة آلية من سجل الوضعيات
-                </div>
-              `
+            <div class="actions">
 
-              : `
-                <div class="badge-source">
-                  <span class="source-dot dot-manual"></span>
-                  حركة مسجلة يدويًا
-                </div>
-              `;
+              <button
+                class="mini edit-btn"
+                data-id="${esc(m.dbId)}"
+                title="تعديل"
+              >
+                <i data-lucide="pencil"></i>
+              </button>
 
+              <button
+                class="mini delete delete-btn"
+                data-id="${esc(m.dbId)}"
+                title="حذف"
+              >
+                <i data-lucide="trash-2"></i>
+              </button>
 
-          const actionsHtml =
-            isAuto
+            </div>
 
-              ? `
-                <span class="readonly-label">
-                  <i data-lucide="lock"></i>
-                  تلقائية
-                </span>
-              `
-
-              : `
-                <div class="actions">
-
-                  <button
-                    class="mini edit-btn"
-                    data-id="${esc(m.dbId)}"
-                    title="تعديل"
-                  >
-                    <i data-lucide="pencil"></i>
-                  </button>
-
-                  <button
-                    class="mini delete delete-btn"
-                    data-id="${esc(m.dbId)}"
-                    title="حذف"
-                  >
-                    <i data-lucide="trash-2"></i>
-                  </button>
-
-                </div>
-              `;
+          `;
 
 
           return `
@@ -3795,11 +3423,7 @@ function renderTable(){
                     </strong>
 
                     <small>
-                      ${
-                        isAuto
-                          ? "حركة مرتبطة بالوضعية"
-                          : "حركة فعلية مسجلة"
-                      }
+                      حركة فعلية مسجلة
                     </small>
 
                   </div>
@@ -3840,7 +3464,10 @@ function renderTable(){
 
                 </span>
 
-                ${sourceHtml}
+                <div class="badge-source">
+                  <span class="source-dot dot-manual"></span>
+                  حركة مسجلة في سجل الحركات
+                </div>
 
               </td>
 
@@ -3944,19 +3571,19 @@ function fillTypeOptions(
 
       '<option value="">اختر نوع الحركة</option>' +
 
-      MANUAL_TYPES
+      MOVEMENT_TYPES
         .map(
-          t =>
+          type =>
             `
             <option
-              value="${esc(t)}"
+              value="${esc(type)}"
               ${
-                t === selected
+                type === selected
                   ? "selected"
                   : ""
               }
             >
-              ${esc(t)}
+              ${esc(type)}
             </option>
             `
         )
@@ -4014,7 +3641,7 @@ function openEdit(id){
   const m =
     extraMovements.find(
       x =>
-        String(x.id) ===
+        String(x.dbId) ===
         String(id)
     );
 
@@ -4034,7 +3661,6 @@ function openEdit(id){
 
   fillTypeOptions(
     m.movement_type ||
-    m.type ||
     ""
   );
 
@@ -4067,10 +3693,8 @@ function openEdit(id){
     .value =
     (
       m.movement_date ||
-      m.date ||
       ""
-    )
-    .slice(0,10);
+    ).slice(0,10);
 
 
   $("gradeInput")
@@ -4132,13 +3756,40 @@ async function saveMovement(){
       .value;
 
 
+  /*
+    حماية مزدوجة:
+    1. القائمة نفسها لا تحتوي أنواع الانتداب والوضع.
+    2. هنا نمنعها حتى لو حاول أحد تعديل HTML يدويًا.
+  */
+
   if(
-    movement_type === "انتداب" ||
-    movement_type === "تحت التصرف"
+    !MOVEMENT_TYPES.includes(
+      movement_type
+    )
   ){
 
-    $("modalError").textContent =
-      "الانتداب والوضع تحت التصرف لا يُسجلان من هذه الصفحة. يتم تسييرهما من صفحة الوضعيات المستقلة.";
+    $("modalError")
+      .textContent =
+      "نوع الحركة غير مسموح به في هذه الصفحة.";
+
+    $("modalError")
+      .classList
+      .remove("hidden");
+
+    return;
+
+  }
+
+
+  if(
+    EXCLUDED_TYPES.has(
+      movement_type
+    )
+  ){
+
+    $("modalError")
+      .textContent =
+      "الانتداب والوضع تحت التصرف وإنهاؤهما لا تُسجل من هذه الصفحة.";
 
     $("modalError")
       .classList
@@ -4404,10 +4055,7 @@ function exportExcel(){
           "",
 
         "مصدر الحركة":
-          m.source ===
-          "assignment"
-            ? "آلية من سجل الوضعيات"
-            : "حركة مسجلة يدويًا",
+          "سجل حركات الموظفين",
 
         "ملاحظات":
           m.notes ||
@@ -4650,3 +4298,4 @@ init();
 
 </body>
 </html>
+```

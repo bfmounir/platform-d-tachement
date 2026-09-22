@@ -1,41 +1,42 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+\<!DOCTYPE html>
+\<html lang="ar" dir="rtl">
 
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+\<head>
+\<meta charset="UTF-8">
+\<meta name="viewport" content="width=device-width, initial-scale=1.0">
+\<link rel="icon" type="image/png" href="favicon.png">
 
-<title>منصة متابعة الانتداب والوضع تحت التصرف</title>
+\<title>منصة متابعة الانتداب والوضع تحت التصرف\</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
+\<script src="[https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2](https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2)">\</script>
+\<script src="[https://unpkg.com/lucide@latest](https://unpkg.com/lucide@latest)">\</script>
 
-<style>
+\<style>
 
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+@import url('[https://fonts.googleapis.com/css2?family=Cairo\:wght@400;500;600;700;800;900&display=swap](https://fonts.googleapis.com/css2?family=Cairo\:wght@400;500;600;700;800;900\&display=swap)');
 
-:root{
-    --primary:#20a9c7;
-    --primary-dark:#138da9;
-    --secondary:#7567d8;
-    --secondary-light:#eeeaff;
-    --gold:#f0a84b;
-    --danger:#dc5b69;
-    --success:#2eaa78;
-    --warning:#efa83f;
+\:root{
+    \--primary:#20a9c7;
+    \--primary-dark:#138da9;
+    \--secondary:#7567d8;
+    \--secondary-light:#eeeaff;
+    \--gold:#f0a84b;
+    \--danger:#dc5b69;
+    \--success:#2eaa78;
+    \--warning:#efa83f;
 
-    --bg:#f5f8fb;
-    --card:#ffffff;
-    --text:#243247;
-    --muted:#758195;
-    --border:#e5eaf0;
+    \--bg:#f5f8fb;
+    \--card:#ffffff;
+    \--text:#243247;
+    \--muted:#758195;
+    \--border:#e5eaf0;
 
-    --shadow:0 8px 25px rgba(38,57,77,.07);
-    --radius:18px;
+    \--shadow:0 8px 25px rgba(38,57,77,.07);
+    \--radius:18px;
 }
 
-*{
-    box-sizing:border-box;
+\*{
+    box-sizing\:border-box;
 }
 
 html,
@@ -48,8 +49,8 @@ body{
         Arial,
         "Noto Sans Arabic",
         sans-serif;
-    background:var(--bg);
-    color:var(--text);
+    background\:var(--bg);
+    color\:var(--text);
 }
 
 body{
@@ -60,43 +61,43 @@ button,
 input,
 select,
 textarea{
-    font-family:inherit;
+    font-family\:inherit;
 }
 
 button{
-    cursor:pointer;
+    cursor\:pointer;
 }
 
 .hidden{
-    display:none!important;
+    display\:none!important;
 }
 
-/* =========================================================
+/\* =========================================================
    شاشة التحميل
-========================================================= */
+\========================================================= \*/
 
-#loadingScreen{
-    position:fixed;
+\#loadingScreen{
+    position\:fixed;
     inset:0;
     background:#fff;
     z-index:9999;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
 }
 
 .loading-box{
-    text-align:center;
+    text-align\:center;
 }
 
 .loading-logo{
     width:72px;
     height:72px;
     border-radius:20px;
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    background\:linear-gradient(135deg,var(--primary),var(--secondary));
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
     color:#fff;
     margin:0 auto 18px;
 }
@@ -105,35 +106,35 @@ button{
     width:38px;
     height:38px;
     border:4px solid #e5edf1;
-    border-top-color:var(--primary);
+    border-top-color\:var(--primary);
     border-radius:50%;
-    animation:spin .8s linear infinite;
+    animation\:spin .8s linear infinite;
 }
 
 @keyframes spin{
     to{
-        transform:rotate(360deg);
+        transform\:rotate(360deg);
     }
 }
 
-/* =========================================================
+/\* =========================================================
    تسجيل الدخول
-========================================================= */
+\========================================================= \*/
 
-#loginScreen{
+\#loginScreen{
     min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
     padding:20px;
     background:
         radial-gradient(circle at 10% 20%,rgba(32,169,199,.12),transparent 30%),
         radial-gradient(circle at 90% 80%,rgba(117,103,216,.12),transparent 30%),
-        #f6f9fc;
+        \#f6f9fc;
 }
 
 .login-card{
-    width:min(440px,100%);
+    width\:min(440px,100%);
     background:#fff;
     border:1px solid var(--border);
     border-radius:26px;
@@ -145,29 +146,29 @@ button{
     width:78px;
     height:78px;
     border-radius:23px;
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    background\:linear-gradient(135deg,var(--primary),var(--secondary));
     color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
     margin:0 auto 20px;
 }
 
 .login-card h1{
-    text-align:center;
+    text-align\:center;
     margin:0;
     font-size:25px;
 }
 
 .login-card .subtitle{
-    text-align:center;
-    color:var(--muted);
+    text-align\:center;
+    color\:var(--muted);
     margin:9px 0 28px;
     line-height:1.7;
 }
 
 .login-diagnostic{
-    display:none;
+    display\:none;
     margin-top:14px;
     border-radius:14px;
     padding:13px 14px;
@@ -176,7 +177,7 @@ button{
     border:1px solid #dfe6ec;
     background:#f8fafc;
 }
-.login-diagnostic.show{display:block;}
+.login-diagnostic.show{display\:block;}
 .login-diagnostic.success{background:#edf9f4;border-color:#cfeede;color:#1f7655;}
 .login-diagnostic.error{background:#fff0f1;border-color:#f4cdd2;color:#9f3f4b;}
 .login-diagnostic.warning{background:#fff7e9;border-color:#f3dfb7;color:#8b611c;}
@@ -193,16 +194,16 @@ button{
     line-height:1.7;
 }
 
-/* =========================================================
+/\* =========================================================
    الحقول
-========================================================= */
+\========================================================= \*/
 
 .field{
     margin-bottom:16px;
 }
 
 .field label{
-    display:block;
+    display\:block;
     font-size:13px;
     font-weight:700;
     margin-bottom:8px;
@@ -216,35 +217,35 @@ button{
     background:#fbfcfd;
     border-radius:12px;
     padding:12px 14px;
-    outline:none;
-    color:var(--text);
+    outline\:none;
+    color\:var(--text);
     font-size:14px;
     transition:.2s;
 }
 
-.field input:focus,
-.field select:focus,
-.field textarea:focus{
-    border-color:var(--primary);
+.field input\:focus,
+.field select\:focus,
+.field textarea\:focus{
+    border-color\:var(--primary);
     box-shadow:0 0 0 3px rgba(32,169,199,.10);
     background:#fff;
 }
 
 .field textarea{
-    resize:vertical;
+    resize\:vertical;
     min-height:90px;
 }
 
-.field input:disabled,
-.field select:disabled,
-.field textarea:disabled{
+.field input\:disabled,
+.field select\:disabled,
+.field textarea\:disabled{
     background:#f2f5f8;
     color:#7b8796;
-    cursor:not-allowed;
+    cursor\:not-allowed;
 }
 
 .password-wrap{
-    position:relative;
+    position\:relative;
 }
 
 .password-wrap input{
@@ -252,18 +253,18 @@ button{
 }
 
 .password-toggle{
-    position:absolute;
+    position\:absolute;
     left:10px;
     top:50%;
-    transform:translateY(-50%);
+    transform\:translateY(-50%);
     border:0;
-    background:none;
-    color:var(--muted);
+    background\:none;
+    color\:var(--muted);
 }
 
-/* =========================================================
+/\* =========================================================
    الأزرار
-========================================================= */
+\========================================================= \*/
 
 .btn{
     border:0;
@@ -271,24 +272,24 @@ button{
     padding:11px 17px;
     font-size:13px;
     font-weight:700;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
+    display\:inline-flex;
+    align-items\:center;
+    justify-content\:center;
     gap:8px;
     transition:.2s;
 }
 
-.btn:hover{
-    transform:translateY(-1px);
+.btn\:hover{
+    transform\:translateY(-1px);
 }
 
 .btn-primary{
-    background:linear-gradient(135deg,var(--primary),#35b9d3);
+    background\:linear-gradient(135deg,var(--primary),#35b9d3);
     color:#fff;
 }
 
 .btn-secondary{
-    background:var(--secondary-light);
+    background\:var(--secondary-light);
     color:#5b4eb9;
 }
 
@@ -316,42 +317,42 @@ button{
     width:100%;
 }
 
-/* =========================================================
+/\* =========================================================
    التطبيق
-========================================================= */
+\========================================================= \*/
 
-#app{
+\#app{
     min-height:100vh;
 }
 
 .layout{
     min-height:100vh;
-    display:flex;
+    display\:flex;
 }
 
-/* =========================================================
+/\* =========================================================
    القائمة الجانبية
-========================================================= */
+\========================================================= \*/
 
 .sidebar{
     width:265px;
     background:#fff;
     border-left:1px solid var(--border);
-    position:fixed;
+    position\:fixed;
     right:0;
     top:0;
     bottom:0;
     z-index:100;
-    display:flex;
-    flex-direction:column;
+    display\:flex;
+    flex-direction\:column;
     transition:.25s;
 }
 
 .brand{
     padding:24px 20px;
     border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
+    display\:flex;
+    align-items\:center;
     gap:12px;
 }
 
@@ -359,12 +360,12 @@ button{
     width:48px;
     height:48px;
     border-radius:15px;
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    background\:linear-gradient(135deg,var(--primary),var(--secondary));
     color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex:none;
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
+    flex\:none;
 }
 
 .brand-title{
@@ -374,50 +375,50 @@ button{
 }
 
 .brand-subtitle{
-    color:var(--muted);
+    color\:var(--muted);
     font-size:11px;
 }
 
 .nav{
     padding:18px 12px;
     flex:1;
-    overflow:auto;
+    overflow\:auto;
 }
 
 .nav-btn{
     width:100%;
     border:0;
-    background:transparent;
+    background\:transparent;
     color:#647286;
     padding:12px 14px;
     border-radius:12px;
-    display:flex;
-    align-items:center;
+    display\:flex;
+    align-items\:center;
     gap:11px;
     margin-bottom:6px;
-    text-align:right;
+    text-align\:right;
     font-weight:700;
 }
 
-.nav-btn:hover{
+.nav-btn\:hover{
     background:#f5f8fb;
 }
 
 .nav-btn.active{
-    background:linear-gradient(90deg,#e8f9fc,#f1edff);
+    background\:linear-gradient(90deg,#e8f9fc,#f1edff);
     color:#287c91;
 }
 
 .nav-badge{
-    margin-right:auto;
+    margin-right\:auto;
     min-width:23px;
     height:23px;
     border-radius:20px;
     background:#ffe8c7;
     color:#a96611;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
     font-size:11px;
 }
 
@@ -430,8 +431,8 @@ button{
     background:#f6f8fa;
     border-radius:13px;
     padding:10px;
-    display:flex;
-    align-items:center;
+    display\:flex;
+    align-items\:center;
     gap:10px;
     margin-bottom:10px;
 }
@@ -440,16 +441,16 @@ button{
     width:37px;
     height:37px;
     border-radius:12px;
-    background:var(--secondary-light);
+    background\:var(--secondary-light);
     color:#6659c4;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
 }
 
-/* =========================================================
+/\* =========================================================
    المحتوى
-========================================================= */
+\========================================================= \*/
 
 .main{
     flex:1;
@@ -459,21 +460,21 @@ button{
 
 .topbar{
     height:76px;
-    background:rgba(255,255,255,.95);
+    background\:rgba(255,255,255,.95);
     border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    display\:flex;
+    align-items\:center;
+    justify-content\:space-between;
     padding:0 28px;
-    position:sticky;
+    position\:sticky;
     top:0;
     z-index:50;
-    backdrop-filter:blur(10px);
+    backdrop-filter\:blur(10px);
 }
 
 .page-title{
-    display:flex;
-    align-items:center;
+    display\:flex;
+    align-items\:center;
     gap:12px;
 }
 
@@ -483,23 +484,23 @@ button{
 }
 
 .page-title small{
-    display:block;
-    color:var(--muted);
+    display\:block;
+    color\:var(--muted);
     font-size:11px;
     margin-top:3px;
 }
 
 .mobile-menu{
-    display:none;
+    display\:none;
 }
 
 .content{
     padding:26px;
 }
 
-/* =========================================================
+/\* =========================================================
    البطاقات
-========================================================= */
+\========================================================= \*/
 
 .hero{
     background:
@@ -507,9 +508,9 @@ button{
     border:1px solid #deebf1;
     border-radius:22px;
     padding:25px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    display\:flex;
+    align-items\:center;
+    justify-content\:space-between;
     gap:20px;
     margin-bottom:22px;
 }
@@ -530,16 +531,16 @@ button{
     height:75px;
     border-radius:23px;
     background:#fff;
-    color:var(--primary);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:var(--shadow);
+    color\:var(--primary);
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
+    box-shadow\:var(--shadow);
 }
 
 .stats-grid{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
+    display\:grid;
+    grid-template-columns\:repeat(5,1fr);
     gap:14px;
     margin-bottom:22px;
 }
@@ -549,13 +550,13 @@ button{
     border:1px solid var(--border);
     border-radius:17px;
     padding:17px;
-    box-shadow:var(--shadow);
+    box-shadow\:var(--shadow);
 }
 
 .stat-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    display\:flex;
+    align-items\:center;
+    justify-content\:space-between;
     gap:8px;
 }
 
@@ -563,29 +564,29 @@ button{
     width:39px;
     height:39px;
     border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
     background:#eaf9fc;
-    color:var(--primary);
+    color\:var(--primary);
 }
 
-.stat-card:nth-child(2) .stat-icon{
+.stat-card\:nth-child(2) .stat-icon{
     background:#eeeaff;
-    color:var(--secondary);
+    color\:var(--secondary);
 }
 
-.stat-card:nth-child(3) .stat-icon{
+.stat-card\:nth-child(3) .stat-icon{
     background:#fff1dd;
     color:#c77b1c;
 }
 
-.stat-card:nth-child(4) .stat-icon{
+.stat-card\:nth-child(4) .stat-icon{
     background:#e8f8f1;
     color:#21865f;
 }
 
-.stat-card:nth-child(5) .stat-icon{
+.stat-card\:nth-child(5) .stat-icon{
     background:#fdebed;
     color:#b74958;
 }
@@ -597,30 +598,30 @@ button{
 }
 
 .stat-label{
-    color:var(--muted);
+    color\:var(--muted);
     font-size:12px;
     margin-top:4px;
 }
 
-/* =========================================================
+/\* =========================================================
    الأقسام
-========================================================= */
+\========================================================= \*/
 
 .section-card{
     background:#fff;
     border:1px solid var(--border);
     border-radius:18px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
+    box-shadow\:var(--shadow);
+    overflow\:hidden;
     margin-bottom:20px;
 }
 
 .section-header{
     padding:17px 19px;
     border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    display\:flex;
+    align-items\:center;
+    justify-content\:space-between;
     gap:10px;
 }
 
@@ -633,17 +634,17 @@ button{
     padding:18px;
 }
 
-/* =========================================================
+/\* =========================================================
    الجدول
-========================================================= */
+\========================================================= \*/
 
 .table-wrap{
-    overflow:auto;
+    overflow\:auto;
 }
 
 table{
     width:100%;
-    border-collapse:collapse;
+    border-collapse\:collapse;
     min-width:780px;
 }
 
@@ -651,25 +652,25 @@ th{
     background:#f7f9fb;
     color:#647286;
     font-size:12px;
-    text-align:right;
+    text-align\:right;
     padding:13px;
-    white-space:nowrap;
+    white-space\:nowrap;
 }
 
 td{
     padding:13px;
     border-top:1px solid #eef1f4;
     font-size:13px;
-    vertical-align:middle;
+    vertical-align\:middle;
 }
 
-tr:hover td{
+tr\:hover td{
     background:#fcfdfe;
 }
 
 .badge{
-    display:inline-flex;
-    align-items:center;
+    display\:inline-flex;
+    align-items\:center;
     gap:5px;
     padding:6px 9px;
     border-radius:20px;
@@ -703,10 +704,10 @@ tr:hover td{
 }
 
 .actions{
-    display:flex;
-    align-items:center;
+    display\:flex;
+    align-items\:center;
     gap:5px;
-    flex-wrap:wrap;
+    flex-wrap\:wrap;
 }
 
 .icon-btn{
@@ -714,9 +715,9 @@ tr:hover td{
     height:34px;
     border:0;
     border-radius:9px;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
+    display\:inline-flex;
+    align-items\:center;
+    justify-content\:center;
 }
 
 .icon-btn.edit{
@@ -739,22 +740,22 @@ tr:hover td{
     color:#217d91;
 }
 
-/* =========================================================
+/\* =========================================================
    البحث
-========================================================= */
+\========================================================= \*/
 
 .toolbar{
-    display:flex;
-    align-items:center;
+    display\:flex;
+    align-items\:center;
     gap:10px;
-    flex-wrap:wrap;
+    flex-wrap\:wrap;
     margin-bottom:17px;
 }
 
 .search-box{
     flex:1;
     min-width:230px;
-    position:relative;
+    position\:relative;
 }
 
 .search-box input{
@@ -763,15 +764,15 @@ tr:hover td{
     border:1px solid var(--border);
     border-radius:12px;
     background:#fff;
-    outline:none;
+    outline\:none;
 }
 
 .search-box i{
-    position:absolute;
+    position\:absolute;
     right:14px;
     top:50%;
-    transform:translateY(-50%);
-    color:var(--muted);
+    transform\:translateY(-50%);
+    color\:var(--muted);
 }
 
 .filter-select{
@@ -783,10 +784,10 @@ tr:hover td{
 }
 
 .employee-type-filters{
-    display:flex;
-    align-items:center;
+    display\:flex;
+    align-items\:center;
     gap:7px;
-    flex-wrap:wrap;
+    flex-wrap\:wrap;
 }
 
 .employee-type-filter{
@@ -800,13 +801,13 @@ tr:hover td{
     transition:.2s;
 }
 
-.employee-type-filter:hover{
+.employee-type-filter\:hover{
     border-color:#cbd9e2;
     background:#f8fbfd;
 }
 
 .employee-type-filter.active{
-    background:linear-gradient(135deg,#e7f8fc,#eeeaff);
+    background\:linear-gradient(135deg,#e7f8fc,#eeeaff);
     border-color:#cfe6ed;
     color:#287c91;
 }
@@ -817,11 +818,11 @@ tr:hover td{
 }
 
 .assignment-summary .assignment-meta{
-    display:flex;
-    flex-wrap:wrap;
+    display\:flex;
+    flex-wrap\:wrap;
     gap:5px 8px;
     margin-top:5px;
-    color:var(--muted);
+    color\:var(--muted);
     font-size:11px;
 }
 
@@ -839,44 +840,44 @@ tr:hover td{
     }
 }
 
-/* =========================================================
+/\* =========================================================
    النوافذ
-========================================================= */
+\========================================================= \*/
 
 .modal{
-    position:fixed;
+    position\:fixed;
     inset:0;
-    background:rgba(26,39,53,.42);
+    background\:rgba(26,39,53,.42);
     z-index:500;
-    display:none;
-    align-items:center;
-    justify-content:center;
+    display\:none;
+    align-items\:center;
+    justify-content\:center;
     padding:20px;
 }
 
 .modal.show{
-    display:flex;
+    display\:flex;
 }
 
 .modal-card{
-    width:min(850px,100%);
+    width\:min(850px,100%);
     max-height:92vh;
-    overflow:auto;
+    overflow\:auto;
     background:#fff;
     border-radius:22px;
     box-shadow:0 25px 70px rgba(25,40,60,.22);
 }
 
 .modal-card.small{
-    width:min(500px,100%);
+    width\:min(500px,100%);
 }
 
 .modal-header{
     padding:18px 20px;
     border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    display\:flex;
+    align-items\:center;
+    justify-content\:space-between;
 }
 
 .modal-header h3{
@@ -898,8 +899,8 @@ tr:hover td{
 }
 
 .form-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
+    display\:grid;
+    grid-template-columns\:repeat(2,1fr);
     gap:0 15px;
 }
 
@@ -910,18 +911,18 @@ tr:hover td{
 .modal-footer{
     padding:15px 20px;
     border-top:1px solid var(--border);
-    display:flex;
-    justify-content:flex-start;
+    display\:flex;
+    justify-content\:flex-start;
     gap:9px;
 }
 
-/* =========================================================
+/\* =========================================================
    التنبيهات
-========================================================= */
+\========================================================= \*/
 
 .alert-item{
-    display:flex;
-    align-items:flex-start;
+    display\:flex;
+    align-items\:flex-start;
     gap:13px;
     padding:14px;
     border:1px solid var(--border);
@@ -933,10 +934,10 @@ tr:hover td{
     width:40px;
     height:40px;
     border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex:none;
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
+    flex\:none;
 }
 
 .alert-danger .alert-icon{
@@ -955,25 +956,25 @@ tr:hover td{
 }
 
 .alert-item strong{
-    display:block;
+    display\:block;
     font-size:13px;
     margin-bottom:5px;
 }
 
 .alert-item span{
-    color:var(--muted);
+    color\:var(--muted);
     font-size:12px;
     line-height:1.6;
 }
 
-/* =========================================================
+/\* =========================================================
    حالة فارغة
-========================================================= */
+\========================================================= \*/
 
 .empty{
-    text-align:center;
+    text-align\:center;
     padding:40px 20px;
-    color:var(--muted);
+    color\:var(--muted);
 }
 
 .empty-icon{
@@ -981,23 +982,23 @@ tr:hover td{
     height:55px;
     border-radius:17px;
     background:#f2f5f8;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
     margin:0 auto 12px;
 }
 
-/* =========================================================
+/\* =========================================================
    Toast
-========================================================= */
+\========================================================= \*/
 
-#toastContainer{
-    position:fixed;
+\#toastContainer{
+    position\:fixed;
     left:20px;
     bottom:20px;
     z-index:2000;
-    display:flex;
-    flex-direction:column;
+    display\:flex;
+    flex-direction\:column;
     gap:8px;
 }
 
@@ -1009,10 +1010,10 @@ tr:hover td{
     box-shadow:0 12px 35px rgba(30,45,65,.16);
     border-radius:13px;
     padding:13px 15px;
-    display:flex;
+    display\:flex;
     gap:10px;
-    align-items:flex-start;
-    animation:toastIn .25s ease;
+    align-items\:flex-start;
+    animation\:toastIn .25s ease;
 }
 
 .toast.success{
@@ -1030,24 +1031,24 @@ tr:hover td{
 @keyframes toastIn{
     from{
         opacity:0;
-        transform:translateY(10px);
+        transform\:translateY(10px);
     }
     to{
         opacity:1;
-        transform:translateY(0);
+        transform\:translateY(0);
     }
 }
 
-/* =========================================================
+/\* =========================================================
    تفاصيل الملف
-========================================================= */
+\========================================================= \*/
 
 .profile-header{
-    background:linear-gradient(120deg,#e8f9fc,#f1edff);
+    background\:linear-gradient(120deg,#e8f9fc,#f1edff);
     border-radius:17px;
     padding:20px;
-    display:flex;
-    align-items:center;
+    display\:flex;
+    align-items\:center;
     gap:15px;
     margin-bottom:18px;
 }
@@ -1057,11 +1058,11 @@ tr:hover td{
     height:65px;
     border-radius:20px;
     background:#fff;
-    color:var(--primary);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex:none;
+    color\:var(--primary);
+    display\:flex;
+    align-items\:center;
+    justify-content\:center;
+    flex\:none;
 }
 
 .profile-header h2{
@@ -1076,8 +1077,8 @@ tr:hover td{
 }
 
 .info-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
+    display\:grid;
+    grid-template-columns\:repeat(3,1fr);
     gap:10px;
     margin-bottom:18px;
 }
@@ -1090,8 +1091,8 @@ tr:hover td{
 }
 
 .info-box label{
-    display:block;
-    color:var(--muted);
+    display\:block;
+    color\:var(--muted);
     font-size:11px;
     margin-bottom:5px;
 }
@@ -1100,14 +1101,14 @@ tr:hover td{
     font-size:13px;
 }
 
-/* =========================================================
+/\* =========================================================
    متجاوب
-========================================================= */
+\========================================================= \*/
 
 @media(max-width:1100px){
 
     .stats-grid{
-        grid-template-columns:repeat(3,1fr);
+        grid-template-columns\:repeat(3,1fr);
     }
 
 }
@@ -1115,12 +1116,12 @@ tr:hover td{
 @media(max-width:800px){
 
     .sidebar{
-        transform:translateX(105%);
+        transform\:translateX(105%);
         box-shadow:-10px 0 35px rgba(30,45,65,.12);
     }
 
     .sidebar.open{
-        transform:translateX(0);
+        transform\:translateX(0);
     }
 
     .main{
@@ -1128,15 +1129,15 @@ tr:hover td{
     }
 
     .mobile-menu{
-        display:flex;
+        display\:flex;
         width:39px;
         height:39px;
         border:0;
         background:#f2f5f8;
         color:#526277;
         border-radius:10px;
-        align-items:center;
-        justify-content:center;
+        align-items\:center;
+        justify-content\:center;
     }
 
     .topbar{
@@ -1152,11 +1153,11 @@ tr:hover td{
     }
 
     .hero-icon{
-        display:none;
+        display\:none;
     }
 
     .stats-grid{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns\:repeat(2,1fr);
     }
 
     .form-grid{
@@ -1165,11 +1166,11 @@ tr:hover td{
 
     .assignment-first-step,
     .form-section-divider{
-        align-items:flex-start;
+        align-items\:flex-start;
     }
 
     .form-grid .full{
-        grid-column:auto;
+        grid-column\:auto;
     }
 
     .info-grid{
@@ -1202,7 +1203,7 @@ tr:hover td{
     }
 
     .toolbar{
-        align-items:stretch;
+        align-items\:stretch;
     }
 
     .search-box{
@@ -1220,17 +1221,17 @@ tr:hover td{
 
 }
 
-/* =========================================================
+/\* =========================================================
    تحسين قائمة الموظفين
-========================================================= */
+\========================================================= \*/
 
 .employee-number-badge{
     min-width:38px;
     height:32px;
     padding:0 9px;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
+    display\:inline-flex;
+    align-items\:center;
+    justify-content\:center;
     border-radius:9px;
     background:#f1edff;
     color:#5f52ba;
@@ -1239,7 +1240,7 @@ tr:hover td{
 }
 
 .employee-name-cell strong{
-    display:block;
+    display\:block;
     font-size:13px;
     color:#172235;
 }
@@ -1259,27 +1260,27 @@ tr:hover td{
     color:#334155;
 }
 
-#employeesTable td{
+\#employeesTable td{
     padding-top:14px;
     padding-bottom:14px;
 }
 
-#employeesTable td:nth-child(1){
+\#employeesTable td\:nth-child(1){
     width:70px;
-    text-align:center;
+    text-align\:center;
 }
 
-#employeesTable td:nth-child(2){
+\#employeesTable td\:nth-child(2){
     min-width:150px;
 }
 
-#employeesTable td:nth-child(6){
+\#employeesTable td\:nth-child(6){
     min-width:210px;
 }
 
-/* =========================================================
+/\* =========================================================
    تحسينات الواجهة والجمالية
-========================================================= */
+\========================================================= \*/
 
 body{
     line-height:1.65;
@@ -1301,12 +1302,12 @@ body{
 }
 
 .section-header{
-    background:linear-gradient(180deg,#fff,#fbfdff);
+    background\:linear-gradient(180deg,#fff,#fbfdff);
     padding:18px 20px;
 }
 
 th{
-    background:linear-gradient(180deg,#f5f8fb,#eef3f7);
+    background\:linear-gradient(180deg,#f5f8fb,#eef3f7);
     color:#536276;
     font-weight:800;
     padding:14px 13px;
@@ -1317,10 +1318,10 @@ td{
 }
 
 tbody tr{
-    transition:background .18s, transform .18s;
+    transition\:background .18s, transform .18s;
 }
 
-tbody tr:hover td{
+tbody tr\:hover td{
     background:#f9fcfd;
 }
 
@@ -1329,10 +1330,10 @@ tbody tr:hover td{
     height:34px;
     padding:0 10px;
     border-radius:10px;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,#f0efff,#e8e5ff);
+    display\:inline-flex;
+    align-items\:center;
+    justify-content\:center;
+    background\:linear-gradient(135deg,#f0efff,#e8e5ff);
     color:#5b50b5;
     font-weight:900;
     font-size:12px;
@@ -1360,7 +1361,7 @@ tbody tr:hover td{
     background:#fafcfe;
 }
 
-.field input:read-only{
+.field input\:read-only{
     background:#f2f1ff;
     color:#5a50ad;
     border-color:#ddd9fa;
@@ -1369,14 +1370,14 @@ tbody tr:hover td{
 
 .assignment-first-step,
 .form-section-divider{
-    display:flex;
-    align-items:center;
+    display\:flex;
+    align-items\:center;
     gap:12px;
     padding:13px 14px;
     margin:2px 0 16px;
     border:1px solid #e8ebf2;
     border-radius:15px;
-    background:linear-gradient(90deg,#f8fbfd,#f8f7ff);
+    background\:linear-gradient(90deg,#f8fbfd,#f8f7ff);
 }
 
 .form-section-divider{
@@ -1386,12 +1387,12 @@ tbody tr:hover td{
 .step-badge{
     width:31px;
     height:31px;
-    flex:none;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
+    flex\:none;
+    display\:inline-flex;
+    align-items\:center;
+    justify-content\:center;
     border-radius:10px;
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    background\:linear-gradient(135deg,var(--primary),var(--secondary));
     color:#fff;
     font-size:12px;
     font-weight:900;
@@ -1412,7 +1413,7 @@ tbody tr:hover td{
 }
 
 .auto-number-wrap{
-    position:relative;
+    position\:relative;
 }
 
 .auto-number-wrap input{
@@ -1420,16 +1421,16 @@ tbody tr:hover td{
 }
 
 .auto-number-icon{
-    position:absolute;
+    position\:absolute;
     right:12px;
     top:50%;
-    transform:translateY(-50%);
+    transform\:translateY(-50%);
     color:#675bc1;
     z-index:2;
 }
 
 .auto-number-field .field-hint{
-    display:block;
+    display\:block;
     margin-top:5px;
 }
 
@@ -1443,24 +1444,24 @@ tbody tr:hover td{
 }
 
 .icon-btn{
-    transition:transform .15s, box-shadow .15s;
+    transition\:transform .15s, box-shadow .15s;
 }
 
-.icon-btn:hover{
-    transform:translateY(-1px);
+.icon-btn\:hover{
+    transform\:translateY(-1px);
     box-shadow:0 5px 12px rgba(35,55,75,.08);
 }
 
-/* =========================================================
+/\* =========================================================
    الطباعة
-========================================================= */
+\========================================================= \*/
 
 .employee-print-area{
-    display:none;
+    display\:none;
 }
 
 .employee-print-header{
-    text-align:center;
+    text-align\:center;
     margin-bottom:22px;
     border-bottom:2px solid #222;
     padding-bottom:14px;
@@ -1492,8 +1493,8 @@ tbody tr:hover td{
 
 .employee-print-table{
     width:100%;
-    border-collapse:collapse;
-    table-layout:fixed;
+    border-collapse\:collapse;
+    table-layout\:fixed;
 }
 
 .employee-print-table th,
@@ -1501,8 +1502,8 @@ tbody tr:hover td{
     border:1px solid #444;
     padding:9px 7px;
     font-size:11px;
-    text-align:center;
-    vertical-align:middle;
+    text-align\:center;
+    vertical-align\:middle;
 }
 
 .employee-print-table th{
@@ -1511,29 +1512,29 @@ tbody tr:hover td{
     font-weight:800;
 }
 
-.employee-print-table th:nth-child(1){width:7%;}
-.employee-print-table th:nth-child(2){width:21%;}
-.employee-print-table th:nth-child(3){width:18%;}
-.employee-print-table th:nth-child(4){width:13%;}
-.employee-print-table th:nth-child(5){width:14%;}
-.employee-print-table th:nth-child(6){width:27%;}
+.employee-print-table th\:nth-child(1){width:7%;}
+.employee-print-table th\:nth-child(2){width:21%;}
+.employee-print-table th\:nth-child(3){width:18%;}
+.employee-print-table th\:nth-child(4){width:13%;}
+.employee-print-table th\:nth-child(5){width:14%;}
+.employee-print-table th\:nth-child(6){width:27%;}
 
 .employee-print-table tr{
-    page-break-inside:avoid;
+    page-break-inside\:avoid;
 }
 
 .employee-print-footer{
     margin-top:18px;
     font-size:10px;
     color:#444;
-    display:flex;
-    justify-content:space-between;
+    display\:flex;
+    justify-content\:space-between;
 }
 
 @media print{
 
     @page{
-        size:A4 portrait;
+        size\:A4 portrait;
         margin:14mm;
     }
 
@@ -1546,30 +1547,30 @@ tbody tr:hover td{
     body.printing-employees #employeeModal,
     body.printing-employees #profileModal,
     body.printing-employees #toastContainer{
-        display:none!important;
+        display\:none!important;
     }
 
     body.printing-employees #employeePrintArea{
-        display:block!important;
+        display\:block!important;
     }
 
     body.printing-employees .employee-print-table thead{
-        display:table-header-group;
+        display\:table-header-group;
     }
 
     body.printing-employees .employee-print-table tfoot{
-        display:table-footer-group;
+        display\:table-footer-group;
     }
 
     body.printing-profile #employeePrintArea{
-        display:none!important;
+        display\:none!important;
     }
 
     body.printing-profile .sidebar,
     body.printing-profile .topbar,
     body.printing-profile .no-print,
     body.printing-profile #toastContainer{
-        display:none!important;
+        display\:none!important;
     }
 
     body.printing-profile .main{
@@ -1581,16 +1582,16 @@ tbody tr:hover td{
     }
 
     body.printing-profile .modal{
-        position:static;
-        display:block!important;
+        position\:static;
+        display\:block!important;
         background:#fff;
         padding:0;
     }
 
     body.printing-profile .modal-card{
         width:100%;
-        max-height:none;
-        box-shadow:none;
+        max-height\:none;
+        box-shadow\:none;
         border:0;
     }
 
@@ -1599,920 +1600,920 @@ tbody tr:hover td{
     }
 
     body.printing-profile .section-card{
-        box-shadow:none;
+        box-shadow\:none;
     }
 }
-</style>
-</head>
+\</style>
+\</head>
 
-<body>
+\<body>
 
-<!-- =========================================================
+\<!-- =========================================================
      شاشة التحميل
-========================================================= -->
+\========================================================= -->
 
-<div id="loadingScreen">
+\<div id="loadingScreen">
 
-    <div class="loading-box">
+    \<div class="loading-box">
 
-        <div class="loading-logo">
-            <i data-lucide="landmark"></i>
-        </div>
+        \<div class="loading-logo">
+            \<i data-lucide="landmark">\</i>
+        \</div>
 
-        <div class="spinner"></div>
+        \<div class="spinner">\</div>
 
-        <p style="color:#758195;font-size:13px;margin-top:14px">
+        \<p style="color:#758195;font-size:13px;margin-top:14px">
             جارٍ التحقق من الاتصال...
-        </p>
+        \</p>
 
-    </div>
+    \</div>
 
-</div>
+\</div>
 
-<!-- =========================================================
+\<!-- =========================================================
      تسجيل الدخول
-========================================================= -->
+\========================================================= -->
 
-<div id="loginScreen" class="hidden">
+\<div id="loginScreen" class="hidden">
 
-    <div class="login-card">
+    \<div class="login-card">
 
-        <div class="login-logo">
-            <i data-lucide="shield-check" size="38"></i>
-        </div>
+        \<div class="login-logo">
+            \<i data-lucide="shield-check" size="38">\</i>
+        \</div>
 
-        <h1>منصة متابعة الانتداب</h1>
+        \<h1>منصة متابعة الانتداب\</h1>
 
-        <div class="subtitle">
+        \<div class="subtitle">
             نظام متابعة الانتداب والوضع تحت التصرف
-            <br>
-            <small>الدخول مخصص للمسؤول فقط</small>
-        </div>
+            \<br>
+            \<small>الدخول مخصص للمسؤول فقط\</small>
+        \</div>
 
-        <form id="loginForm">
+        \<form id="loginForm">
 
-            <div class="field">
+            \<div class="field">
 
-                <label>البريد الإلكتروني</label>
+                \<label>البريد الإلكتروني\</label>
 
-                <input
+                \<input
                     id="loginEmail"
                     type="email"
                     autocomplete="username"
                     placeholder="أدخل البريد الإلكتروني"
                     required
-                >
+                \>
 
-            </div>
+            \</div>
 
-            <div class="field">
+            \<div class="field">
 
-                <label>كلمة المرور</label>
+                \<label>كلمة المرور\</label>
 
-                <div class="password-wrap">
+                \<div class="password-wrap">
 
-                    <input
+                    \<input
                         id="loginPassword"
                         type="password"
                         autocomplete="current-password"
                         placeholder="أدخل كلمة المرور"
                         required
-                    >
+                    \>
 
-                    <button
+                    \<button
                         type="button"
                         class="password-toggle"
                         onclick="togglePassword()"
-                    >
-                        <i data-lucide="eye" size="18"></i>
-                    </button>
+                    \>
+                        \<i data-lucide="eye" size="18">\</i>
+                    \</button>
 
-                </div>
+                \</div>
 
-            </div>
+            \</div>
 
-            <button
+            \<button
                 type="submit"
                 class="btn btn-primary btn-block"
-            >
-                <i data-lucide="log-in" size="17"></i>
+            \>
+                \<i data-lucide="log-in" size="17">\</i>
                 دخول المسؤول
-            </button>
+            \</button>
 
-        </form>
+        \</form>
 
-        <div id="loginDiagnostic" class="login-diagnostic"></div>
+        \<div id="loginDiagnostic" class="login-diagnostic">\</div>
 
-        <div class="login-note">
-            <i data-lucide="info" size="15"></i>
+        \<div class="login-note">
+            \<i data-lucide="info" size="15">\</i>
             هذه المنصة مخصصة للإدارة والمسؤول عن متابعة
             وضعيات الانتداب والوضع تحت التصرف.
-        </div>
+        \</div>
 
-    </div>
+    \</div>
 
-</div>
+\</div>
 
-<!-- =========================================================
+\<!-- =========================================================
      التطبيق
-========================================================= -->
+\========================================================= -->
 
-<div id="app" class="hidden">
+\<div id="app" class="hidden">
 
-    <div class="layout">
+    \<div class="layout">
 
-        <!-- Sidebar -->
+        \<!-- Sidebar -->
 
-        <aside id="sidebar" class="sidebar">
+        \<aside id="sidebar" class="sidebar">
 
-            <div class="brand">
+            \<div class="brand">
 
-                <div class="brand-icon">
-                    <i data-lucide="landmark"></i>
-                </div>
+                \<div class="brand-icon">
+                    \<i data-lucide="landmark">\</i>
+                \</div>
 
-                <div>
+                \<div>
 
-                    <div class="brand-title">
+                    \<div class="brand-title">
                         منصة متابعة الانتداب
-                    </div>
+                    \</div>
 
-                    <div class="brand-subtitle">
+                    \<div class="brand-subtitle">
                         والوضع تحت التصرف
-                    </div>
+                    \</div>
 
-                </div>
+                \</div>
 
-            </div>
+            \</div>
 
-            <nav class="nav">
+            \<nav class="nav">
 
-                <button
+                \<button
                     class="nav-btn active"
                     data-page="dashboard"
                     onclick="showPage('dashboard')"
-                >
-                    <i data-lucide="layout-dashboard"></i>
+                \>
+                    \<i data-lucide="layout-dashboard">\</i>
                     الرئيسية
-                </button>
+                \</button>
 
-                <button
+                \<button
                     class="nav-btn"
                     data-page="employees"
                     onclick="showPage('employees')"
-                >
-                    <i data-lucide="users"></i>
+                \>
+                    \<i data-lucide="users">\</i>
                     الموظفون
-                </button>
+                \</button>
 
-                <button
+                \<button
                     class="nav-btn"
                     data-page="assignments"
                     onclick="showPage('assignments')"
-                >
-                    <i data-lucide="clipboard-check"></i>
+                \>
+                    \<i data-lucide="clipboard-check">\</i>
                     الوضعيات
-                    <span id="pendingBadge" class="nav-badge">0</span>
-                </button>
+                    \<span id="pendingBadge" class="nav-badge">0\</span>
+                \</button>
 
-                <button
+                \<button
                     class="nav-btn"
                     data-page="alerts"
                     onclick="showPage('alerts')"
-                >
-                    <i data-lucide="bell"></i>
+                \>
+                    \<i data-lucide="bell">\</i>
                     التنبيهات
-                </button>
+                \</button>
 
-                <button
+                \<button
                     class="nav-btn"
                     type="button"
                     onclick="openMovementsPage()"
-                >
-                    <i data-lucide="bar-chart-3"></i>
+                \>
+                    \<i data-lucide="bar-chart-3">\</i>
                     حصيلة حركة الموظفين
-                </button>
+                \</button>
 
-            </nav>
+            \</nav>
 
-            <div class="sidebar-footer">
+            \<div class="sidebar-footer">
 
-                <div class="admin-chip">
+                \<div class="admin-chip">
 
-                    <div class="admin-avatar">
-                        <i data-lucide="user-round" size="18"></i>
-                    </div>
+                    \<div class="admin-avatar">
+                        \<i data-lucide="user-round" size="18">\</i>
+                    \</div>
 
-                    <div style="min-width:0">
+                    \<div style="min-width:0">
 
-                        <strong
-                            style="display:block;font-size:12px"
-                        >
+                        \<strong
+                            style="display\:block;font-size:12px"
+                        \>
                             المسؤول
-                        </strong>
+                        \</strong>
 
-                        <span
-                            style="display:block;color:#758195;font-size:10px;overflow:hidden;text-overflow:ellipsis"
+                        \<span
+                            style="display\:block;color:#758195;font-size:10px;overflow\:hidden;text-overflow\:ellipsis"
                             id="adminEmail"
-                        >
+                        \>
                             —
-                        </span>
+                        \</span>
 
-                    </div>
+                    \</div>
 
-                </div>
+                \</div>
 
-                <button
+                \<button
                     class="btn btn-light btn-block"
                     onclick="logout()"
-                >
-                    <i data-lucide="log-out" size="16"></i>
+                \>
+                    \<i data-lucide="log-out" size="16">\</i>
                     تسجيل الخروج
-                </button>
+                \</button>
 
-            </div>
+            \</div>
 
-        </aside>
+        \</aside>
 
-        <!-- Main -->
+        \<!-- Main -->
 
-        <main class="main">
+        \<main class="main">
 
-            <header class="topbar">
+            \<header class="topbar">
 
-                <div class="page-title">
+                \<div class="page-title">
 
-                    <button
+                    \<button
                         class="mobile-menu"
                         onclick="toggleSidebar()"
-                    >
-                        <i data-lucide="menu"></i>
-                    </button>
+                    \>
+                        \<i data-lucide="menu">\</i>
+                    \</button>
 
-                    <div>
+                    \<div>
 
-                        <h2 id="pageTitle">
+                        \<h2 id="pageTitle">
                             الرئيسية
-                        </h2>
+                        \</h2>
 
-                        <small>
+                        \<small>
                             إدارة ومتابعة الوضعيات الإدارية
-                        </small>
+                        \</small>
 
-                    </div>
+                    \</div>
 
-                </div>
+                \</div>
 
-                <button
+                \<button
                     class="btn btn-primary"
                     onclick="openEmployeeModal()"
-                >
-                    <i data-lucide="user-plus" size="16"></i>
+                \>
+                    \<i data-lucide="user-plus" size="16">\</i>
                     إضافة موظف
-                </button>
+                \</button>
 
-            </header>
+            \</header>
 
-            <div class="content">
+            \<div class="content">
 
-                <!-- Dashboard -->
+                \<!-- Dashboard -->
 
-                <section id="page-dashboard" class="page">
+                \<section id="page-dashboard" class="page">
 
-                    <div class="hero">
+                    \<div class="hero">
 
-                        <div>
+                        \<div>
 
-                            <h1>
+                            \<h1>
                                 متابعة الانتداب والوضع تحت التصرف
-                            </h1>
+                            \</h1>
 
-                            <p>
+                            \<p>
                                 لوحة موحدة لمتابعة الموظفين،
                                 الوضعيات، آجالها، والتنبيهات المرتبطة بها.
-                            </p>
+                            \</p>
 
-                        </div>
+                        \</div>
 
-                        <div class="hero-icon">
-                            <i data-lucide="bar-chart-3" size="36"></i>
-                        </div>
+                        \<div class="hero-icon">
+                            \<i data-lucide="bar-chart-3" size="36">\</i>
+                        \</div>
 
-                    </div>
+                    \</div>
 
-                    <div class="stats-grid">
+                    \<div class="stats-grid">
 
-                        <div class="stat-card">
+                        \<div class="stat-card">
 
-                            <div class="stat-top">
-                                <div class="stat-icon">
-                                    <i data-lucide="users"></i>
-                                </div>
-                            </div>
+                            \<div class="stat-top">
+                                \<div class="stat-icon">
+                                    \<i data-lucide="users">\</i>
+                                \</div>
+                            \</div>
 
-                            <div id="statEmployees" class="stat-number">
+                            \<div id="statEmployees" class="stat-number">
                                 0
-                            </div>
+                            \</div>
 
-                            <div class="stat-label">
+                            \<div class="stat-label">
                                 إجمالي الموظفين
-                            </div>
+                            \</div>
 
-                        </div>
+                        \</div>
 
-                        <div class="stat-card">
+                        \<div class="stat-card">
 
-                            <div class="stat-top">
-                                <div class="stat-icon">
-                                    <i data-lucide="send"></i>
-                                </div>
-                            </div>
+                            \<div class="stat-top">
+                                \<div class="stat-icon">
+                                    \<i data-lucide="send">\</i>
+                                \</div>
+                            \</div>
 
-                            <div id="statSecond" class="stat-number">
+                            \<div id="statSecond" class="stat-number">
                                 0
-                            </div>
+                            \</div>
 
-                            <div class="stat-label">
+                            \<div class="stat-label">
                                 المنتدبون المعتمدون
-                            </div>
+                            \</div>
 
-                        </div>
+                        \</div>
 
-                        <div class="stat-card">
+                        \<div class="stat-card">
 
-                            <div class="stat-top">
-                                <div class="stat-icon">
-                                    <i data-lucide="building-2"></i>
-                                </div>
-                            </div>
+                            \<div class="stat-top">
+                                \<div class="stat-icon">
+                                    \<i data-lucide="building-2">\</i>
+                                \</div>
+                            \</div>
 
-                            <div id="statThird" class="stat-number">
+                            \<div id="statThird" class="stat-number">
                                 0
-                            </div>
+                            \</div>
 
-                            <div class="stat-label">
+                            \<div class="stat-label">
                                 تحت التصرف المعتمد
-                            </div>
+                            \</div>
 
-                        </div>
+                        \</div>
 
-                        <div class="stat-card">
+                        \<div class="stat-card">
 
-                            <div class="stat-top">
-                                <div class="stat-icon">
-                                    <i data-lucide="activity"></i>
-                                </div>
-                            </div>
+                            \<div class="stat-top">
+                                \<div class="stat-icon">
+                                    \<i data-lucide="activity">\</i>
+                                \</div>
+                            \</div>
 
-                            <div id="statActive" class="stat-number">
+                            \<div id="statActive" class="stat-number">
                                 0
-                            </div>
+                            \</div>
 
-                            <div class="stat-label">
+                            \<div class="stat-label">
                                 وضعيات سارية
-                            </div>
+                            \</div>
 
-                        </div>
+                        \</div>
 
-                        <div class="stat-card">
+                        \<div class="stat-card">
 
-                            <div class="stat-top">
-                                <div class="stat-icon">
-                                    <i data-lucide="bell-ring"></i>
-                                </div>
-                            </div>
+                            \<div class="stat-top">
+                                \<div class="stat-icon">
+                                    \<i data-lucide="bell-ring">\</i>
+                                \</div>
+                            \</div>
 
-                            <div id="statAlerts" class="stat-number">
+                            \<div id="statAlerts" class="stat-number">
                                 0
-                            </div>
+                            \</div>
 
-                            <div class="stat-label">
+                            \<div class="stat-label">
                                 تنبيهات
-                            </div>
+                            \</div>
 
-                        </div>
+                        \</div>
 
-                    </div>
+                    \</div>
 
-                    <div class="section-card">
+                    \<div class="section-card">
 
-                        <div class="section-header">
+                        \<div class="section-header">
 
-                            <h3>
+                            \<h3>
                                 التنبيهات الداخلية
-                            </h3>
+                            \</h3>
 
-                            <button
+                            \<button
                                 class="btn btn-secondary"
                                 onclick="showPage('alerts')"
-                            >
+                            \>
                                 عرض الكل
-                                <i data-lucide="arrow-left" size="15"></i>
-                            </button>
+                                \<i data-lucide="arrow-left" size="15">\</i>
+                            \</button>
 
-                        </div>
+                        \</div>
 
-                        <div
+                        \<div
                             id="dashboardAlerts"
                             class="section-body"
-                        ></div>
+                        \>\</div>
 
-                    </div>
+                    \</div>
 
-                </section>
+                \</section>
 
-                <!-- Employees -->
+                \<!-- Employees -->
 
-                <section
+                \<section
                     id="page-employees"
                     class="page hidden"
-                >
+                \>
 
-                    <div class="section-card">
+                    \<div class="section-card">
 
-                        <div class="section-header">
+                        \<div class="section-header">
 
-                            <h3>
+                            \<h3>
                                 قائمة الموظفين
-                            </h3>
+                            \</h3>
 
-                            <div class="actions">
+                            \<div class="actions">
 
-                                <button
+                                \<button
                                     class="btn btn-light"
                                     onclick="printEmployees()"
-                                >
-                                    <i data-lucide="printer" size="15"></i>
+                                \>
+                                    \<i data-lucide="printer" size="15">\</i>
                                     طباعة القائمة
-                                </button>
+                                \</button>
 
-                                <button
+                                \<button
                                     class="btn btn-primary"
                                     onclick="openEmployeeModal()"
-                                >
-                                    <i data-lucide="user-plus" size="15"></i>
+                                \>
+                                    \<i data-lucide="user-plus" size="15">\</i>
                                     إضافة موظف
-                                </button>
+                                \</button>
 
-                            </div>
+                            \</div>
 
-                        </div>
+                        \</div>
 
-                        <div class="section-body">
+                        \<div class="section-body">
 
-                            <div class="toolbar">
+                            \<div class="toolbar">
 
-                                <div class="search-box">
+                                \<div class="search-box">
 
-                                    <i data-lucide="search" size="17"></i>
+                                    \<i data-lucide="search" size="17">\</i>
 
-                                    <input
+                                    \<input
                                         id="employeeSearch"
                                         type="text"
                                         placeholder="البحث بالاسم أو اللقب أو الرقم الوظيفي..."
                                         oninput="renderEmployees()"
-                                    >
+                                    \>
 
-                                </div>
+                                \</div>
 
-                                <div class="employee-type-filters" role="group" aria-label="تصفية نوع الوضعية">
+                                \<div class="employee-type-filters" role="group" aria-label="تصفية نوع الوضعية">
 
-                                    <button
+                                    \<button
                                         type="button"
                                         id="employeeTypeAll"
                                         class="employee-type-filter active"
                                         onclick="setEmployeeTypeFilter('all')"
-                                    >
+                                    \>
                                         الكل
-                                    </button>
+                                    \</button>
 
-                                    <button
+                                    \<button
                                         type="button"
                                         id="employeeTypeSecond"
                                         class="employee-type-filter"
                                         onclick="setEmployeeTypeFilter('انتداب')"
-                                    >
+                                    \>
                                         المنتدبون
-                                    </button>
+                                    \</button>
 
-                                    <button
+                                    \<button
                                         type="button"
                                         id="employeeTypeThird"
                                         class="employee-type-filter"
                                         onclick="setEmployeeTypeFilter('تحت التصرف')"
-                                    >
+                                    \>
                                         الموضوعون تحت التصرف
-                                    </button>
+                                    \</button>
 
-                                </div>
+                                \</div>
 
-                                <select
+                                \<select
                                     id="employeeStatusFilter"
                                     class="filter-select"
                                     onchange="renderEmployees()"
-                                >
-                                    <option value="all">كل الموظفين</option>
-                                    <option value="active">نشط</option>
-                                    <option value="inactive">غير نشط</option>
-                                </select>
+                                \>
+                                    \<option value="all">كل الموظفين\</option>
+                                    \<option value="active">نشط\</option>
+                                    \<option value="inactive">غير نشط\</option>
+                                \</select>
 
-                            </div>
+                            \</div>
 
-                            <div class="table-wrap">
+                            \<div class="table-wrap">
 
-                                <table>
+                                \<table>
 
-                                    <thead>
+                                    \<thead>
 
-                                        <tr>
-                                            <th>الرقم</th>
-                                            <th>الموظف</th>
-                                            <th>الرتبة</th>
-                                            <th>الوضعية</th>
-                                            <th>المدة</th>
-                                            <th>المؤسسة</th>
-                                            <th>إجراءات</th>
-                                        </tr>
+                                        \<tr>
+                                            \<th>الرقم\</th>
+                                            \<th>الموظف\</th>
+                                            \<th>الرتبة\</th>
+                                            \<th>الوضعية\</th>
+                                            \<th>المدة\</th>
+                                            \<th>المؤسسة\</th>
+                                            \<th>إجراءات\</th>
+                                        \</tr>
 
-                                    </thead>
+                                    \</thead>
 
-                                    <tbody id="employeesTable"></tbody>
+                                    \<tbody id="employeesTable">\</tbody>
 
-                                </table>
+                                \</table>
 
-                            </div>
+                            \</div>
 
-                        </div>
+                        \</div>
 
-                    </div>
+                    \</div>
 
-                </section>
+                \</section>
 
-                <!-- Assignments -->
+                \<!-- Assignments -->
 
-                <section
+                \<section
                     id="page-assignments"
                     class="page hidden"
-                >
+                \>
 
-                    <div class="section-card">
+                    \<div class="section-card">
 
-                        <div class="section-header">
+                        \<div class="section-header">
 
-                            <div>
+                            \<div>
 
-                                <h3>
+                                \<h3>
                                     مراجعة الوضعيات
-                                </h3>
+                                \</h3>
 
-                                <small
+                                \<small
                                     style="color:#758195;font-size:11px"
-                                >
+                                \>
                                     الوضعيات الجديدة تحتاج إلى اعتماد المسؤول
-                                </small>
+                                \</small>
 
-                            </div>
+                            \</div>
 
-                        </div>
+                        \</div>
 
-                        <div class="section-body">
+                        \<div class="section-body">
 
-                            <div class="toolbar">
+                            \<div class="toolbar">
 
-                                <div class="search-box">
+                                \<div class="search-box">
 
-                                    <i data-lucide="search" size="17"></i>
+                                    \<i data-lucide="search" size="17">\</i>
 
-                                    <input
+                                    \<input
                                         id="assignmentSearch"
                                         type="text"
                                         placeholder="البحث عن موظف أو مؤسسة..."
                                         oninput="renderAssignments()"
-                                    >
+                                    \>
 
-                                </div>
+                                \</div>
 
-                                <select
+                                \<select
                                     id="assignmentFilter"
                                     class="filter-select"
                                     onchange="renderAssignments()"
-                                >
-                                    <option value="pending">
+                                \>
+                                    \<option value="pending">
                                         قيد الاعتماد
-                                    </option>
+                                    \</option>
 
-                                    <option value="approved">
+                                    \<option value="approved">
                                         معتمدة
-                                    </option>
+                                    \</option>
 
-                                    <option value="all">
+                                    \<option value="all">
                                         الكل
-                                    </option>
+                                    \</option>
 
-                                </select>
+                                \</select>
 
-                            </div>
+                            \</div>
 
-                            <div class="table-wrap">
+                            \<div class="table-wrap">
 
-                                <table>
+                                \<table>
 
-                                    <thead>
+                                    \<thead>
 
-                                        <tr>
-                                            <th>الموظف</th>
-                                            <th>النوع</th>
-                                            <th>المؤسسة الأصلية</th>
-                                            <th>الوجهة</th>
-                                            <th>المدة</th>
-                                            <th>الحالة</th>
-                                            <th>إجراءات</th>
-                                        </tr>
+                                        \<tr>
+                                            \<th>الموظف\</th>
+                                            \<th>النوع\</th>
+                                            \<th>المؤسسة الأصلية\</th>
+                                            \<th>الوجهة\</th>
+                                            \<th>المدة\</th>
+                                            \<th>الحالة\</th>
+                                            \<th>إجراءات\</th>
+                                        \</tr>
 
-                                    </thead>
+                                    \</thead>
 
-                                    <tbody id="assignmentsTable"></tbody>
+                                    \<tbody id="assignmentsTable">\</tbody>
 
-                                </table>
+                                \</table>
 
-                            </div>
+                            \</div>
 
-                        </div>
+                        \</div>
 
-                    </div>
+                    \</div>
 
-                </section>
+                \</section>
 
-                <!-- Alerts -->
+                \<!-- Alerts -->
 
-                <section
+                \<section
                     id="page-alerts"
                     class="page hidden"
-                >
+                \>
 
-                    <div class="section-card">
+                    \<div class="section-card">
 
-                        <div class="section-header">
+                        \<div class="section-header">
 
-                            <h3>
+                            \<h3>
                                 التنبيهات الداخلية
-                            </h3>
+                            \</h3>
 
-                            <button
+                            \<button
                                 class="btn btn-light"
                                 onclick="loadAll()"
-                            >
-                                <i data-lucide="refresh-cw" size="15"></i>
+                            \>
+                                \<i data-lucide="refresh-cw" size="15">\</i>
                                 تحديث
-                            </button>
+                            \</button>
 
-                        </div>
+                        \</div>
 
-                        <div
+                        \<div
                             id="allAlerts"
                             class="section-body"
-                        ></div>
+                        \>\</div>
 
-                    </div>
+                    \</div>
 
-                </section>
+                \</section>
 
-            </div>
+            \</div>
 
-        </main>
+        \</main>
 
-    </div>
+    \</div>
 
-</div>
+\</div>
 
-<!-- =========================================================
+\<!-- =========================================================
      Employee Modal
-========================================================= -->
+\========================================================= -->
 
-<div id="employeeModal" class="modal">
+\<div id="employeeModal" class="modal">
 
-    <div class="modal-card">
+    \<div class="modal-card">
 
-        <div class="modal-header">
+        \<div class="modal-header">
 
-            <h3 id="employeeModalTitle">
+            \<h3 id="employeeModalTitle">
                 إضافة موظف
-            </h3>
+            \</h3>
 
-            <button
+            \<button
                 class="close-btn"
                 onclick="closeModal('employeeModal')"
-            >
-                <i data-lucide="x"></i>
-            </button>
+            \>
+                \<i data-lucide="x">\</i>
+            \</button>
 
-        </div>
+        \</div>
 
-        <form id="employeeForm">
+        \<form id="employeeForm">
 
-            <div class="modal-body">
+            \<div class="modal-body">
 
-                <input
+                \<input
                     id="employeeId"
                     type="hidden"
-                >
+                \>
 
-                <div class="assignment-first-step">
+                \<div class="assignment-first-step">
 
-                    <div class="step-badge">1</div>
+                    \<div class="step-badge">1\</div>
 
-                    <div>
-                        <div class="step-title">تحديد الوضعية الإدارية أولًا</div>
-                        <div class="step-help">اختر الوضعية، وسيتم منح رقم المتابعة تلقائيًا ضمن تسلسل هذه الوضعية.</div>
-                    </div>
+                    \<div>
+                        \<div class="step-title">تحديد الوضعية الإدارية أولًا\</div>
+                        \<div class="step-help">اختر الوضعية، وسيتم منح رقم المتابعة تلقائيًا ضمن تسلسل هذه الوضعية.\</div>
+                    \</div>
 
-                </div>
+                \</div>
 
-                <div class="form-grid assignment-choice-grid">
+                \<div class="form-grid assignment-choice-grid">
 
-                    <div class="field">
+                    \<div class="field">
 
-                        <label>نوع الوضعية *</label>
+                        \<label>نوع الوضعية \*\</label>
 
-                        <select id="assignmentType" onchange="updateAutoEmployeeNumber()">
+                        \<select id="assignmentType" onchange="updateAutoEmployeeNumber()">
 
-                            <option value="انتداب">
+                            \<option value="انتداب">
                                 انتداب
-                            </option>
+                            \</option>
 
-                            <option value="تحت التصرف">
+                            \<option value="تحت التصرف">
                                 تحت التصرف
-                            </option>
+                            \</option>
 
-                        </select>
+                        \</select>
 
-                    </div>
+                    \</div>
 
-                    <div class="field">
+                    \<div class="field">
 
-                        <label>الاتجاه *</label>
+                        \<label>الاتجاه \*\</label>
 
-                        <select id="assignmentDirection">
+                        \<select id="assignmentDirection">
 
-                            <option value="من المؤسسة">
+                            \<option value="من المؤسسة">
                                 من المؤسسة
-                            </option>
+                            \</option>
 
-                            <option value="إلى المؤسسة">
+                            \<option value="إلى المؤسسة">
                                 إلى المؤسسة
-                            </option>
+                            \</option>
 
-                        </select>
+                        \</select>
 
-                    </div>
+                    \</div>
 
-                    <div class="field auto-number-field">
+                    \<div class="field auto-number-field">
 
-                        <label>رقم المتابعة</label>
+                        \<label>رقم المتابعة\</label>
 
-                        <div class="auto-number-wrap">
-                            <span class="auto-number-icon"><i data-lucide="hash" size="17"></i></span>
-                            <input
+                        \<div class="auto-number-wrap">
+                            \<span class="auto-number-icon">\<i data-lucide="hash" size="17">\</i>\</span>
+                            \<input
                                 id="employeeNumber"
                                 type="text"
                                 autocomplete="off"
                                 readonly
                                 placeholder="يُمنح تلقائيًا"
-                            >
-                        </div>
-                        <small id="numberHint" class="field-hint">رقم مستقل حسب نوع الوضعية</small>
+                            \>
+                        \</div>
+                        \<small id="numberHint" class="field-hint">رقم مستقل حسب نوع الوضعية\</small>
 
-                    </div>
+                    \</div>
 
-                </div>
+                \</div>
 
-                <div class="form-section-divider">
-                    <span class="step-badge">2</span>
-                    <div>
-                        <div class="step-title">بيانات الموظف</div>
-                        <div class="step-help">أدخل المعلومات الأساسية للموظف.</div>
-                    </div>
-                </div>
+                \<div class="form-section-divider">
+                    \<span class="step-badge">2\</span>
+                    \<div>
+                        \<div class="step-title">بيانات الموظف\</div>
+                        \<div class="step-help">أدخل المعلومات الأساسية للموظف.\</div>
+                    \</div>
+                \</div>
 
-                <div class="form-grid">
+                \<div class="form-grid">
 
-                    <div class="field">
+                    \<div class="field">
 
-                        <label>الاسم *</label>
+                        \<label>الاسم \*\</label>
 
-                        <input
+                        \<input
                             id="firstName"
                             type="text"
                             autocomplete="off"
                             required
-                        >
+                        \>
 
-                    </div>
+                    \</div>
 
-                    <div class="field">
+                    \<div class="field">
 
-                        <label>اللقب *</label>
+                        \<label>اللقب \*\</label>
 
-                        <input
+                        \<input
                             id="lastName"
                             type="text"
                             autocomplete="off"
                             required
-                        >
+                        \>
 
-                    </div>
+                    \</div>
 
-                    <div class="field full">
+                    \<div class="field full">
 
-                        <label>الرتبة *</label>
+                        \<label>الرتبة \*\</label>
 
-                        <input
+                        \<input
                             id="grade"
                             type="text"
                             autocomplete="off"
                             required
-                        >
+                        \>
 
-                    </div>
+                    \</div>
 
-                </div>
+                \</div>
 
-                <div class="form-section-divider legacy-divider">
-                    <span class="step-badge">3</span>
-                    <div>
-                        <div class="step-title">تفاصيل الوضعية</div>
-                        <div class="step-help">أكمل بيانات المؤسسة والتواريخ والمدة.</div>
-                    </div>
-                </div>
+                \<div class="form-section-divider legacy-divider">
+                    \<span class="step-badge">3\</span>
+                    \<div>
+                        \<div class="step-title">تفاصيل الوضعية\</div>
+                        \<div class="step-help">أكمل بيانات المؤسسة والتواريخ والمدة.\</div>
+                    \</div>
+                \</div>
 
-                    <div class="field">
+                    \<div class="field">
 
-                        <label>المؤسسة الأصلية *</label>
+                        \<label>المؤسسة الأصلية \*\</label>
 
-                        <input
+                        \<input
                             id="originalInstitution"
                             type="text"
                             value="المؤسسة العمومية الاستشفائية بأولف"
                             required
-                        >
+                        \>
 
-                    </div>
+                    \</div>
 
-                    <div class="field">
+                    \<div class="field">
 
-                        <label>المؤسسة التي سيوجه إليها *</label>
+                        \<label>المؤسسة التي سيوجه إليها \*\</label>
 
-                        <input
+                        \<input
                             id="receivingInstitution"
                             type="text"
                             required
-                        >
+                        \>
 
-                    </div>
+                    \</div>
 
-                    <div class="field">
+                    \<div class="field">
 
-                        <label>من تاريخ *</label>
+                        \<label>من تاريخ \*\</label>
 
-                        <input
+                        \<input
                             id="startDate"
                             type="date"
                             required
                             onchange="updateDurationPreview()"
-                        >
+                        \>
 
-                    </div>
+                    \</div>
 
-                    <div class="field">
+                    \<div class="field">
 
-                        <label>إلى تاريخ</label>
+                        \<label>إلى تاريخ\</label>
 
-                        <input
+                        \<input
                             id="endDate"
                             type="date"
                             onchange="updateDurationPreview()"
-                        >
+                        \>
 
-                    </div>
+                    \</div>
 
-                    <div class="field full">
+                    \<div class="field full">
 
-                        <label style="display:flex;align-items:center;gap:8px">
+                        \<label style="display\:flex;align-items\:center;gap:8px">
 
-                            <input
+                            \<input
                                 id="isIndefinite"
                                 type="checkbox"
                                 onchange="toggleEndDate()"
-                                style="width:auto"
-                            >
+                                style="width\:auto"
+                            \>
 
                             الوضعية غير محددة المدة
 
-                        </label>
+                        \</label>
 
-                    </div>
+                    \</div>
 
-                    <div
+                    \<div
                         id="durationPreview"
                         class="full"
                         style="
@@ -2524,118 +2525,118 @@ tbody tr:hover td{
                             font-size:13px;
                             margin-bottom:15px;
                         "
-                    >
+                    \>
                         المدة: —
-                    </div>
+                    \</div>
 
-                    <div class="field full">
+                    \<div class="field full">
 
-                        <label>ملاحظات</label>
+                        \<label>ملاحظات\</label>
 
-                        <textarea
+                        \<textarea
                             id="notes"
                             placeholder="ملاحظات اختيارية..."
-                        ></textarea>
+                        \>\</textarea>
 
-                    </div>
+                    \</div>
 
-                </div>
+                \</div>
 
-            </div>
+            \</div>
 
-            <div class="modal-footer">
+            \<div class="modal-footer">
 
-                <button
+                \<button
                     type="button"
                     class="btn btn-light"
                     onclick="closeModal('employeeModal')"
-                >
+                \>
                     إلغاء
-                </button>
+                \</button>
 
-                <button
+                \<button
                     type="submit"
                     class="btn btn-primary"
-                >
-                    <i data-lucide="save" size="16"></i>
+                \>
+                    \<i data-lucide="save" size="16">\</i>
                     حفظ
-                </button>
+                \</button>
 
-            </div>
+            \</div>
 
-        </form>
+        \</form>
 
-    </div>
+    \</div>
 
-</div>
+\</div>
 
-<!-- =========================================================
+\<!-- =========================================================
      Profile Modal
-========================================================= -->
+\========================================================= -->
 
-<div id="profileModal" class="modal">
+\<div id="profileModal" class="modal">
 
-    <div class="modal-card">
+    \<div class="modal-card">
 
-        <div class="modal-header">
+        \<div class="modal-header">
 
-            <h3>
+            \<h3>
                 ملف الموظف
-            </h3>
+            \</h3>
 
-            <button
+            \<button
                 class="close-btn no-print"
                 onclick="closeModal('profileModal')"
-            >
-                <i data-lucide="x"></i>
-            </button>
+            \>
+                \<i data-lucide="x">\</i>
+            \</button>
 
-        </div>
+        \</div>
 
-        <div
+        \<div
             id="profileContent"
             class="modal-body"
-        ></div>
+        \>\</div>
 
-        <div class="modal-footer no-print">
+        \<div class="modal-footer no-print">
 
-            <button
+            \<button
                 class="btn btn-light"
                 onclick="closeModal('profileModal')"
-            >
+            \>
                 إغلاق
-            </button>
+            \</button>
 
-            <button
+            \<button
                 class="btn btn-primary"
                 onclick="printProfile()"
-            >
-                <i data-lucide="printer" size="16"></i>
+            \>
+                \<i data-lucide="printer" size="16">\</i>
                 طباعة / حفظ PDF
-            </button>
+            \</button>
 
-        </div>
+        \</div>
 
-    </div>
+    \</div>
 
-</div>
+\</div>
 
-<div id="toastContainer"></div>
+\<div id="toastContainer">\</div>
 
-<!-- =========================================================
+\<!-- =========================================================
      مساحة طباعة مستقلة لقائمة الموظفين
-========================================================= -->
+\========================================================= -->
 
-<div id="employeePrintArea" class="employee-print-area"></div>
+\<div id="employeePrintArea" class="employee-print-area">\</div>
 
-<script>
+\<script>
 
-/* =========================================================
+/\* =========================================================
    إعداد Supabase
-========================================================= */
+\========================================================= \*/
 
 const SUPABASE_URL =
-    "https://etqbcnskmzlumfguryjk.supabase.co";
+    "[https://etqbcnskmzlumfguryjk.supabase.co](https://etqbcnskmzlumfguryjk.supabase.co)";
 
 const SUPABASE_KEY =
     "sb_publishable_lTuyKeXZOPZO5AzVzRuGUA_6wZwjz1m";
@@ -2646,9 +2647,9 @@ const db =
         SUPABASE_KEY
     );
 
-/* =========================================================
+/\* =========================================================
    الحالة العامة
-========================================================= */
+\========================================================= \*/
 
 let currentUser = null;
 
@@ -2657,22 +2658,22 @@ let employeeTypeFilter = "all";
 
 let assignments = [];
 
-/*
- * الموظف الذي يتم تعديله.
- */
+/\*
+ \* الموظف الذي يتم تعديله.
+ \*/
 let editingEmployeeId = null;
 
-/*
- * الوضعية المحددة التي يتم تعديلها.
- *
- * هذا المتغير يمنع تعديل أول وضعية للموظف
- * بالخطأ عندما يكون لديه أكثر من وضعية.
- */
+/\*
+ \* الوضعية المحددة التي يتم تعديلها.
+ \*
+ \* هذا المتغير يمنع تعديل أول وضعية للموظف
+ \* بالخطأ عندما يكون لديه أكثر من وضعية.
+ \*/
 let editingAssignmentId = null;
 
-/* =========================================================
+/\* =========================================================
    أدوات عامة
-========================================================= */
+\========================================================= \*/
 
 function esc(value){
 
@@ -2730,7 +2731,7 @@ function todayDate(){
             d.getDate()
         ).padStart(2,"0");
 
-    return `${y}-${m}-${day}`;
+    return \`${y}-${m}-${day}\`;
 }
 
 function generateEmployeeNumber(assignmentType = null){
@@ -2740,12 +2741,12 @@ function generateEmployeeNumber(assignmentType = null){
         document.getElementById("assignmentType")?.value ||
         "انتداب";
 
-    /*
-     * الترقيم مستقل لكل وضعية:
-     * 001، 002، 003... للمنتدبين
-     * 001، 002، 003... للموضوعين تحت التصرف
-     * وذلك بالاعتماد على آخر وضعية معتمدة لكل موظف.
-     */
+    /\*
+     \* الترقيم مستقل لكل وضعية:
+     \* 001، 002، 003... للمنتدبين
+     \* 001، 002، 003... للموضوعين تحت التصرف
+     \* وذلك بالاعتماد على آخر وضعية معتمدة لكل موظف.
+     \*/
     const numbers =
         employees
             .filter(e => {
@@ -2876,14 +2877,14 @@ function calculateDuration(start,end){
     }
 
     const totalMonths =
-        years * 12 + months;
+        years \* 12 + months;
 
     let result =
-        `${totalMonths} شهر`;
+        \`${totalMonths} شهر\`;
 
     if(days > 0){
         result +=
-            ` و ${days} يوم`;
+            \` و ${days} يوم\`;
     }
 
     return result;
@@ -2896,8 +2897,8 @@ function assignmentState(a){
         return {
             text:"سارية - غير محددة المدة",
             class:"badge-success",
-            alert:null,
-            remaining:null
+            alert\:null,
+            remaining\:null
         };
 
     }
@@ -2907,8 +2908,8 @@ function assignmentState(a){
         return {
             text:"غير محددة",
             class:"badge-info",
-            alert:null,
-            remaining:null
+            alert\:null,
+            remaining\:null
         };
 
     }
@@ -2932,7 +2933,7 @@ function assignmentState(a){
     if(remaining <= 7){
 
         return {
-            text:`تنتهي خلال ${remaining} يوم`,
+            text:\`تنتهي خلال ${remaining} يوم\`,
             class:"badge-danger",
             alert:"danger",
             remaining
@@ -2942,7 +2943,7 @@ function assignmentState(a){
     if(remaining <= 30){
 
         return {
-            text:`تنتهي خلال ${remaining} يوم`,
+            text:\`تنتهي خلال ${remaining} يوم\`,
             class:"badge-warning",
             alert:"warning",
             remaining
@@ -2952,7 +2953,7 @@ function assignmentState(a){
     if(remaining <= 90){
 
         return {
-            text:`تنتهي خلال ${remaining} يوم`,
+            text:\`تنتهي خلال ${remaining} يوم\`,
             class:"badge-info",
             alert:"info",
             remaining
@@ -2962,7 +2963,7 @@ function assignmentState(a){
     return {
         text:"سارية",
         class:"badge-success",
-        alert:null,
+        alert\:null,
         remaining
     };
 }
@@ -2973,7 +2974,7 @@ function showToast(message,type="success"){
         document.createElement("div");
 
     box.className =
-        `toast ${type}`;
+        \`toast ${type}\`;
 
     const icon =
         type === "error"
@@ -2982,12 +2983,12 @@ function showToast(message,type="success"){
         ? "triangle-alert"
         : "circle-check";
 
-    box.innerHTML = `
-        <i data-lucide="${icon}" size="18"></i>
-        <div style="font-size:12px;line-height:1.7">
+    box.innerHTML = \`
+        \<i data-lucide="${icon}" size="18">\</i>
+        \<div style="font-size:12px;line-height:1.7">
             ${esc(message)}
-        </div>
-    `;
+        \</div>
+    \`;
 
     document
         .getElementById("toastContainer")
@@ -3001,16 +3002,16 @@ function showToast(message,type="success"){
     );
 }
 
-/* =========================================================
+/\* =========================================================
    تسجيل الدخول
-========================================================= */
+\========================================================= \*/
 
 function showLoginDiagnostic(message,type="info",details=""){
     const box=document.getElementById("loginDiagnostic");
     if(!box)return;
-    box.className=`login-diagnostic show ${type}`;
-    box.innerHTML=`<strong>${esc(message)}</strong>${details?`<div style="margin-top:5px">${esc(details)}</div>`:""}`;
-    if(window.lucide)lucide.createIcons();
+    box.className=\`login-diagnostic show ${type}\`;
+    box.innerHTML=\`\<strong>${esc(message)}\</strong>${details?\`\<div style="margin-top:5px">${esc(details)}\</div>\`:""}\`;
+    if(window\.lucide)lucide.createIcons();
 }
 
 function clearLoginDiagnostic(){
@@ -3098,8 +3099,8 @@ document.getElementById("loginForm").addEventListener("submit",async function(e)
     const password=document.getElementById("loginPassword").value;
     const button=this.querySelector('button[type="submit"]');
     button.disabled=true;
-    button.innerHTML='<i data-lucide="loader-circle" size="17"></i> جارٍ التحقق...';
-    if(window.lucide)lucide.createIcons();
+    button.innerHTML='\<i data-lucide="loader-circle" size="17">\</i> جارٍ التحقق...';
+    if(window\.lucide)lucide.createIcons();
     try{
         if(!email||!password){
             showLoginDiagnostic("أدخل البريد الإلكتروني وكلمة المرور أولًا.","warning");
@@ -3140,7 +3141,7 @@ document.getElementById("loginForm").addEventListener("submit",async function(e)
         showApp();
         const loaded=await loadAll();
         if(loaded===false){
-            const {data:sessionData}=await db.auth.getSession();
+            const {data\:sessionData}=await db.auth.getSession();
             const lastError="تعذر تحميل بيانات المنصة بعد نجاح تسجيل الدخول. إذا ظهرت رسالة RLS فهذا يعني أن سياسات Row Level Security تمنع قراءة الجداول المطلوبة.";
             if(sessionData?.session){
                 await db.auth.signOut();
@@ -3157,8 +3158,8 @@ document.getElementById("loginForm").addEventListener("submit",async function(e)
         showLoginDiagnostic(info.title,"error",info.details);
     }finally{
         button.disabled=false;
-        button.innerHTML='<i data-lucide="log-in" size="17"></i> دخول المسؤول';
-        if(window.lucide)lucide.createIcons();
+        button.innerHTML='\<i data-lucide="log-in" size="17">\</i> دخول المسؤول';
+        if(window\.lucide)lucide.createIcons();
     }
 });
 
@@ -3170,13 +3171,13 @@ async function logout(){
 
 function classifySupabaseError(error){
     const raw=String(error?.message||error||"");
-    const lower=raw.toLowerCase();
+    const lower=raw\.toLowerCase();
     if(lower.startsWith("config:")||isConfigError(error))return {title:"مشكلة في إعدادات Supabase.",details:"تعذر استخدام عنوان المشروع أو مفتاح الاتصال. راجع SUPABASE_URL و SUPABASE_KEY داخل هذا الملف."};
-    if(lower.includes("rls_admin_check:")||isRlsError(error))return {title:"مشكلة Supabase / RLS.",details:raw.replace(/^RLS_ADMIN_CHECK:\s*/i,"")||"رفض Row Level Security العملية. راجع سياسات جدول user_roles والجداول التي تُحمّل بعد الدخول."};
+    if(lower.includes("rls_admin_check:")||isRlsError(error))return {title:"مشكلة Supabase / RLS.",details\:raw\.replace(/^RLS_ADMIN_CHECK:\s\*/i,"")||"رفض Row Level Security العملية. راجع سياسات جدول user_roles والجداول التي تُحمّل بعد الدخول."};
     if(lower.includes("email not confirmed"))return {title:"الحساب موجود لكن البريد الإلكتروني غير مؤكد.",details:"يجب تأكيد البريد من Supabase Authentication قبل السماح بالدخول."};
     if(isInvalidCredentials(error))return {title:"البريد الإلكتروني أو كلمة المرور غير صحيحة.",details:"Supabase يستخدم رسالة موحدة لهذه الحالة، لذلك لا يمكن للواجهة تأكيد أن الحساب غير موجود بدلًا من كون كلمة المرور خاطئة."};
     if(lower.includes("too many requests"))return {title:"تم تجاوز عدد محاولات تسجيل الدخول.",details:"انتظر قليلًا ثم أعد المحاولة."};
-    return {title:"حدث خطأ أثناء الاتصال بـ Supabase.",details:raw||"خطأ غير معروف."};
+    return {title:"حدث خطأ أثناء الاتصال بـ Supabase.",details\:raw||"خطأ غير معروف."};
 }
 
 function friendlyError(error){
@@ -3188,9 +3189,9 @@ function handleSupabaseError(error){
     showToast(friendlyError(error),"error");
 }
 
-/* =========================================================
+/\* =========================================================
    التنقل
-========================================================= */
+\========================================================= \*/
 
 function showPage(page){
 
@@ -3203,7 +3204,7 @@ function showPage(page){
 
     const target =
         document.getElementById(
-            `page-${page}`
+            \`page-${page}\`
         );
 
     if(target){
@@ -3240,7 +3241,7 @@ function showPage(page){
 }
 
 function openMovementsPage(){
-    window.location.href = "movements.html";
+    window\.location.href = "movements.html";
 }
 
 function toggleSidebar(){
@@ -3259,9 +3260,9 @@ function closeSidebar(){
 
 }
 
-/* =========================================================
+/\* =========================================================
    تحميل البيانات
-========================================================= */
+\========================================================= \*/
 
 async function loadAll(){
 
@@ -3275,16 +3276,16 @@ async function loadAll(){
 
                 db
                     .from("employees")
-                    .select("*")
+                    .select("\*")
                     .order("last_name")
                     .order("first_name"),
 
                 db
                     .from("assignments")
-                    .select("*")
+                    .select("\*")
                     .order(
                         "created_at",
-                        {ascending:false}
+                        {ascending\:false}
                     )
 
             ]);
@@ -3336,9 +3337,9 @@ function renderAll(){
 
 }
 
-/* =========================================================
+/\* =========================================================
    الإحصائيات
-========================================================= */
+\========================================================= \*/
 
 function approvedAssignments(){
 
@@ -3400,9 +3401,9 @@ function renderStats(){
 
 }
 
-/* =========================================================
+/\* =========================================================
    الموظفون
-========================================================= */
+\========================================================= \*/
 
 function employeeAssignments(employeeId){
 
@@ -3585,23 +3586,23 @@ function renderEmployees(){
 
     if(!rows.length){
 
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="7">
+        tbody.innerHTML = \`
+            \<tr>
+                \<td colspan="7">
 
-                    <div class="empty">
+                    \<div class="empty">
 
-                        <div class="empty-icon">
-                            <i data-lucide="users"></i>
-                        </div>
+                        \<div class="empty-icon">
+                            \<i data-lucide="users">\</i>
+                        \</div>
 
                         لا توجد بيانات مطابقة.
 
-                    </div>
+                    \</div>
 
-                </td>
-            </tr>
-        `;
+                \</td>
+            \</tr>
+        \`;
 
         lucide.createIcons();
 
@@ -3615,7 +3616,7 @@ function renderEmployees(){
                 getLatestApprovedAssignment(e.id);
 
             let typeHtml =
-                '<span style="color:#758195">لا توجد وضعية معتمدة</span>';
+                '\<span style="color:#758195">لا توجد وضعية معتمدة\</span>';
 
             let durationHtml = "—";
             let institutionHtml = "—";
@@ -3630,114 +3631,114 @@ function renderEmployees(){
                     ? "badge-purple"
                     : "badge-info";
 
-                typeHtml = `
-                    <span class="badge ${typeClass}">
+                typeHtml = \`
+                    \<span class="badge ${typeClass}">
                         ${esc(currentAssignment.assignment_type)}
-                    </span>
-                `;
+                    \</span>
+                \`;
 
                 durationHtml =
                     currentAssignment.is_indefinite
-                    ? '<span class="badge badge-info">غير محددة المدة</span>'
-                    : `<span class="badge badge-warning">
+                    ? '\<span class="badge badge-info">غير محددة المدة\</span>'
+                    : \`\<span class="badge badge-warning">
                         ${esc(
                             calculateDuration(
                                 currentAssignment.start_date,
                                 currentAssignment.end_date
                             )
                         )}
-                    </span>`;
+                    \</span>\`;
 
-                institutionHtml = `
-                    <div class="institution-cell">
-                        <strong>
+                institutionHtml = \`
+                    \<div class="institution-cell">
+                        \<strong>
                             ${esc(
                                 isSecondment
                                 ? currentAssignment.original_institution
                                 : currentAssignment.receiving_institution
                             )}
-                        </strong>
-                    </div>
-                `;
+                        \</strong>
+                    \</div>
+                \`;
             }
 
-            return `
-                <tr>
+            return \`
+                \<tr>
 
-                    <td>
-                        <span class="employee-number-badge">
+                    \<td>
+                        \<span class="employee-number-badge">
                             ${esc(e.employee_number || "—")}
-                        </span>
-                    </td>
+                        \</span>
+                    \</td>
 
-                    <td>
-                        <div class="employee-name-cell">
-                            <strong>
+                    \<td>
+                        \<div class="employee-name-cell">
+                            \<strong>
                                 ${esc(e.first_name)}
                                 ${esc(e.last_name)}
-                            </strong>
-                        </div>
-                    </td>
+                            \</strong>
+                        \</div>
+                    \</td>
 
-                    <td>
-                        <span class="grade-cell">
+                    \<td>
+                        \<span class="grade-cell">
                             ${esc(e.grade)}
-                        </span>
-                    </td>
+                        \</span>
+                    \</td>
 
-                    <td>
+                    \<td>
                         ${typeHtml}
-                    </td>
+                    \</td>
 
-                    <td>
+                    \<td>
                         ${durationHtml}
-                    </td>
+                    \</td>
 
-                    <td>
+                    \<td>
                         ${institutionHtml}
-                    </td>
+                    \</td>
 
-                    <td>
-                        <div class="actions">
+                    \<td>
+                        \<div class="actions">
 
-                            <button
+                            \<button
                                 class="icon-btn view"
                                 title="عرض الملف"
                                 onclick="openProfile('${e.id}')"
-                            >
-                                <i
+                            \>
+                                \<i
                                     data-lucide="folder-open"
                                     size="16"
-                                ></i>
-                            </button>
+                                \>\</i>
+                            \</button>
 
-                            <button
+                            \<button
                                 class="icon-btn edit"
                                 title="تعديل"
                                 onclick="openEmployeeModal('${e.id}')"
-                            >
-                                <i
+                            \>
+                                \<i
                                     data-lucide="pencil"
                                     size="16"
-                                ></i>
-                            </button>
+                                \>\</i>
+                            \</button>
 
-                            <button
+                            \<button
                                 class="icon-btn delete"
                                 title="حذف"
                                 onclick="deleteEmployee('${e.id}')"
-                            >
-                                <i
+                            \>
+                                \<i
                                     data-lucide="trash-2"
                                     size="16"
-                                ></i>
-                            </button>
+                                \>\</i>
+                            \</button>
 
-                        </div>
-                    </td>
+                        \</div>
+                    \</td>
 
-                </tr>
-            `;
+                \</tr>
+            \`;
 
         }).join("");
 
@@ -3745,9 +3746,9 @@ function renderEmployees(){
 
 }
 
-/* =========================================================
+/\* =========================================================
    حماية وإعادة تفعيل حقول النموذج
-========================================================= */
+\========================================================= \*/
 
 function enableEmployeeFields(){
 
@@ -3847,18 +3848,18 @@ function resetEmployeeForm(){
 
 }
 
-/* =========================================================
+/\* =========================================================
    إضافة / تعديل موظف
-========================================================= */
+\========================================================= \*/
 
 function openEmployeeModal(id=null){
 
-    /*
-     * نبدأ دائمًا بتنظيف النموذج.
-     *
-     * هذا مهم حتى لا تنتقل حالة disabled
-     * أو بيانات الموظف السابق إلى نموذج جديد.
-     */
+    /\*
+     \* نبدأ دائمًا بتنظيف النموذج.
+     \*
+     \* هذا مهم حتى لا تنتقل حالة disabled
+     \* أو بيانات الموظف السابق إلى نموذج جديد.
+     \*/
 
     resetEmployeeForm();
 
@@ -3871,9 +3872,9 @@ function openEmployeeModal(id=null){
         ? "تعديل بيانات الموظف"
         : "إضافة موظف";
 
-    /*
-     * تأكيد إضافي أن الحقول قابلة للكتابة.
-     */
+    /\*
+     \* تأكيد إضافي أن الحقول قابلة للكتابة.
+     \*/
 
     enableEmployeeFields();
 
@@ -3917,13 +3918,13 @@ function openEmployeeModal(id=null){
             .value =
             employee.grade || "";
 
-        /*
-         * عند تعديل الموظف من قائمة الموظفين:
-         * نستعمل أول وضعية له كبيانات افتراضية.
-         *
-         * أما عند تعديل وضعية محددة من جدول الوضعيات،
-         * فإن editAssignment() يحدد editingAssignmentId.
-         */
+        /\*
+         \* عند تعديل الموظف من قائمة الموظفين:
+         \* نستعمل أول وضعية له كبيانات افتراضية.
+         \*
+         \* أما عند تعديل وضعية محددة من جدول الوضعيات،
+         \* فإن editAssignment() يحدد editingAssignmentId.
+         \*/
 
         const firstAssignment =
             assignments.find(
@@ -3997,14 +3998,14 @@ function openEmployeeModal(id=null){
         .getElementById("employeeModal")
         .classList.add("show");
 
-    /*
-     * عند الإضافة:
-     * نضع المؤشر في الاسم تلقائيًا.
-     *
-     * وعند التعديل:
-     * نضعه أيضًا في الاسم حتى يكون الحقل
-     * قابلًا للتعديل مباشرة.
-     */
+    /\*
+     \* عند الإضافة:
+     \* نضع المؤشر في الاسم تلقائيًا.
+     \*
+     \* وعند التعديل:
+     \* نضعه أيضًا في الاسم حتى يكون الحقل
+     \* قابلًا للتعديل مباشرة.
+     \*/
 
     setTimeout(() => {
 
@@ -4192,9 +4193,9 @@ async function saveEmployee(e){
 
         if(editingEmployeeId){
 
-            /*
-             * تحديث بيانات الموظف.
-             */
+            /\*
+             \* تحديث بيانات الموظف.
+             \*/
 
             const {
                 error
@@ -4225,13 +4226,13 @@ async function saveEmployee(e){
                 throw error;
             }
 
-            /*
-             * إذا كانت هناك وضعية محددة
-             * في editingAssignmentId نستخدمها.
-             *
-             * وإذا لم توجد، نبحث عن أول وضعية
-             * للموظف كحل احتياطي.
-             */
+            /\*
+             \* إذا كانت هناك وضعية محددة
+             \* في editingAssignmentId نستخدمها.
+             \*
+             \* وإذا لم توجد، نبحث عن أول وضعية
+             \* للموظف كحل احتياطي.
+             \*/
 
             const existing =
                 editingAssignmentId
@@ -4282,10 +4283,10 @@ async function saveEmployee(e){
                             notes:
                                 notes,
 
-                            /*
-                             * أي تعديل على وضعية معتمدة
-                             * يعيدها إلى المراجعة.
-                             */
+                            /\*
+                             \* أي تعديل على وضعية معتمدة
+                             \* يعيدها إلى المراجعة.
+                             \*/
 
                             approval_status:
                                 "pending",
@@ -4312,10 +4313,10 @@ async function saveEmployee(e){
 
             }else{
 
-                /*
-                 * إذا كان الموظف لا يملك وضعية،
-                 * ننشئ وضعية جديدة.
-                 */
+                /\*
+                 \* إذا كان الموظف لا يملك وضعية،
+                 \* ننشئ وضعية جديدة.
+                 \*/
 
                 const {
                     error:
@@ -4379,12 +4380,12 @@ async function saveEmployee(e){
 
         }else{
 
-            /*
-             * إضافة موظف جديد.
-             */
+            /\*
+             \* إضافة موظف جديد.
+             \*/
 
             const {
-                data:employee,
+                data\:employee,
                 error
             } =
                 await db
@@ -4414,9 +4415,9 @@ async function saveEmployee(e){
                 throw error;
             }
 
-            /*
-             * إضافة الوضعية المرتبطة بالموظف.
-             */
+            /\*
+             \* إضافة الوضعية المرتبطة بالموظف.
+             \*/
 
             const {
                 error:
@@ -4464,11 +4465,11 @@ async function saveEmployee(e){
 
             if(assignmentError){
 
-                /*
-                 * في حالة فشل إضافة الوضعية،
-                 * نحذف الموظف الذي أُضيف للتو
-                 * حتى لا يبقى سجل ناقص.
-                 */
+                /\*
+                 \* في حالة فشل إضافة الوضعية،
+                 \* نحذف الموظف الذي أُضيف للتو
+                 \* حتى لا يبقى سجل ناقص.
+                 \*/
 
                 await db
                     .from("employees")
@@ -4497,9 +4498,9 @@ async function saveEmployee(e){
             "employeeModal"
         );
 
-        /*
-         * تصفير معرفات التعديل بعد الحفظ.
-         */
+        /\*
+         \* تصفير معرفات التعديل بعد الحفظ.
+         \*/
 
         editingEmployeeId = null;
 
@@ -4520,9 +4521,9 @@ async function saveEmployee(e){
 
 }
 
-/* =========================================================
+/\* =========================================================
    حذف موظف
-========================================================= */
+\========================================================= \*/
 
 async function deleteEmployee(id){
 
@@ -4535,7 +4536,7 @@ async function deleteEmployee(id){
 
     const confirmed =
         confirm(
-            `هل تريد حذف الموظف "${employee.first_name} ${employee.last_name}"؟\n\nسيتم حذف جميع الوضعيات المرتبطة به أيضًا.`
+            \`هل تريد حذف الموظف "${employee.first_name} ${employee.last_name}"؟\n\nسيتم حذف جميع الوضعيات المرتبطة به أيضًا.\`
         );
 
     if(!confirmed){
@@ -4600,9 +4601,9 @@ async function deleteEmployee(id){
 
 }
 
-/* =========================================================
+/\* =========================================================
    الوضعيات
-========================================================= */
+\========================================================= \*/
 
 function renderAssignments(){
 
@@ -4642,7 +4643,7 @@ function renderAssignments(){
             const employeeName =
                 employee
                 ?
-                `${employee.first_name} ${employee.last_name}`
+                \`${employee.first_name} ${employee.last_name}\`
                 :
                 "";
 
@@ -4673,25 +4674,25 @@ function renderAssignments(){
 
     if(!rows.length){
 
-        tbody.innerHTML = `
-            <tr>
+        tbody.innerHTML = \`
+            \<tr>
 
-                <td colspan="7">
+                \<td colspan="7">
 
-                    <div class="empty">
+                    \<div class="empty">
 
-                        <div class="empty-icon">
-                            <i data-lucide="clipboard-check"></i>
-                        </div>
+                        \<div class="empty-icon">
+                            \<i data-lucide="clipboard-check">\</i>
+                        \</div>
 
                         لا توجد وضعيات في هذه القائمة.
 
-                    </div>
+                    \</div>
 
-                </td>
+                \</td>
 
-            </tr>
-        `;
+            \</tr>
+        \`;
 
         lucide.createIcons();
 
@@ -4713,120 +4714,120 @@ function renderAssignments(){
                 a.approval_status ===
                 "pending";
 
-            return `
-                <tr>
+            return \`
+                \<tr>
 
-                    <td>
+                    \<td>
 
-                        <strong>
+                        \<strong>
                             ${
                                 employee
                                 ?
                                 esc(
-                                    `${employee.first_name} ${employee.last_name}`
+                                    \`${employee.first_name} ${employee.last_name}\`
                                 )
                                 :
                                 "موظف محذوف"
                             }
-                        </strong>
+                        \</strong>
 
-                    </td>
+                    \</td>
 
-                    <td>
+                    \<td>
 
-                        <span class="badge badge-purple">
+                        \<span class="badge badge-purple">
                             ${esc(
                                 a.assignment_type
                             )}
-                        </span>
+                        \</span>
 
-                    </td>
+                    \</td>
 
-                    <td>
+                    \<td>
                         ${esc(
                             a.original_institution ||
                             "—"
                         )}
-                    </td>
+                    \</td>
 
-                    <td>
+                    \<td>
                         ${esc(
                             a.receiving_institution
                         )}
-                    </td>
+                    \</td>
 
-                    <td>
+                    \<td>
                         ${calculateDuration(
                             a.start_date,
                             a.end_date
                         )}
-                    </td>
+                    \</td>
 
-                    <td>
+                    \<td>
 
                         ${
                             pending
                             ?
-                            '<span class="badge badge-warning">قيد الاعتماد</span>'
+                            '\<span class="badge badge-warning">قيد الاعتماد\</span>'
                             :
-                            `<span class="badge ${state.class}">
+                            \`\<span class="badge ${state.class}">
                                 ${state.text}
-                            </span>`
+                            \</span>\`
                         }
 
-                    </td>
+                    \</td>
 
-                    <td>
+                    \<td>
 
-                        <div class="actions">
+                        \<div class="actions">
 
-                            <button
+                            \<button
                                 class="icon-btn edit"
                                 title="تعديل"
                                 onclick="editAssignment('${a.id}')"
-                            >
-                                <i
+                            \>
+                                \<i
                                     data-lucide="pencil"
                                     size="16"
-                                ></i>
-                            </button>
+                                \>\</i>
+                            \</button>
 
                             ${
                                 pending
                                 ?
-                                `
-                                <button
+                                \`
+                                \<button
                                     class="icon-btn approve"
                                     title="اعتماد"
                                     onclick="approveAssignment('${a.id}')"
-                                >
-                                    <i
+                                \>
+                                    \<i
                                         data-lucide="check"
                                         size="16"
-                                    ></i>
-                                </button>
-                                `
+                                    \>\</i>
+                                \</button>
+                                \`
                                 :
                                 ""
                             }
 
-                            <button
+                            \<button
                                 class="icon-btn delete"
                                 title="حذف"
                                 onclick="deleteAssignment('${a.id}')"
-                            >
-                                <i
+                            \>
+                                \<i
                                     data-lucide="trash-2"
                                     size="16"
-                                ></i>
-                            </button>
+                                \>\</i>
+                            \</button>
 
-                        </div>
+                        \</div>
 
-                    </td>
+                    \</td>
 
-                </tr>
-            `;
+                \</tr>
+            \`;
 
         }).join("");
 
@@ -4966,9 +4967,9 @@ async function deleteAssignment(id){
 
 }
 
-/* =========================================================
+/\* =========================================================
    تعديل وضعية محددة
-========================================================= */
+\========================================================= \*/
 
 function editAssignment(id){
 
@@ -5002,9 +5003,9 @@ function editAssignment(id){
         return;
     }
 
-    /*
-     * نحدد الموظف والوضعية بالضبط.
-     */
+    /\*
+     \* نحدد الموظف والوضعية بالضبط.
+     \*/
 
     editingEmployeeId =
         employee.id;
@@ -5012,9 +5013,9 @@ function editAssignment(id){
     editingAssignmentId =
         assignment.id;
 
-    /*
-     * نضمن أن جميع الحقول قابلة للكتابة.
-     */
+    /\*
+     \* نضمن أن جميع الحقول قابلة للكتابة.
+     \*/
 
     enableEmployeeFields();
 
@@ -5170,9 +5171,9 @@ function editAssignment(id){
 
 }
 
-/* =========================================================
+/\* =========================================================
    التنبيهات
-========================================================= */
+\========================================================= \*/
 
 function buildAlerts(){
 
@@ -5192,7 +5193,7 @@ function buildAlerts(){
                 );
 
             return {
-                assignment:a,
+                assignment\:a,
                 employee,
                 state
             };
@@ -5244,17 +5245,17 @@ function renderAlerts(){
 
         if(!list.length){
 
-            return `
-                <div class="empty">
+            return \`
+                \<div class="empty">
 
-                    <div class="empty-icon">
-                        <i data-lucide="bell-off"></i>
-                    </div>
+                    \<div class="empty-icon">
+                        \<i data-lucide="bell-off">\</i>
+                    \</div>
 
                     لا توجد تنبيهات حالية.
 
-                </div>
-            `;
+                \</div>
+            \`;
 
         }
 
@@ -5303,34 +5304,34 @@ function renderAlerts(){
                     "وضعية منتهية";
             }
 
-            return `
-                <div class="alert-item ${cls}">
+            return \`
+                \<div class="alert-item ${cls}">
 
-                    <div class="alert-icon">
+                    \<div class="alert-icon">
 
-                        <i data-lucide="${
+                        \<i data-lucide="${
                             danger
                             ?
                             "alert-triangle"
                             :
                             "bell"
-                        }"></i>
+                        }">\</i>
 
-                    </div>
+                    \</div>
 
-                    <div style="flex:1">
+                    \<div style="flex:1">
 
-                        <strong>
+                        \<strong>
                             ${title}
-                        </strong>
+                        \</strong>
 
-                        <span>
+                        \<span>
 
                             ${
                                 e
                                 ?
                                 esc(
-                                    `${e.first_name} ${e.last_name}`
+                                    \`${e.first_name} ${e.last_name}\`
                                 )
                                 :
                                 "موظف"
@@ -5348,26 +5349,26 @@ function renderAlerts(){
                                 a.receiving_institution
                             )}
 
-                            <br>
+                            \<br>
 
                             ${
                                 item.state.remaining < 0
                                 ?
-                                `انتهت في ${formatDate(
+                                \`انتهت في ${formatDate(
                                     a.end_date
-                                )}`
+                                )}\`
                                 :
-                                `تنتهي في ${formatDate(
+                                \`تنتهي في ${formatDate(
                                     a.end_date
-                                )} — ${item.state.remaining} يوم متبقي`
+                                )} — ${item.state.remaining} يوم متبقي\`
                             }
 
-                        </span>
+                        \</span>
 
-                    </div>
+                    \</div>
 
-                </div>
-            `;
+                \</div>
+            \`;
 
         }).join("");
 
@@ -5383,9 +5384,9 @@ function renderAlerts(){
 
 }
 
-/* =========================================================
+/\* =========================================================
    ملف الموظف
-========================================================= */
+\========================================================= \*/
 
 function openProfile(id){
 
@@ -5411,135 +5412,135 @@ function openProfile(id){
         .getElementById(
             "profileContent"
         )
-        .innerHTML = `
+        .innerHTML = \`
 
-            <div class="profile-header">
+            \<div class="profile-header">
 
-                <div class="profile-avatar">
+                \<div class="profile-avatar">
 
-                    <i
+                    \<i
                         data-lucide="user"
                         size="31"
-                    ></i>
+                    \>\</i>
 
-                </div>
+                \</div>
 
-                <div>
+                \<div>
 
-                    <h2>
+                    \<h2>
                         ${esc(
                             employee.first_name
                         )}
                         ${esc(
                             employee.last_name
                         )}
-                    </h2>
+                    \</h2>
 
-                    <p>
+                    \<p>
                         ${esc(
                             employee.grade
                         )}
-                    </p>
+                    \</p>
 
-                </div>
+                \</div>
 
-            </div>
+            \</div>
 
-            <div class="info-grid">
+            \<div class="info-grid">
 
-                <div class="info-box">
+                \<div class="info-box">
 
-                    <label>
+                    \<label>
                         الاسم واللقب
-                    </label>
+                    \</label>
 
-                    <strong>
+                    \<strong>
                         ${esc(
                             employee.first_name
                         )}
                         ${esc(
                             employee.last_name
                         )}
-                    </strong>
+                    \</strong>
 
-                </div>
+                \</div>
 
-                <div class="info-box">
+                \<div class="info-box">
 
-                    <label>
+                    \<label>
                         الرقم الوظيفي
-                    </label>
+                    \</label>
 
-                    <strong>
+                    \<strong>
                         ${esc(
                             employee.employee_number ||
                             "غير مسجل"
                         )}
-                    </strong>
+                    \</strong>
 
-                </div>
+                \</div>
 
-                <div class="info-box">
+                \<div class="info-box">
 
-                    <label>
+                    \<label>
                         الرتبة
-                    </label>
+                    \</label>
 
-                    <strong>
+                    \<strong>
                         ${esc(
                             employee.grade
                         )}
-                    </strong>
+                    \</strong>
 
-                </div>
+                \</div>
 
-            </div>
+            \</div>
 
-            <div class="section-card">
+            \<div class="section-card">
 
-                <div class="section-header">
+                \<div class="section-header">
 
-                    <h3>
+                    \<h3>
                         الوضعيات المعتمدة
-                    </h3>
+                    \</h3>
 
-                </div>
+                \</div>
 
-                <div class="section-body">
+                \<div class="section-body">
 
                     ${
                         approved.length
                         ?
-                        `
-                        <div class="table-wrap">
+                        \`
+                        \<div class="table-wrap">
 
-                            <table>
+                            \<table>
 
-                                <thead>
+                                \<thead>
 
-                                    <tr>
+                                    \<tr>
 
-                                        <th>النوع</th>
+                                        \<th>النوع\</th>
 
-                                        <th>الاتجاه</th>
+                                        \<th>الاتجاه\</th>
 
-                                        <th>المؤسسة الأصلية</th>
+                                        \<th>المؤسسة الأصلية\</th>
 
-                                        <th>الوجهة</th>
+                                        \<th>الوجهة\</th>
 
-                                        <th>من</th>
+                                        \<th>من\</th>
 
-                                        <th>إلى</th>
+                                        \<th>إلى\</th>
 
-                                        <th>المدة</th>
+                                        \<th>المدة\</th>
 
-                                        <th>الحالة</th>
+                                        \<th>الحالة\</th>
 
-                                    </tr>
+                                    \</tr>
 
-                                </thead>
+                                \</thead>
 
-                                <tbody>
+                                \<tbody>
 
                                     ${
                                         approved
@@ -5550,127 +5551,127 @@ function openProfile(id){
                                                         a
                                                     );
 
-                                                return `
-                                                    <tr>
+                                                return \`
+                                                    \<tr>
 
-                                                        <td>
+                                                        \<td>
                                                             ${esc(
                                                                 a.assignment_type
                                                             )}
-                                                        </td>
+                                                        \</td>
 
-                                                        <td>
+                                                        \<td>
                                                             ${esc(
                                                                 a.assignment_direction
                                                             )}
-                                                        </td>
+                                                        \</td>
 
-                                                        <td>
+                                                        \<td>
                                                             ${esc(
                                                                 a.original_institution ||
                                                                 "—"
                                                             )}
-                                                        </td>
+                                                        \</td>
 
-                                                        <td>
+                                                        \<td>
                                                             ${esc(
                                                                 a.receiving_institution
                                                             )}
-                                                        </td>
+                                                        \</td>
 
-                                                        <td>
+                                                        \<td>
                                                             ${formatDate(
                                                                 a.start_date
                                                             )}
-                                                        </td>
+                                                        \</td>
 
-                                                        <td>
+                                                        \<td>
                                                             ${formatDate(
                                                                 a.end_date
                                                             )}
-                                                        </td>
+                                                        \</td>
 
-                                                        <td>
+                                                        \<td>
                                                             ${calculateDuration(
                                                                 a.start_date,
                                                                 a.end_date
                                                             )}
-                                                        </td>
+                                                        \</td>
 
-                                                        <td>
+                                                        \<td>
 
-                                                            <span
+                                                            \<span
                                                                 class="badge ${state.class}"
-                                                            >
+                                                            \>
                                                                 ${state.text}
-                                                            </span>
+                                                            \</span>
 
-                                                        </td>
+                                                        \</td>
 
-                                                    </tr>
-                                                `;
+                                                    \</tr>
+                                                \`;
 
                                             })
                                             .join("")
                                     }
 
-                                </tbody>
+                                \</tbody>
 
-                            </table>
+                            \</table>
 
-                        </div>
-                        `
+                        \</div>
+                        \`
                         :
-                        `
-                        <div class="empty">
+                        \`
+                        \<div class="empty">
                             لا توجد وضعيات معتمدة لهذا الموظف.
-                        </div>
-                        `
+                        \</div>
+                        \`
                     }
 
-                </div>
+                \</div>
 
-            </div>
+            \</div>
 
             ${
                 pending.length
                 ?
-                `
-                <div class="section-card">
+                \`
+                \<div class="section-card">
 
-                    <div class="section-header">
+                    \<div class="section-header">
 
-                        <h3>
+                        \<h3>
                             وضعيات قيد الاعتماد
-                        </h3>
+                        \</h3>
 
-                    </div>
+                    \</div>
 
-                    <div class="section-body">
+                    \<div class="section-body">
 
-                        ${pending.map(a => `
+                        ${pending.map(a => \`
 
-                            <div
+                            \<div
                                 class="alert-item alert-warning"
-                            >
+                            \>
 
-                                <div class="alert-icon">
+                                \<div class="alert-icon">
 
-                                    <i
+                                    \<i
                                         data-lucide="clock"
-                                    ></i>
+                                    \>\</i>
 
-                                </div>
+                                \</div>
 
-                                <div>
+                                \<div>
 
-                                    <strong>
+                                    \<strong>
                                         ${esc(
                                             a.assignment_type
                                         )}
-                                    </strong>
+                                    \</strong>
 
-                                    <span>
+                                    \<span>
 
                                         ${esc(
                                             a.original_institution ||
@@ -5683,30 +5684,30 @@ function openProfile(id){
                                             a.receiving_institution
                                         )}
 
-                                        <br>
+                                        \<br>
 
                                         من
                                         ${formatDate(
                                             a.start_date
                                         )}
 
-                                    </span>
+                                    \</span>
 
-                                </div>
+                                \</div>
 
-                            </div>
+                            \</div>
 
-                        `).join("")}
+                        \`).join("")}
 
-                    </div>
+                    \</div>
 
-                </div>
-                `
+                \</div>
+                \`
                 :
                 ""
             }
 
-        `;
+        \`;
 
     document
         .getElementById(
@@ -5718,9 +5719,9 @@ function openProfile(id){
 
 }
 
-/* =========================================================
+/\* =========================================================
    الطباعة
-========================================================= */
+\========================================================= \*/
 
 function printProfile(){
 
@@ -5738,7 +5739,7 @@ function printProfile(){
     document.title =
         "ملف الموظف";
 
-    window.print();
+    window\.print();
 
     setTimeout(() => {
 
@@ -5843,32 +5844,32 @@ function printEmployees(){
             "employeePrintArea"
         );
 
-    printArea.innerHTML = `
-        <div class="employee-print-header">
-            <div class="institution">
+    printArea.innerHTML = \`
+        \<div class="employee-print-header">
+            \<div class="institution">
                 المؤسسة العمومية الاستشفائية بأولف
-            </div>
-            <div class="department">
+            \</div>
+            \<div class="department">
                 مصلحة الموارد البشرية
-            </div>
-            <h1>${esc(title)}</h1>
-            <div class="print-date">
+            \</div>
+            \<h1>${esc(title)}\</h1>
+            \<div class="print-date">
                 تاريخ استخراج القائمة: ${formatDate(todayDate())}
-            </div>
-        </div>
+            \</div>
+        \</div>
 
-        <table class="employee-print-table">
-            <thead>
-                <tr>
-                    <th>الرقم</th>
-                    <th>الموظف</th>
-                    <th>الرتبة</th>
-                    <th>الوضعية</th>
-                    <th>المدة</th>
-                    <th>المؤسسة</th>
-                </tr>
-            </thead>
-            <tbody>
+        \<table class="employee-print-table">
+            \<thead>
+                \<tr>
+                    \<th>الرقم\</th>
+                    \<th>الموظف\</th>
+                    \<th>الرتبة\</th>
+                    \<th>الوضعية\</th>
+                    \<th>المدة\</th>
+                    \<th>المؤسسة\</th>
+                \</tr>
+            \</thead>
+            \<tbody>
                 ${
                     rows.length
                     ? rows.map(e => {
@@ -5900,34 +5901,34 @@ function printEmployees(){
                             )
                             : "—";
 
-                        return `
-                            <tr>
-                                <td>${esc(e.employee_number || "—")}</td>
-                                <td>
+                        return \`
+                            \<tr>
+                                \<td>${esc(e.employee_number || "—")}\</td>
+                                \<td>
                                     ${esc(e.first_name)}
                                     ${esc(e.last_name)}
-                                </td>
-                                <td>${esc(e.grade || "—")}</td>
-                                <td>${esc(a?.assignment_type || "لا توجد وضعية معتمدة")}</td>
-                                <td>${esc(duration)}</td>
-                                <td>${esc(institution || "—")}</td>
-                            </tr>
-                        `;
+                                \</td>
+                                \<td>${esc(e.grade || "—")}\</td>
+                                \<td>${esc(a?.assignment_type || "لا توجد وضعية معتمدة")}\</td>
+                                \<td>${esc(duration)}\</td>
+                                \<td>${esc(institution || "—")}\</td>
+                            \</tr>
+                        \`;
                     }).join("")
-                    : `
-                        <tr>
-                            <td colspan="6">لا توجد بيانات مطابقة.</td>
-                        </tr>
-                    `
+                    : \`
+                        \<tr>
+                            \<td colspan="6">لا توجد بيانات مطابقة.\</td>
+                        \</tr>
+                    \`
                 }
-            </tbody>
-        </table>
+            \</tbody>
+        \</table>
 
-        <div class="employee-print-footer">
-            <span>عدد الموظفين: ${rows.length}</span>
-            <span>منصة متابعة الانتداب والوضع تحت التصرف</span>
-        </div>
-    `;
+        \<div class="employee-print-footer">
+            \<span>عدد الموظفين: ${rows.length}\</span>
+            \<span>منصة متابعة الانتداب والوضع تحت التصرف\</span>
+        \</div>
+    \`;
 
     const original =
         document.title;
@@ -5942,7 +5943,7 @@ function printEmployees(){
 
     document.title = title;
 
-    window.print();
+    window\.print();
 
     setTimeout(() => {
 
@@ -5958,9 +5959,9 @@ function printEmployees(){
 
 }
 
-/* =========================================================
+/\* =========================================================
    النوافذ
-========================================================= */
+\========================================================= \*/
 
 function closeModal(id){
 
@@ -5968,12 +5969,12 @@ function closeModal(id){
         .getElementById(id)
         .classList.remove("show");
 
-    /*
-     * عند إغلاق نافذة الموظف:
-     * لا نحذف البيانات من قاعدة البيانات،
-     * لكن نصفر حالة التعديل حتى لا يحدث
-     * تعديل غير مقصود عند فتح نافذة جديدة.
-     */
+    /\*
+     \* عند إغلاق نافذة الموظف:
+     \* لا نحذف البيانات من قاعدة البيانات،
+     \* لكن نصفر حالة التعديل حتى لا يحدث
+     \* تعديل غير مقصود عند فتح نافذة جديدة.
+     \*/
 
     if(id === "employeeModal"){
 
@@ -6019,9 +6020,9 @@ document
 
     });
 
-/* =========================================================
+/\* =========================================================
    المدة
-========================================================= */
+\========================================================= \*/
 
 function toggleEndDate(){
 
@@ -6116,9 +6117,9 @@ function updateDurationPreview(){
 
 }
 
-/* =========================================================
+/\* =========================================================
    كلمة المرور
-========================================================= */
+\========================================================= \*/
 
 function togglePassword(){
 
@@ -6137,9 +6138,9 @@ function togglePassword(){
 
 }
 
-/* =========================================================
+/\* =========================================================
    سجل العمليات
-========================================================= */
+\========================================================= \*/
 
 async function logActivity(
     action,
@@ -6180,9 +6181,9 @@ async function logActivity(
 
 }
 
-/* =========================================================
+/\* =========================================================
    العداد
-========================================================= */
+\========================================================= \*/
 
 function updatePendingBadge(){
 
@@ -6202,9 +6203,9 @@ function updatePendingBadge(){
 
 }
 
-/* =========================================================
+/\* =========================================================
    مراقبة الجلسة
-========================================================= */
+\========================================================= \*/
 
 db.auth.onAuthStateChange(
     async (
@@ -6226,9 +6227,9 @@ db.auth.onAuthStateChange(
     }
 );
 
-/* =========================================================
+/\* =========================================================
    التشغيل
-========================================================= */
+\========================================================= \*/
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -6241,7 +6242,7 @@ document.addEventListener(
     }
 );
 
-</script>
+\</script>
 
-</body>
-</html>
+\</body>
+\</html>
